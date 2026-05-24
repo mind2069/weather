@@ -1,0 +1,32 @@
+@media (max-width: 699px)
+{
+    header .menu nav .anchor .dropdown .units
+    {
+        display: block;
+    }
+
+    header .location .row
+    {
+        display: block;
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    header .location .row .search .input
+    {
+        width: 100%;
+    }
+
+    header .location .row .unit 
+    {
+        display: none;
+    }
+}
+
+@media (max-width: 499px)
+{
+    header .location .row
+    {
+        padding: 0 0.5rem;
+    }
+}

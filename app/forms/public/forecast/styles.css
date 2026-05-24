@@ -1,0 +1,420 @@
+.forecast
+{
+
+}
+
+/* Details */
+
+.forecast .details
+{
+    padding: 2.5rem 0;
+    background: linear-gradient(to bottom, #079fe1, #30b0e6);
+    color: #ffffff;
+}
+
+.forecast .details .head
+{
+    padding: 0 0 1rem 0;
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.forecast .details .head .label
+{
+}
+
+.forecast .details .head .dates
+{
+    display: flex;
+    gap: 0.5rem;
+    font-size: 1rem;
+}
+
+.forecast .details .items 
+{
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(7, 1fr);
+    
+}
+
+.forecast .details .items .item
+{
+    width: 100%;
+    margin: 0;
+    cursor: pointer;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 1rem 0.75rem 0.75rem 0.75rem;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.375;
+    color: inherit;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.15);
+    transition: background-color 0.15s ease, color 0.15s ease;
+    white-space: nowrap;
+}
+
+.forecast .details .items .item:hover
+{
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.forecast .details .items .item:focus-visible
+{
+    outline: 2px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 2px;
+}
+
+.forecast .details .items .item .title
+{
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.forecast .details .items .item .title .weekday
+{
+    text-transform: uppercase;
+}
+
+.forecast .details .items .item .title .date
+{
+}
+
+.forecast .details .items .item .overview .grid
+{
+    display: grid;
+    grid-template-areas: "weekday" "date" "icon" "temperature" "blurb";
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+}
+
+.forecast .details .items .item .overview .grid .weekday
+{
+    grid-area: weekday;
+}
+
+.forecast .details .items .item .overview .grid .date
+{
+    grid-area: date;
+}
+
+.forecast .details .items .item .overview .grid .icon
+{
+    grid-area: icon;
+}
+
+.forecast .details .items .item .overview .grid .temperature
+{
+    grid-area: temperature;
+}
+
+.forecast .details .items .item .overview .grid .blurb
+{
+    grid-area: blurb;
+}
+
+.forecast .details .items .item .overview .weekday
+{
+    font-weight: 500;
+    line-height: 1.25;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.forecast .details .items .item .overview .date
+{
+    font-size: 12px;
+    line-height: 1.25;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.forecast .details .items .item .overview .icon
+{
+    padding: 0.25rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.forecast .details .items .item .overview .icon img
+{
+    width: 48px;
+    height: 48px;
+    display: block;
+    user-select: none;
+}
+
+.forecast .details .items .item .overview .temperature
+{
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.25;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.forecast .details .items .item .overview .temperature > div
+{
+    display: flex;
+    gap: 1px;
+}
+
+.forecast .details .items .item .overview .blurb
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.95);
+    white-space: normal;
+    font-size: 14px;
+}
+
+.forecast .details .items .item .statistics
+{
+}
+
+.forecast .details .items .item .statistics .statistic
+{
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 2px;
+}
+
+.forecast .details .items .item .statistics .precipitation
+{
+    display: none;
+}
+
+.forecast .details .items .item .statistics .humidity
+{
+    display: none;
+}
+
+.forecast .details .items .item .statistics .statistic .label
+{
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.forecast .details .items .item .statistics .statistic .value
+{
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+}
+
+.forecast .details .items .item .statistics .rain
+{
+    margin: 0.5rem 0 0;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.forecast .details .items .item .metas
+{
+    margin: 1rem 0 0;
+    padding: 0.5rem 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 12px;
+}
+
+.forecast .details .items .item .metas .grid
+{
+    display: grid;
+    /* grid-template-areas: "low" "high" "humidity" "uv" "wind" "sunrise" "sunset"; */
+    grid-template-areas: "humidity" "uv" "wind" "sunrise" "sunset";
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+}
+
+.forecast .details .items .item .metas .grid .low
+{
+    grid-area: low;
+    display: none;
+}
+
+.forecast .details .items .item .metas .grid .high
+{
+    grid-area: high;
+    display: none;
+}
+
+.forecast .details .items .item .metas .grid .precipitation
+{
+    grid-area: precipitation;
+    display: none;
+}
+
+.forecast .details .items .item .metas .grid .humidity
+{
+    grid-area: humidity;
+}
+
+.forecast .details .items .item .metas .grid .uv
+{
+    grid-area: uv;
+}
+
+.forecast .details .items .item .metas .grid .wind
+{
+    grid-area: wind;
+}
+
+.forecast .details .items .item .metas .grid .sunrise
+{
+    grid-area: sunrise;
+}
+
+.forecast .details .items .item .metas .grid .sunset
+{
+    grid-area: sunset;
+}
+.forecast .details .items .item .metas .meta
+{
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.forecast .details .items .item .metas .meta .label
+{
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.forecast .details .items .item .metas .meta .value
+{
+    text-align: right;
+}
+
+/* Chart */
+
+.forecast .chart
+{
+    padding: 3rem 0;
+}
+
+.forecast .chart .container
+{
+    overflow: hidden;
+}
+
+.forecast .chart .wrapper-1
+{
+    width: 100%;
+}
+
+.forecast .chart .wrapper-2
+{
+    height: 288px;
+    width: 100%;
+}
+
+.forecast .chart .navigator
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.forecast .chart .navigator .arrow
+{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100px;
+    height: 49px;
+    padding: 0;
+    line-height: 1;
+    text-transform: none;
+}
+
+.forecast .chart .navigator .arrow svg
+{
+    width: 1.25rem;
+    height: 1.25rem;
+    display: block;
+    flex-shrink: 0;
+}
+
+.forecast .chart .navigator .arrow:disabled
+{
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.forecast .chart .actions    
+{
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.forecast .chart .actions .grid
+{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.forecast .chart .actions .btn
+{
+    width: 100%;
+    max-width: 100%;
+}
+
+.chart-hourly-column
+{
+    pointer-events: none;
+}
+
+.chart-tooltip
+{
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.chart-tooltip-title
+{
+    margin: 0;
+    font-weight: 500;
+    color: #1e293b;
+}
+
+.chart-tooltip-metric
+{
+    margin: 0;
+    color: #475569;
+}
+
+.chart-tooltip-metric--spaced
+{
+    margin-top: 0.25rem;
+}
+
+.chart-tooltip-value
+{
+    font-weight: 600;
+    color: #0f172a;
+}

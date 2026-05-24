@@ -1,0 +1,74 @@
+@media (max-width: 599px)
+{
+    .modal-day .list .hour .overview .grid
+    {
+        grid-template-areas: "time time" "icon temperature" "forecast forecast";
+        grid-template-columns: auto auto;
+        gap: 0.25rem;
+    }
+
+    .modal-day .list .hour .overview .icon img
+    {
+        width: 30px;
+        height: 30px;
+    }
+
+    .modal-day .list .hour .overview .temperature
+    {
+        position: relative;
+        top: -1px;
+        font-size: 28px;
+        line-height: 1rem;
+        font-weight: 500;
+    }
+
+    .modal-day .list .hour .overview .time,
+    .modal-day .list .hour .overview .forecast
+    {
+        color: #ffffff;
+        font-weight: 400;
+        font-size: 13px;
+    }
+  
+    .modal-day .list .hour .meta .grid
+    {
+        grid-template-areas: "precipitation wind" "humidity uv";
+        grid-template-columns: auto auto;
+        row-gap: 0.25rem;
+    }
+}
+
+@media (max-width: 499px)
+{
+    .modal-day .summary .actions .action span
+    {
+        display: none;
+    }
+
+
+    .modal-day .list .hour .meta .grid
+    {
+        column-gap: 0.5rem;
+    }
+
+    .modal-day .summary .data
+    {
+        grid-template-columns: 1fr 1fr;
+    }
+
+
+    .modal-day .summary .data .col:last-child
+    {
+        display: none;
+    }
+
+}
+
+@media (max-width: 399px)
+{
+    .modal-day .list .hour .meta .grid
+    {
+        column-gap: 0.5rem;
+    }
+}
+

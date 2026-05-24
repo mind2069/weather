@@ -1,0 +1,448 @@
+/* Day */
+
+.day
+{
+}
+
+.day .details
+{
+    padding: 2.5rem 0;
+    background: linear-gradient(to bottom, #079fe1, #30b0e6);
+    color: #ffffff;
+}
+
+/* header */
+
+.day .details .header
+{
+    display: grid;
+    grid-template-areas: "title title" "highlights summary";
+    grid-template-columns: auto auto;
+    gap: 0.5rem;
+}
+
+.day .details .header .title
+{
+    grid-area: title;
+}
+
+.day .details .header .title h1
+{
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+}
+
+.day .details .header .highlights
+{
+    grid-area: highlights;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.day .details .header .highlights .wrapper
+{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 0.5rem;
+}
+
+.day .details .header .highlights .icon
+{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.day .details .header .highlights .icon img
+{
+    width: 4.5rem;
+    height: 4.5rem;
+    display: block;
+    user-select: none;
+}
+
+.day .details .header .highlights .temperature
+{
+    display: flex;
+    align-items: center;
+}
+
+.day .details .header .highlights .temperature > div
+{
+    position: relative;
+    margin-top: -0.5rem;
+    display: flex;
+    align-items: flex-start;
+    font-size: 4.5rem;
+    line-height: 1;
+}
+
+.day .details .header .highlights .temperature .value
+{
+}
+
+.day .details .header .highlights .temperature .unit
+{
+    font-size: 0.5em;
+    margin-left: 0.05em;
+    position: relative;
+    top: 0.25em;
+}
+
+.day .details .header .highlights .overview
+{
+    display: flex;
+    align-items: center;
+    padding-left: 0.5rem;
+}
+
+.day .details .header .highlights .overview .items
+{
+    font-size: 0.75rem;
+    line-height: 1.125rem;
+}
+
+.day .details .header .summary
+{
+    grid-area: summary;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.day .details .header .summary .content
+{
+    grid-area: content;
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    width: max-content;
+    max-width: 100%;
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+
+.day .details .header .summary .content .item
+{
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.day .details .header .summary .content .item:first-child
+{
+    padding-left: 0;
+    border-left: none;
+}
+
+.day .details .header .summary .content .item:last-child
+{
+    padding-right: 0;
+    border-right: none;
+}
+
+.day .details .header .summary .content .row
+{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.day .details .header .summary .content .label
+{
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.day .details .header .summary .content .value
+{
+    color: #ffffff;
+}
+
+.day .details .header .summary .content .end
+{
+    text-align: right;
+}
+
+/* Hours */
+
+.day .details .hours
+{
+    margin-top: 1.25rem;
+    display: grid;
+    gap: 0.75rem;
+    padding-bottom: 0.25rem;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.day .details .hours .hour
+{
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 1rem 0.75rem;
+    text-align: center;
+    border-radius: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    line-height: 1.375;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.day .details .hours .hour .overview
+{
+}
+
+.day .details .hours .hour .overview .grid
+{
+    display: grid;
+    grid-template-areas: "time" "icon" "temperature" "forecast";
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+}
+
+.day .details .hours .hour .overview .time
+{
+    grid-area: time;
+}
+
+.day .details .hours .hour .overview .temperature
+{
+    grid-area: temperature;
+}
+
+.day .details .hours .hour .overview .icon
+{
+    grid-area: icon;
+}
+
+.day .details .hours .hour .overview .forecast
+{
+    grid-area: forecast;
+}
+
+.day .details .hours .hour .overview .time
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.day .details .hours .hour .overview .temperature
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.day .details .hours .hour .overview .temperature > div
+{
+    display: flex;
+    gap: 1px;
+    font-size: 1rem;
+}
+
+.day .details .hours .hour .overview .icon
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0;
+}
+
+.day .details .hours .hour .overview .icon img
+{
+    width: 36px;
+    height: 36px;
+    display: block;
+    user-select: none;
+}
+
+.day .details .hours .hour .overview .forecast
+{    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.day .details .hours .hour .metas
+{
+    margin: 0.5rem 0 0;
+    padding: 0.5rem 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.75rem;
+}
+
+.day .details .hours .hour .metas .grid
+{
+    display: grid;
+    grid-template-areas: "precipitation" "wind" "humidity" "uv";
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+}
+
+.day .details .hours .hour .metas .precipitation
+{
+    grid-area: precipitation;
+}
+
+.day .details .hours .hour .metas .wind
+{
+    grid-area: wind;
+}
+
+.day .details .hours .hour .metas .humidity
+{
+    grid-area: humidity;
+}
+
+.day .details .hours .hour .metas .uv
+{
+    grid-area: uv;
+}
+
+.day .details .hours .hour .metas .meta
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+.day .details .hours .hour .metas .meta .label
+{
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.day .details .hours .hour .metas .meta .value
+{
+    color: #ffffff;
+}
+
+/* Chart */
+
+.day .chart
+{
+    padding: 3rem 0;
+}
+
+.day .chart .container
+{
+    overflow: hidden;
+}
+
+.day .chart .wrapper-1
+{
+    width: 100%;
+}
+
+.day .chart .wrapper-2
+{
+    height: 288px;
+    width: 100%;
+}
+
+.day .chart .navigator
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.day .chart .navigator .arrow
+{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100px;
+    height: 49px;
+    padding: 0;
+    line-height: 1;
+    text-transform: none;
+}
+
+.day .chart .navigator .arrow svg
+{
+    width: 1.25rem;
+    height: 1.25rem;
+    display: block;
+    flex-shrink: 0;
+}
+
+.day .chart .navigator .arrow:disabled
+{
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.day .chart .actions    
+{
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.day .chart .actions .grid
+{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.day .chart .actions .btn
+{
+    width: 100%;
+    max-width: 100%;
+}
+
+.chart-hourly-column
+{
+    pointer-events: none;
+}
+
+.chart-tooltip
+{
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.chart-tooltip-title
+{
+    margin: 0;
+    font-weight: 500;
+    color: #1e293b;
+}
+
+.chart-tooltip-line
+{
+    margin: 0.25rem 0 0;
+    color: #0f172a;
+}
+
+.chart-tooltip-strong
+{
+    font-weight: 600;
+}
+
+.chart-tooltip-muted
+{
+    color: #475569;
+}
