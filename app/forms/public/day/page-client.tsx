@@ -487,7 +487,7 @@ export default function Client({ session, date }: ClientProperties)
                                                 </div>
                                                 <div className="item precipitation">
                                                     <span className="label">
-                                                        {LanguagesHelper.Caption("Precip")}
+                                                        {LanguagesHelper.Caption("Precipitation")}
                                                     </span>
                                                     <span className="value">
                                                         {day.highlights.precipitation.toFixed(1)} mm
@@ -606,7 +606,12 @@ export default function Client({ session, date }: ClientProperties)
                                             <div className="grid">
                                                 <div className="meta precipitation">
                                                     <div className="label">
-                                                        {LanguagesHelper.Caption("Precip")}
+                                                        <span className="long">
+                                                            {LanguagesHelper.Caption("Precipitation")}
+                                                        </span>
+                                                        <span className="short">
+                                                            {LanguagesHelper.Caption("Precip")}
+                                                        </span>
                                                     </div>
                                                     <div className="value">
                                                         {item.precipitation.toFixed(1)} mm

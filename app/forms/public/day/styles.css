@@ -340,6 +340,11 @@
     color: rgba(255, 255, 255, 0.65);
 }
 
+.day .details .hours .hour .metas .meta .label .long
+{
+    display: none;
+}
+
 .day .details .hours .hour .metas .meta .value
 {
     color: #ffffff;

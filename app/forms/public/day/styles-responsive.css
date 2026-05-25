@@ -66,6 +66,16 @@
     {
         gap: 0.5rem;
     }
+
+    .day .details .hours .hour .metas .meta .label .long
+    {
+        display: inline;
+    }
+
+    .day .details .hours .hour .metas .meta .label .short
+    {
+        display: none;
+    }
 }
 
 @media (max-width: 1299px)
@@ -149,7 +159,7 @@
     }
 }
 
-@media (max-width: 699px)
+@media (max-width: 749px)
 {
     .day .details .hours .hour .metas .grid
     {
