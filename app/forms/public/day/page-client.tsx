@@ -41,7 +41,7 @@ function HourChartAxisLabels(iso: string, locale: string): { top: string; bottom
     {
         hour: "numeric",
         minute: "2-digit",
-        hour12: undefined
+        hour12: true,
 
     }).formatToParts(d);
 

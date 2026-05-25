@@ -76,7 +76,12 @@ export class FormattingHelper
             return "—";
         }
     
-        return d.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
+        return d.toLocaleTimeString(locale,
+        {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+        });
     }
     
     public static UvIndex(value: number): string
