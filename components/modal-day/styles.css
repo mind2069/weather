@@ -114,7 +114,6 @@
 {
     display: flex;
     flex-shrink: 0;
-    user-select: none;
     font-size: 56px;
     line-height: 1;
 }
@@ -319,7 +318,6 @@
     width: 1.875rem;
     height: 1.875rem;
     display: block;
-    user-select: none;
 }
 
 .modal-day .list .hour .overview .temperature

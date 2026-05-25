@@ -461,17 +461,37 @@ export default function Client({ session, date }: ClientProperties)
                                         </div>
                                         <div className="overview">
                                             <div className="items">
-                                                <div className="humidity">
-                                                    {LanguagesHelper.Caption("Humidity")}: {Math.round(day.highlights.humidity)}%
+                                                <div className="item humidity">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Humidity")}
+                                                    </span>
+                                                    <span className="value">
+                                                        {Math.round(day.highlights.humidity)}%
+                                                    </span>
                                                 </div>
-                                                <div className="wind">
-                                                    {LanguagesHelper.Caption("Wind")}: {Math.round(day.highlights.windSpeed)} {windSpeedUnit}
+                                                <div className="item wind">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Wind")}
+                                                    </span>
+                                                    <span className="value">
+                                                        {Math.round(day.highlights.windSpeed)} {windSpeedUnit}
+                                                    </span>
                                                 </div>
-                                                <div className="uv">
-                                                    {LanguagesHelper.Caption("UV")}: {FormattingHelper.UvIndex(day.highlights.uvIndex)}
+                                                <div className="item uv">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("UV")}
+                                                    </span>
+                                                    <span className="value">
+                                                        {FormattingHelper.UvIndex(day.highlights.uvIndex)}
+                                                    </span>
                                                 </div>
-                                                <div className="precipitation">
-                                                    {LanguagesHelper.Caption("Precipitation")}: {day.highlights.precipitation.toFixed(1)} mm
+                                                <div className="item precipitation">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Precip")}
+                                                    </span>
+                                                    <span className="value">
+                                                        {day.highlights.precipitation.toFixed(1)} mm
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>

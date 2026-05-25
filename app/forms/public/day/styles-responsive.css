@@ -212,6 +212,11 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.25);
         padding-bottom: 0.75rem;
     }
+
+    .day .details .header .highlights .temperature > div
+    {
+        font-size: 4rem;
+    }
 }
 
 @media (max-width: 549px)

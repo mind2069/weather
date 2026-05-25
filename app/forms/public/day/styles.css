@@ -64,7 +64,6 @@
     width: 4.5rem;
     height: 4.5rem;
     display: block;
-    user-select: none;
 }
 
 .day .details .header .highlights .temperature
@@ -76,7 +75,7 @@
 .day .details .header .highlights .temperature > div
 {
     position: relative;
-    margin-top: -0.5rem;
+    margin-top: -8px;
     display: flex;
     align-items: flex-start;
     font-size: 4.5rem;
@@ -106,6 +105,24 @@
 {
     font-size: 0.75rem;
     line-height: 1.125rem;
+}
+
+.day .details .header .highlights .overview .items .item
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.day .details .header .highlights .overview .items .item .label
+{
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.day .details .header .highlights .overview .items .item .value
+{
+    color: #ffffff;
 }
 
 .day .details .header .summary
@@ -264,7 +281,6 @@
     width: 36px;
     height: 36px;
     display: block;
-    user-select: none;
 }
 
 .day .details .hours .hour .overview .forecast
