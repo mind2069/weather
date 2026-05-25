@@ -13,3 +13,11 @@
         padding: 0 1rem;
     }
 }
+
+@media (max-width: 499px)
+{
+    .container
+    {
+        padding: 0 0.75rem;
+    }
+}
