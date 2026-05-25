@@ -562,7 +562,7 @@ export default function Client({ session, date }: ClientProperties)
                                                 <span className="value">
                                                     {day.sunrise
                                                         ? FormattingHelper.LocalTime(day.sunrise, locale)
-                                                        : "—"}
+                                                        : "-"}
                                                 </span>
                                             </div>
                                             <div className="row">
@@ -572,7 +572,7 @@ export default function Client({ session, date }: ClientProperties)
                                                 <span className="value">
                                                     {day.sunset
                                                         ? FormattingHelper.LocalTime(day.sunset, locale)
-                                                        : "—"}
+                                                        : "-"}
                                                 </span>
                                             </div>
                                         </div>

@@ -44,6 +44,23 @@ function DaylightWeatherCodes(date: string, sunrise: string, sunset: string, hou
     return out;
 }
 
+function TimeWithAmPm(iso: string): string
+{
+    const d = new Date(iso);
+
+    if (Number.isNaN(d.getTime()))
+    {
+        return iso;
+    }
+
+    const hours24 = d.getHours();
+    const minutes = d.getMinutes();
+    const hours12 = hours24 % 12 || 12;
+    const amPm = hours24 < 12 ? "AM" : "PM";
+
+    return `${String(hours12).padStart(2, "0")}:${String(minutes).padStart(2, "0")} ${amPm}`;
+}
+
 function ModeWeatherCode(codes: number[]): number | null
 {
     if (codes.length === 0)
@@ -86,7 +103,7 @@ export class OpenMeteoHelper
             const p = data.daily.precipitation_probability_max?.[i];
             const rh = data.daily.relative_humidity_2m_mean?.[i];
             const sunrise = data.daily.sunrise[i];
-            const sunset = data.daily.sunset[i];
+            const sunset = data.daily.sunset[i]; 
             const displayCodeFallback = data.daily.weather_code[i];
             const windDirRaw = data.daily.wind_direction_10m_dominant?.[i];
             const windDirection = windDirRaw == null || Number.isNaN(windDirRaw) ? 0 : Math.round(((windDirRaw % 360) + 360) % 360);
