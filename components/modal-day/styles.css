@@ -203,9 +203,11 @@
     line-height: 1rem;
 }
 
-.modal-day .summary .data > .col + .col
+.modal-day .summary .data .col
 {
-    border-left: 1px solid rgba(255, 255, 255, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
 
 .modal-day .summary .data .col:first-child
@@ -213,6 +215,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .modal-day .summary .data .col:first-child
@@ -224,6 +227,7 @@
 {
     padding-left: 1rem;
     padding-right: 1rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .modal-day .summary .data .col:last-child

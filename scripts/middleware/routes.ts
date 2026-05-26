@@ -62,7 +62,7 @@ export async function handleRoutes(request: NextRequest)
         
         if (!isAuthenticated)
         {
-            const pathHome = language === 'fr-ca' ? '/fr-ca/prevision' : '/en-ca/forecast';
+            const pathHome = language === 'fr-ca' ? '/fr-ca/aujourdhui' : '/en-ca/today';
 
             return NextResponse.redirect(new URL(pathHome, request.url));
         }

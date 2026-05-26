@@ -208,7 +208,7 @@ export default function ModalDayForecast({ session, day, dayForecast, open, load
                                         </div>
                                         <div className="col">
                                             <div className="row">
-                                                <span className="label">{LanguagesHelper.Caption("UV")}</span>
+                                                <span className="label">{LanguagesHelper.Caption("UVMax")}</span>
                                                 <span className="value">
                                                     {FormattingHelper.UvIndex(day.uvMax)}
                                                 </span>
