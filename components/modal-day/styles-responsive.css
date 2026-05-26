@@ -56,6 +56,10 @@
         grid-template-columns: 1fr 1fr;
     }
 
+    .modal-day .summary .data .col:nth-child(2)
+    {
+        border-right: none;
+    }
 
     .modal-day .summary .data .col:last-child
     {
