@@ -32,7 +32,7 @@
     justify-content: space-between;
     padding: 0;
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     line-height: 1.5rem;
     font-weight: 500;
 }
@@ -375,16 +375,22 @@
 
 .day .chart .navigator
 {
+    margin-top: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.day .chart .navigator .grid
+{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
-    margin-top: 2rem;
 }
 
 .day .chart .navigator .arrow
 {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;

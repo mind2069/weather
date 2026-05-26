@@ -176,8 +176,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 2rem;
-    overflow: hidden;
+    min-height: 2.5rem;
     color: rgba(255, 255, 255, 0.95);
     white-space: normal;
     font-size: 14px;
@@ -185,6 +184,7 @@
 
 .forecast .details .items .item .statistics
 {
+    margin-top: 0.5rem;
 }
 
 .forecast .details .items .item .statistics .statistic
@@ -323,16 +323,22 @@
 
 .forecast .chart .navigator
 {
+    margin-top: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.forecast .chart .navigator .grid
+{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
-    margin-top: 2rem;
 }
 
 .forecast .chart .navigator .arrow
 {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;

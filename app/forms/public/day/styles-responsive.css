@@ -159,8 +159,14 @@
     }
 }
 
-@media (max-width: 749px)
+@media (max-width: 799px)
 {
+    .day .details .header .title h1
+    {
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
     .day .details .hours .hour .metas .grid
     {
         grid-template-areas: "precipitation wind" "humidity uv";
@@ -168,8 +174,92 @@
     }
 }
 
+@media (max-width: 649px)
+{
+    .day .details .hours .hour .overview
+    {
+        text-align: left;
+    }
+
+    .day .details .hours .hour .overview .grid
+    {
+        grid-template-areas: "time time" "icon temperature" "forecast forecast";
+        grid-template-columns: 34px auto;
+        gap: 0.25rem;
+    }
+
+    .day .details .hours .hour .overview .time 
+    {
+        display: block;
+    }
+
+    .day .details .hours .hour .overview .icon img
+    {
+        width: 32px;
+        height: 32px;
+    }
+
+    .day .details .hours .hour .overview .temperature
+    {
+        justify-content: flex-start;
+        font-weight: 400;
+    }
+
+    .day .details .hours .hour .overview .temperature > div
+    {
+        position: relative;
+        top: -2px;
+    }
+
+    .day .details .hours .hour .overview .temperature .value
+    {
+        padding-left: 0.25rem;
+        font-size: 24px;
+        line-height: 1;
+    }
+
+    .forecast .details .items .item .overview .temperature .unit
+    {
+        font-size: 16px;
+        position: relative;
+        top: 0px;
+    }
+
+    .day .details .hours .hour .overview .forecast
+    {  
+        display: block;  
+        min-height: auto;
+    }
+
+    .day .details .hours .hour .metas .grid
+    {
+        grid-template-areas: "precipitation" "wind" "humidity" "uv";
+        grid-template-columns: auto;
+        row-gap: 0.125rem;
+    }
+}
+
 @media (max-width: 599px)
 {
+    .day .details .header .title h1
+    {
+        display: flex;
+        flex-direction: column-reverse;
+        direction: ltr;
+        gap: 0.25rem;
+    }
+
+    .day .details .header .title h1 .weekday
+    {
+        font-size: 1.25rem;
+    }
+
+    .day .details .header .title h1 .forecast
+    {
+        font-size: 1rem;
+        font-weight: 400;
+    }
+
     .day .details .header .summary .content
     {
         display: grid;
@@ -229,76 +319,29 @@
     }
 }
 
-@media (max-width: 549px)
-{
-    .day .details .hours .hour .overview
-    {
-        text-align: left;
-    }
-
-    .day .details .hours .hour .overview .grid
-    {
-        grid-template-areas: "time time" "icon temperature" "forecast forecast";
-        grid-template-columns: auto auto;
-        gap: 0.25rem;
-    }
-
-    .day .details .hours .hour .overview .time 
-    {
-        display: block;
-    }
-
-    .day .details .hours .hour .overview .icon img
-    {
-        width: 32px;
-        height: 32px;
-    }
-
-    .day .details .hours .hour .overview .temperature .value
-    {
-        padding-left: 0.25rem;
-        font-size: 24px;
-        line-height: 1;
-    }
-
-    .forecast .details .items .item .overview .temperature .unit
-    {
-        font-size: 16px;
-        position: relative;
-        top: 0px;
-    }
-
-    .day .details .hours .hour .overview .forecast
-    {  
-        display: block;  
-        min-height: auto;
-    }
-
-    .day .details .hours .hour .metas .grid
-    {
-        grid-template-areas: "precipitation" "wind" "humidity" "uv";
-        grid-template-columns: auto;
-        row-gap: 0.125rem;
-    }
-}
-
 @media (max-width: 499px)
 {
-    .day .details .header .title h1
+    .day .chart .navigator
     {
-        display: flex;
-        flex-direction: column-reverse;
-        direction: ltr;
-        gap: 0.5rem;
+        display: block;
+        margin-top: 1rem;
     }
 
-    .day .details .header .title h1 .forecast
+    .day .chart .navigator .grid
     {
-        font-size: 1rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .day .chart .navigator .arrow
+    {
+        width: 100%;
     }
 
     .day .chart .actions    
     {
+        margin-top: 1rem;
         display: block;
     }
 

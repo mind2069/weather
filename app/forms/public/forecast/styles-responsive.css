@@ -36,7 +36,7 @@
     {
         grid-template-areas: "weekday" "date" "icon" "temperature" "blurb";
         grid-template-areas: "icon temperature" "icon blurb";
-        grid-template-columns: auto auto;
+        grid-template-columns: 50px auto;
         row-gap: 0.125rem;
         column-gap: 0.5rem;
     }
@@ -60,6 +60,7 @@
 
     .forecast .details .items .item .overview .temperature
     {
+        justify-content: flex-start;
         font-size: 24px;
         font-weight: 400;
         line-height: 1;
@@ -213,8 +214,27 @@
 
 @media (max-width: 499px)
 {
+    .forecast .chart .navigator
+    {
+        display: block;
+        margin-top: 1rem;
+    }
+
+    .forecast .chart .navigator .grid
+    {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .forecast .chart .navigator .arrow
+    {
+        width: 100%;
+    }
+
     .forecast .chart .actions    
     {
+        margin-top: 1rem;
         display: block;
     }
 

@@ -915,20 +915,26 @@ export default function Client({ session, days }: ClientProperties)
                         </div>
                         {chartScrollNarrowLayout && chartNeedsHorizontalScroll ? (
                             <div className="navigator">
-                                <button
-                                    type="button"
-                                    className="btn arrow"
-                                    onClick={() => chartScrollByPage(-1)}
-                                >
-                                    <ChevronLeft aria-hidden size={20} strokeWidth={2} />
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn arrow"
-                                    onClick={() => chartScrollByPage(1)}
-                                >
-                                    <ChevronRight aria-hidden size={20} strokeWidth={2} />
-                                </button>
+                                <div className="grid">
+                                    <div>
+                                        <button
+                                            type="button"
+                                            className="btn arrow"
+                                            onClick={() => chartScrollByPage(-1)}
+                                        >
+                                            <ChevronLeft aria-hidden size={20} strokeWidth={2} />
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button
+                                            type="button"
+                                            className="btn arrow"
+                                            onClick={() => chartScrollByPage(1)}
+                                        >
+                                            <ChevronRight aria-hidden size={20} strokeWidth={2} />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         ) : null}
                         <div className="actions">

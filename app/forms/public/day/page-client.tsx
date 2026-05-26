@@ -442,7 +442,6 @@ export default function Client({ session, date }: ClientProperties)
                                 <div className="highlights">
                                     <div className="wrapper">
                                         <div className="icon">
-                                            {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img
                                                 src={day.highlights.icon}
                                                 alt={day.highlights.forecast}
@@ -839,20 +838,26 @@ export default function Client({ session, date }: ClientProperties)
                             </div>
                             {chartScrollNarrowLayout && chartNeedsHorizontalScroll ? (
                                 <div className="navigator">
-                                    <button
-                                        type="button"
-                                        className="btn arrow"
-                                        onClick={() => chartScrollByPage(-1)}
-                                    >
-                                        <ChevronLeft aria-hidden size={20} strokeWidth={2} />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="btn arrow"
-                                        onClick={() => chartScrollByPage(1)}
-                                    >
-                                        <ChevronRight aria-hidden size={20} strokeWidth={2} />
-                                    </button>
+                                    <div className="grid">
+                                        <div>
+                                            <button
+                                                type="button"
+                                                className="btn arrow"
+                                                onClick={() => chartScrollByPage(-1)}
+                                            >
+                                                <ChevronLeft aria-hidden size={20} strokeWidth={2} />
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button
+                                                type="button"
+                                                className="btn arrow"
+                                                onClick={() => chartScrollByPage(1)}
+                                            >
+                                                <ChevronRight aria-hidden size={20} strokeWidth={2} />
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             ) : null}
                             <div className="actions">
