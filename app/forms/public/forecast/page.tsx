@@ -1,29 +1,27 @@
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import * as LanguagesHelper from "@/scripts/languages/languages-helper";
 import Client from "./page-client";
 import "./styles.css";
 import "./styles-responsive.css";
 import { Session } from "@/scripts/types/session";
 import { SessionServiceShared } from "@/services/session/shared";
-import { TextHelper } from "@/scripts/helpers/text";
+import { ResolveForecastRoute } from "./resolve-route";
 
 export default async function Page()
 {
     const headersList = await headers();
     const session: Session = SessionServiceShared.Build(headersList);
     const pathname = session.tracking.pathname;
-    const segments = pathname.split("/").filter(Boolean);
 
-    let days = 14;
+    LanguagesHelper.Initialize(session.language.code);
 
-    if (segments.length === 3)
+    const route = ResolveForecastRoute(pathname);
+
+    if (!route.valid)
     {
-        const daysPath = TextHelper.Numeric(segments[2]);
-        
-        if (daysPath.length > 0)
-        {
-            days = parseInt(daysPath);
-        }
+        redirect(LanguagesHelper.Path("Public_Forecast"));
     }
 
-    return ( <Client session={session} days={days}/> )
+    return <Client session={session} days={route.days} />;
 }

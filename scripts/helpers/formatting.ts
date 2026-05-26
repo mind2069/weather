@@ -66,6 +66,26 @@ export class FormattingHelper
             })
             .join("");
     }
+
+    /** e.g. Saturday, May 30, 2026 (locale-aware) */
+    public static DateFull(isoDate: string, locale: string): string
+    {
+        const d = new Date(`${isoDate}T12:00:00`);
+        const formatted = d.toLocaleDateString(locale,
+        {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+        });
+
+        if (formatted.length === 0)
+        {
+            return formatted;
+        }
+
+        return formatted[0].toUpperCase() + formatted.slice(1);
+    }
     
     public static LocalTime(iso: string, locale: string): string
     {
