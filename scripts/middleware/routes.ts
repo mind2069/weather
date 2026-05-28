@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { ROUTES_PATHS } from "./routes-paths";
 import { RouteAuthorized, RouteProtected } from "./authentification";
+import * as LanguagesHelper from "@/scripts/languages/languages-helper";
 const LANGUAGES = ["en-ca", "fr-ca"] as const;
 
 function IsAssetRequest(pathname: string): boolean
@@ -50,7 +51,12 @@ export async function handleRoutes(request: NextRequest)
 
     if (pathname === "/")
     {
-        return NextResponse.redirect(new URL("/en-ca/forecast", request.url));
+        LanguagesHelper.Initialize("en-ca");
+
+        const languageId = LanguagesHelper.LanguageId();
+        const path = LanguagesHelper.PathLanguage("Public_Today", languageId);
+
+        return NextResponse.redirect(new URL(path, request.url));
     }
 
     const segments = pathname.split("/").filter(Boolean);
@@ -64,9 +70,12 @@ export async function handleRoutes(request: NextRequest)
         
         if (!isAuthenticated)
         {
-            const pathHome = language === 'fr-ca' ? '/fr-ca/aujourdhui' : '/en-ca/today';
+            LanguagesHelper.Initialize(language);
 
-            return NextResponse.redirect(new URL(pathHome, request.url));
+            const languageId = LanguagesHelper.LanguageId();
+            const path = LanguagesHelper.PathLanguage("Public_Today", languageId);
+
+            return NextResponse.redirect(new URL(path, request.url));
         }
     }
 

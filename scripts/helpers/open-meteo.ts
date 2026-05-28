@@ -90,6 +90,29 @@ function ModeWeatherCode(codes: number[]): number | null
     return best;
 }
 
+function DisplayWeatherCode(
+    date: string,
+    sunrise: string,
+    sunset: string,
+    dailyCode: number | null,
+    hourlyTime: string[],
+    hourlyCode: number[],
+): number | null
+{
+    if (hourlyTime.length && hourlyCode.length)
+    {
+        const daylight = DaylightWeatherCodes(date, sunrise, sunset, hourlyTime, hourlyCode);
+        const mode = ModeWeatherCode(daylight);
+
+        if (mode != null)
+        {
+            return mode;
+        }
+    }
+
+    return dailyCode;
+}
+
 export class OpenMeteoHelper
 {
     public static ForecastNormalize(session: Session, data: OpenMeteoForecast): ForecastNormalized[]
@@ -108,25 +131,14 @@ export class OpenMeteoHelper
             const windDirRaw = data.daily.wind_direction_10m_dominant?.[i];
             const windDirection = windDirRaw == null || Number.isNaN(windDirRaw) ? 0 : Math.round(((windDirRaw % 360) + 360) % 360);
 
-            let displayCode = displayCodeFallback;
-
-            if (hourly?.time?.length && hourly.weather_code?.length)
-            {
-                const daylight = DaylightWeatherCodes(
-                    date,
-                    sunrise,
-                    sunset,
-                    hourly.time,
-                    hourly.weather_code,
-                );
-
-                const mode = ModeWeatherCode(daylight);
-
-                if (mode != null)
-                {
-                    displayCode = mode;
-                }
-            }
+            const displayCode = DisplayWeatherCode(
+                date,
+                sunrise,
+                sunset,
+                displayCodeFallback ?? null,
+                hourly?.time ?? [],
+                hourly?.weather_code ?? [],
+            ) ?? displayCodeFallback;
 
             return {
                 date: date,
@@ -230,8 +242,16 @@ export class OpenMeteoHelper
         {
             const maxWind = Math.max(...winds);
             const windMaxIdx = h.wind_speed_10m.findIndex((v) => num(v) === maxWind);
+            const displayCode = DisplayWeatherCode(
+                date,
+                sunrise,
+                sunset,
+                dailyCode,
+                times,
+                h.weather_code,
+            );
 
-            highlights = 
+            highlights =
             {
                 time: fallbackHour?.time ?? `${date}T12:00`,
                 temperature: Math.max(...temps),
@@ -241,8 +261,8 @@ export class OpenMeteoHelper
                 windSpeed: maxWind,
                 windDirection: windMaxIdx >= 0 ? num(h.wind_direction_10m[windMaxIdx]) : (fallbackHour?.windDirection ?? 0),
                 uvIndex: Math.max(...uvs),
-                forecast: dailyCode != null ? LanguagesHelper.WeatherCaption(dailyCode) : (fallbackHour?.forecast ?? ""),
-                icon: dailyCode != null ? (WEATHER_ICONS[dailyCode] ?? WEATHER_ICONS_UNKNOWN) : (fallbackHour?.icon ?? WEATHER_ICONS_UNKNOWN),
+                forecast: displayCode != null ? LanguagesHelper.WeatherCaption(displayCode) : (fallbackHour?.forecast ?? ""),
+                icon: displayCode != null ? (WEATHER_ICONS[displayCode] ?? WEATHER_ICONS_UNKNOWN) : (fallbackHour?.icon ?? WEATHER_ICONS_UNKNOWN),
             };
         }
 

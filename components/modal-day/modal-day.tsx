@@ -3,7 +3,6 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import * as LanguagesHelper from "@/scripts/languages/languages-helper";
 import type { ForecastNormalized, DayNormalized } from "@/scripts/types/open-meteo";
-
 import type { Session } from "@/scripts/types/session";
 import { FormattingHelper } from "@/scripts/helpers/formatting";
 import Link from "next/link";
@@ -104,6 +103,7 @@ export default function ModalDayForecast({ session, day, dayForecast, open, load
         return () =>
         {
             document.body.style.overflow = previousOverflow;
+
             window.removeEventListener("keydown", onKeyDown);
         };
 
@@ -194,15 +194,15 @@ export default function ModalDayForecast({ session, day, dayForecast, open, load
                                     <div className="data">
                                         <div className="col">
                                             <div className="row">
-                                                <span className="label">{LanguagesHelper.Caption("High")}</span>
-                                                <span className="value">
-                                                    {Math.round(day.tempMax)}°{tempUnitSuffix}
-                                                </span>
-                                            </div>
-                                            <div className="row">
                                                 <span className="label">{LanguagesHelper.Caption("Low")}</span>
                                                 <span className="value">
                                                     {Math.round(day.tempMin)}°{tempUnitSuffix}
+                                                </span>
+                                            </div>
+                                            <div className="row">
+                                                <span className="label">{LanguagesHelper.Caption("High")}</span>
+                                                <span className="value">
+                                                    {Math.round(day.tempMax)}°{tempUnitSuffix}
                                                 </span>
                                             </div>
                                         </div>

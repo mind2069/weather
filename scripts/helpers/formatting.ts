@@ -1,12 +1,27 @@
 export class FormattingHelper
 {
-    /** Calendar `YYYY-MM-DD` in the environment’s local timezone (server or browser). */
     public static IsoDateLocal(d: Date): string
     {
         return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
     }
 
-    /** True if `s` is a real calendar day in `YYYY-MM-DD` form. */
+    public static IsoDateInTimeZone(d: Date, timeZone: string): string
+    {
+        const parts = new Intl.DateTimeFormat("en-CA",
+        {
+            timeZone,
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        }).formatToParts(d);
+
+        const year = parts.find((p) => p.type === "year")?.value ?? "";
+        const month = parts.find((p) => p.type === "month")?.value ?? "";
+        const day = parts.find((p) => p.type === "day")?.value ?? "";
+
+        return `${year}-${month}-${day}`;
+    }
+
     public static IsValidIsoDate(s: string): boolean
     {
         const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
@@ -67,7 +82,6 @@ export class FormattingHelper
             .join("");
     }
 
-    /** e.g. Saturday, May 30, 2026 (locale-aware) */
     public static DateFull(isoDate: string, locale: string): string
     {
         const d = new Date(`${isoDate}T12:00:00`);

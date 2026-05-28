@@ -23,5 +23,5 @@ export default async function Page()
         redirect(LanguagesHelper.Path("Public_Day"));
     }
 
-    return <Client session={session} date={route.date} />;
+    return <Client session={session} date={route.date} kind={route.kind} />;
 }

@@ -9,6 +9,21 @@ export interface DayRoute
     kind: DayRouteKind;
 }
 
+export function EffectiveDayDate(kind: DayRouteKind, fixedDate: string): string
+{
+    if (kind === "today")
+    {
+        return FormattingHelper.IsoDateLocal(new Date());
+    }
+
+    if (kind === "tomorrow")
+    {
+        return FormattingHelper.IsoDateLocal(new Date(Date.now() + 24 * 60 * 60 * 1000));
+    }
+
+    return fixedDate;
+}
+
 export function ResolveDayRoute(pathname: string): DayRoute
 {
     const segments = pathname.split("/").filter(Boolean);

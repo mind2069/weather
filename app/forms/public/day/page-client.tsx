@@ -13,6 +13,7 @@ import { Session } from "@/scripts/types/session";
 import ModalLoading from "@/components/modal-loading/modal-loading";
 import ModalMessage from "@/components/modal-message/modal-message";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { EffectiveDayDate, type DayRouteKind } from "./resolve-route";
 
 interface DayHourlyChartRow
 {
@@ -145,13 +146,15 @@ interface ClientProperties
 {
     session: Session;
     date: string;
+    kind: DayRouteKind;
 }
 
-export default function Client({ session, date }: ClientProperties)
+export default function Client({ session, date, kind }: ClientProperties)
 {
     LanguagesHelper.Initialize(session.language.code);
 
     const locale = session.user.locale;
+    const effectiveDate = useMemo(() => EffectiveDayDate(kind, date), [kind, date]);
     const windSpeedUnit = session.user.unit === "imperial" ? "mph" : "km/h";
     const windSpeedUnitDisplay = session.user.unit === "imperial" ? "MPH" : "KM/H";
     const tempUnitSuffix = session.user.unit === "imperial" ? "F" : "C";
@@ -159,7 +162,6 @@ export default function Client({ session, date }: ClientProperties)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [chartMetric, setChartMetric] = useState<ChartMetric>("temperature");
-    const pageLoadedRef = useRef(false);
     const chartScrollRef = useRef<HTMLDivElement>(null);
     const [chartScrollNarrowLayout, setChartScrollNarrowLayout] = useState(false);
     const [chartNeedsHorizontalScroll, setChartNeedsHorizontalScroll] = useState(false);
@@ -242,16 +244,8 @@ export default function Client({ session, date }: ClientProperties)
 
     useEffect(() =>
     {
-        if (pageLoadedRef.current)
-        {
-            return;
-        }
-
-        pageLoadedRef.current = true;
-
         void Load();
-        
-    }, []);
+    }, [effectiveDate]);
 
     const Load = async () =>
     {
@@ -261,7 +255,7 @@ export default function Client({ session, date }: ClientProperties)
         const parametersDay: OpenMeteoDayParameters =
         {
             session: session,
-            date: date,
+            date: effectiveDate,
         };
 
         const responseDay: OpenMeteoDayResponse = await WeatherServiceClient.Day(parametersDay);
