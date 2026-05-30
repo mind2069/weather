@@ -67,6 +67,13 @@ function descriptionFor(context: DayMetaContext, languageId: LanguageId): string
             : "Météo heure par heure pour demain : température, ressenti, précipitations, vent, indice UV, lever et coucher du soleil.";
     }
 
+    if (context.kind === "after-tomorrow")
+    {
+        return IsEnglish(languageId)
+            ? "Hour-by-hour weather for after tomorrow: temperature, feels-like, precipitation, wind, UV index, sunrise and sunset."
+            : "Météo heure par heure pour après demain : température, ressenti, précipitations, vent, indice UV, lever et coucher du soleil.";
+    }
+
     const dateLabel = FormattingHelper.TextLong(context.date, locale);
 
     return IsEnglish(languageId)
