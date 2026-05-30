@@ -29,7 +29,7 @@ export function EffectiveDayDate(kind: DayRouteKind, fixedDate: string): string
     return fixedDate;
 }
 
-export function ResolveDayRoute(page: string): DayRoute
+export function ResolveDayRoute(page: string, date: string): DayRoute
 {
     const today = FormattingHelper.IsoDateLocal(new Date());
     const tomorrow = FormattingHelper.IsoDateLocal(new Date(Date.now() + 24 * 60 * 60 * 1000));
@@ -39,6 +39,17 @@ export function ResolveDayRoute(page: string): DayRoute
     {
         case "day":
         case "journee":
+        {
+            const trimmed = date?.trim() ?? "";
+
+            if (FormattingHelper.IsValidIsoDate(trimmed))
+            {
+                return { valid: true, date: trimmed, kind: "date" };
+            }
+
+            return { valid: false, date: today, kind: "today" };
+        }
+
         case "today":
         case "aujourdhui":
 

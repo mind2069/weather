@@ -11,15 +11,15 @@ import { ResolveDayRoute } from "./resolve-route";
 export async function generateMetadata(): Promise<Metadata>
 {
     const headersList = await headers();
-    const pathname = headersList.get("x-pathname") ?? "";
-    const languageCode = headersList.get("x-language") ?? "en-ca";
+    const session = SessionServiceShared.Build(headersList);
+    const languageCode = session.language.code;
     const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
-    const page = headersList.get("x-page") ?? "";
-    const route = ResolveDayRoute(page);
+    const page = session.tracking.page;
+    const filename = session.tracking.filename;
+    const route = ResolveDayRoute(page, filename);
     const baseUrl = metaBaseUrlFromHeaders(headersList);
     const context = DayMetaContextFromRoute(route, baseUrl);
     const cookies = headersList.get("cookie") ?? "";
-    const session = SessionServiceShared.Build(headersList);
     const location = hasSavedLocationFromCookies(cookies) ? session.user.location : undefined;
 
     return ToNextMetadata(languageId, context, location);
@@ -28,11 +28,12 @@ export async function generateMetadata(): Promise<Metadata>
 export default async function LayoutBase({ children }: { children: React.ReactNode })
 {
     const headersList = await headers();
-    const pathname = headersList.get("x-pathname") ?? "";
-    const languageCode = headersList.get("x-language") ?? "en-ca";
+    const session = SessionServiceShared.Build(headersList);
+    const languageCode = session.language.code;
     const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
-    const page = headersList.get("x-page") ?? "";
-    const route = ResolveDayRoute(page);
+    const page = session.tracking.page;
+    const filename = session.tracking.filename;
+    const route = ResolveDayRoute(page, filename);
     const baseUrl = metaBaseUrlFromHeaders(headersList);
     const context = DayMetaContextFromRoute(route, baseUrl);
     const jsonLd = JSON.stringify(Meta.JsonLd(languageId, context));

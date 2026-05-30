@@ -14,14 +14,15 @@ export default async function Page()
     const session: Session = SessionServiceShared.Build(headersList);
     const language = session.language.code;
     const page = session.tracking.page;
+    const filename = session.tracking.filename;
 
     LanguagesHelper.Initialize(language);
 
-    const route = ResolveDayRoute(page);
+    const route = ResolveDayRoute(page, filename);
 
     if (!route.valid)
     {
-        redirect(LanguagesHelper.Path("Public_Day"));
+        //redirect(LanguagesHelper.Path("Public_Day"));
     }
 
     return <Client session={session} date={route.date} kind={route.kind} />;

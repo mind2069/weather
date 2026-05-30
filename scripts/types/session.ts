@@ -25,6 +25,7 @@ export interface SessionTracking
     pathname: string;
     section: string;
     page: string;
+    filename: string;
     code: string;
 }
 

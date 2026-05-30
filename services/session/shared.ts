@@ -7,7 +7,8 @@ export class SessionServiceShared
 {
     public static Build(headers: Headers): Session
     {
-        const session: Session = SessionEmpty();
+        let session: Session = SessionEmpty();
+        
         const cookies = headers.get("cookie") ?? "";
 
         const languageHeaders = headers.get("x-language");
@@ -21,11 +22,13 @@ export class SessionServiceShared
         const pathname = headers.get("x-pathname") ?? "";
         const section = headers.get("x-section") ?? "";
         const page = headers.get("x-page") ?? "";
+        const filename = headers.get("x-filename") ?? "";
 
         session.tracking.ip_address = ipAddress;
         session.tracking.pathname = pathname;
         session.tracking.section = section;
         session.tracking.page = page;
+        session.tracking.filename = filename;
         session.tracking.code = LanguagesHelper.PathCode(section, page);
 
         let unit = CookiesHelper.Get(cookies, 'unit') ?? '';
