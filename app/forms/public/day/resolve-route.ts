@@ -21,6 +21,11 @@ export function EffectiveDayDate(kind: DayRouteKind, fixedDate: string): string
         return FormattingHelper.IsoDateLocal(new Date(Date.now() + 24 * 60 * 60 * 1000));
     }
 
+    if (kind === "after-tomorrow")
+    {
+        return FormattingHelper.IsoDateLocal(new Date(Date.now() + 48 * 60 * 60 * 1000));
+    }
+
     return fixedDate;
 }
 
