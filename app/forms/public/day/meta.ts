@@ -24,6 +24,7 @@ function dayPath(languageId: LanguageId, kind: DayRouteKind, date: string): stri
         {
             case "today": return "/en-ca/today";
             case "tomorrow": return "/en-ca/tomorrow";
+            case "after-tomorrow": return "/en-ca/after-tomorrow";
             case "date": return `/en-ca/day/${date}`;
         }
     }
@@ -32,8 +33,11 @@ function dayPath(languageId: LanguageId, kind: DayRouteKind, date: string): stri
     {
         case "today": return "/fr-ca/aujourdhui";
         case "tomorrow": return "/fr-ca/demain";
+        case "after-tomorrow": return "/fr-ca/apres-demain";
         case "date": return `/fr-ca/journee/${date}`;
     }
+
+    return "";
 }
 
 function titleFor(context: DayMetaContext, languageId: LanguageId): string
