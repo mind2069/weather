@@ -14,7 +14,8 @@ export async function generateMetadata(): Promise<Metadata>
     const pathname = headersList.get("x-pathname") ?? "";
     const languageCode = headersList.get("x-language") ?? "en-ca";
     const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
-    const route = ResolveDayRoute(pathname);
+    const page = headersList.get("x-page") ?? "";
+    const route = ResolveDayRoute(page);
     const baseUrl = metaBaseUrlFromHeaders(headersList);
     const context = DayMetaContextFromRoute(route, baseUrl);
     const cookies = headersList.get("cookie") ?? "";
@@ -30,7 +31,8 @@ export default async function LayoutBase({ children }: { children: React.ReactNo
     const pathname = headersList.get("x-pathname") ?? "";
     const languageCode = headersList.get("x-language") ?? "en-ca";
     const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
-    const route = ResolveDayRoute(pathname);
+    const page = headersList.get("x-page") ?? "";
+    const route = ResolveDayRoute(page);
     const baseUrl = metaBaseUrlFromHeaders(headersList);
     const context = DayMetaContextFromRoute(route, baseUrl);
     const jsonLd = JSON.stringify(Meta.JsonLd(languageId, context));

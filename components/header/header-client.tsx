@@ -137,8 +137,14 @@ export default function HeaderClient({session}: ClientProperties)
                                                 <a href={LanguagesHelper.Path("Public_Tomorrow")} onClick={() => setNavMenuOpen(false)}>
                                                     {LanguagesHelper.Caption("Tomorrow")}
                                                 </a>
-                                                <a href={LanguagesHelper.Path("Public_Forecast")} onClick={() => setNavMenuOpen(false)}>
-                                                    {LanguagesHelper.Caption("Forecast")}
+                                                <a href={LanguagesHelper.Path("Public_AfterTomorrow")} onClick={() => setNavMenuOpen(false)}>
+                                                    {LanguagesHelper.Caption("AfterTomorrow")}
+                                                </a>
+                                                <a href={LanguagesHelper.Path("Public_Forecast7Days")} onClick={() => setNavMenuOpen(false)}>
+                                                    {LanguagesHelper.Caption("Forecast7Days")}
+                                                </a>
+                                                <a href={LanguagesHelper.Path("Public_Forecast14Days")} onClick={() => setNavMenuOpen(false)}>
+                                                    {LanguagesHelper.Caption("Forecast14Days")}
                                                 </a>
                                             </div>
                                             <div className="units">

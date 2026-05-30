@@ -12,11 +12,12 @@ export default async function Page()
 {
     const headersList = await headers();
     const session: Session = SessionServiceShared.Build(headersList);
-    const pathname = session.tracking.pathname;
+    const language = session.language.code;
+    const page = session.tracking.page;
 
-    LanguagesHelper.Initialize(session.language.code);
+    LanguagesHelper.Initialize(language);
 
-    const route = ResolveDayRoute(pathname);
+    const route = ResolveDayRoute(page);
 
     if (!route.valid)
     {

@@ -28,7 +28,7 @@ export default function FooterClient({ session }: ClientProperties)
                     <span className="separator" aria-hidden>
                         |
                     </span>
-                    <a className="link" href={LanguagesHelper.Path("Public_Forecast")}>
+                    <a className="link" href={LanguagesHelper.Path("Public_Forecast14Days")}>
                         {LanguagesHelper.Caption("Forecast")}
                     </a>
                 </nav>

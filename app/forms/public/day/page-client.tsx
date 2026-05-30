@@ -66,10 +66,7 @@ function HourChartAxisLabels(iso: string, locale: string): { top: string; bottom
         }
     }
 
-    const top =
-        hour && minute
-            ? `${hour}:${minute}`
-            : hour || FormattingHelper.LocalTime(iso, locale);
+    const top = hour && minute ? `${hour}:${minute}` : hour || FormattingHelper.LocalTime(iso, locale);
 
     return { top, bottom: dayPeriod };
 }
@@ -245,6 +242,7 @@ export default function Client({ session, date, kind }: ClientProperties)
     useEffect(() =>
     {
         void Load();
+        
     }, [effectiveDate]);
 
     const Load = async () =>

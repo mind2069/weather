@@ -12,15 +12,16 @@ export default async function Page()
 {
     const headersList = await headers();
     const session: Session = SessionServiceShared.Build(headersList);
-    const pathname = session.tracking.pathname;
+    const language = session.language.code;
+    const page = session.tracking.page;
 
-    LanguagesHelper.Initialize(session.language.code);
+    LanguagesHelper.Initialize(language);
 
-    const route = ResolveForecastRoute(pathname);
+    const route = ResolveForecastRoute(page);
 
     if (!route.valid)
     {
-        redirect(LanguagesHelper.Path("Public_Forecast"));
+        redirect(LanguagesHelper.Path("Public_Forecast14Days"));
     }
 
     return <Client session={session} days={route.days} />;

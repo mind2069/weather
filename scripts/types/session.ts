@@ -23,9 +23,9 @@ export interface SessionTracking
 {
     ip_address: string;
     pathname: string;
-    filename: string;
-    code: string;
+    section: string;
     page: string;
+    code: string;
 }
 
 export interface SessionUser

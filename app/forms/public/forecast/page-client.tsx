@@ -457,7 +457,7 @@ export default function Client({ session, days }: ClientProperties)
                     <div className="container">
                         <h1 className="head">
                             <span className="label">
-                                {LanguagesHelper.Caption("14DayForecast")}
+                                {LanguagesHelper.Caption("Forecast14Days")}
                             </span>
                             <span className="dates">
                                 <span>

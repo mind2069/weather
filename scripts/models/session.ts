@@ -18,9 +18,9 @@ export function SessionEmpty(): Session
         {
             ip_address: '0.0.0.0',
             pathname: '',
-            filename: '',
-            code: '',
+            section: '',
             page: '',
+            code: ''
         },
         user: 
         {

@@ -19,14 +19,14 @@ export class SessionServiceShared
 
         const ipAddress = headers.get("x-ip-address") ?? '0.0.0.0';
         const pathname = headers.get("x-pathname") ?? "";
+        const section = headers.get("x-section") ?? "";
         const page = headers.get("x-page") ?? "";
-        const filename = headers.get("x-filename") ?? "";
 
         session.tracking.ip_address = ipAddress;
         session.tracking.pathname = pathname;
-        session.tracking.filename = filename;
+        session.tracking.section = section;
         session.tracking.page = page;
-        session.tracking.code = LanguagesHelper.PathCode(page, filename);
+        session.tracking.code = LanguagesHelper.PathCode(section, page);
 
         let unit = CookiesHelper.Get(cookies, 'unit') ?? '';
 

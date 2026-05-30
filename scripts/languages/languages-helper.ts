@@ -108,9 +108,9 @@ export function PathLanguage(code: string, languageId: string): string
     return value;
 }
 
-export function PathCode(page: string, filename: string) : string
+export function PathCode(section: string, page: string) : string
 {
-    const code = page == filename ? filename : page + "_" + filename;
+    const code = section == page ? page : section + "_" + page;
 
     const value = LANGUAGES_CODE[code] ?? "Public_Home";
 

@@ -1,6 +1,6 @@
 import { FormattingHelper } from "@/scripts/helpers/formatting";
 
-export type DayRouteKind = "today" | "tomorrow" | "date";
+export type DayRouteKind = "today" | "tomorrow" | "after-tomorrow" | "date";
 
 export interface DayRoute
 {
@@ -24,35 +24,30 @@ export function EffectiveDayDate(kind: DayRouteKind, fixedDate: string): string
     return fixedDate;
 }
 
-export function ResolveDayRoute(pathname: string): DayRoute
+export function ResolveDayRoute(page: string): DayRoute
 {
-    const segments = pathname.split("/").filter(Boolean);
     const today = FormattingHelper.IsoDateLocal(new Date());
     const tomorrow = FormattingHelper.IsoDateLocal(new Date(Date.now() + 24 * 60 * 60 * 1000));
+    const afterTomorrow = FormattingHelper.IsoDateLocal(new Date(Date.now() + 48 * 60 * 60 * 1000));
 
-    if (segments.length === 2)
+    switch (page)
     {
-        switch (segments[1])
-        {
-            case "day":
-            case "journee":
-            case "today":
-            case "aujourdhui":
-                return { valid: true, date: today, kind: "today" };
+        case "day":
+        case "journee":
+        case "today":
+        case "aujourdhui":
 
-            case "tomorrow":
-            case "demain":
-                return { valid: true, date: tomorrow, kind: "tomorrow" };
-        }
-    }
-    else if (segments.length === 3)
-    {
-        const date = segments[2];
+            return { valid: true, date: today, kind: "today" };
 
-        if (FormattingHelper.IsValidIsoDate(date))
-        {
-            return { valid: true, date, kind: "date" };
-        }
+        case "tomorrow":
+        case "demain":
+
+            return { valid: true, date: tomorrow, kind: "tomorrow" };
+
+        case "after-tomorrow":
+        case "apres-demain":
+
+             return { valid: true, date: afterTomorrow, kind: "after-tomorrow" };
     }
 
     return { valid: false, date: today, kind: "today" };

@@ -17,13 +17,13 @@ function IsAssetRequest(pathname: string): boolean
     );
 }
 
-function WithHeaders(response: NextResponse, language: string, ipAddress: string, hostname: string, pathname: string, page: string, filename: string)
+function WithHeaders(response: NextResponse, language: string, ipAddress: string, hostname: string, pathname: string, section: string, page: string)
 {
     response.headers.set("x-language", language);
     response.headers.set("x-ip-address", ipAddress);
     response.headers.set("x-hostname", hostname);
     response.headers.set("x-pathname", pathname);
-    response.headers.set("x-filename", filename);
+    response.headers.set("x-section", section);
     response.headers.set("x-page", page);
 
     return response;
@@ -61,8 +61,13 @@ export async function handleRoutes(request: NextRequest)
 
     const segments = pathname.split("/").filter(Boolean);
     const language = (LANGUAGES as readonly string[]).includes(segments[0]) ? (segments[0] as typeof LANGUAGES[number]) : LANGUAGES[0];
-    const page = segments[1] ?? "";
-    const filename = segments.pop() ?? "";
+    let section = segments[1] ?? "";
+    const page = segments.pop() ?? "";
+
+    if(section === page)
+    {
+        section = "public";
+    }
 
     if (RouteProtected(pathname))
     {
@@ -87,7 +92,7 @@ export async function handleRoutes(request: NextRequest)
 
             rewriteUrl.search = request.nextUrl.search;
 
-            const response = WithHeaders( NextResponse.rewrite(rewriteUrl), language, ipAddress, hostname, pathname, page, filename);
+            const response = WithHeaders( NextResponse.rewrite(rewriteUrl), language, ipAddress, hostname, pathname, section, page);
 
             return SetRefererCookie(response, referer, language);
         }
@@ -109,7 +114,7 @@ export async function handleRoutes(request: NextRequest)
 
                 rewriteUrl.search = request.nextUrl.search;
 
-                const response = WithHeaders(NextResponse.rewrite(rewriteUrl), language, ipAddress, hostname, pathname, page, filename);
+                const response = WithHeaders(NextResponse.rewrite(rewriteUrl), language, ipAddress, hostname, pathname, section, page);
 
                 return SetRefererCookie(response, referer, language);
             }
@@ -121,7 +126,7 @@ export async function handleRoutes(request: NextRequest)
         return NextResponse.redirect(new URL(`/en-ca${pathname}`, request.url));
     }
 
-    const response = WithHeaders(NextResponse.next(), language, ipAddress, hostname, pathname, page, filename);
+    const response = WithHeaders(NextResponse.next(), language, ipAddress, hostname, pathname, section, page);
 
     return SetRefererCookie(response, referer, language);
 }
