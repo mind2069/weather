@@ -20,6 +20,7 @@ export function SessionEmpty(): Session
             pathname: '',
             section: '',
             page: '',
+            filename: '',
             code: ''
         },
         user: 
