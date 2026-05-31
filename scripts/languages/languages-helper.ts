@@ -112,7 +112,7 @@ export function PathCode(section: string, page: string) : string
 {
     const code = section == page ? page : section + "_" + page;
 
-    const value = LANGUAGES_CODE[code] ?? "Public_Home";
+    const value = LANGUAGES_CODE[code] ?? section + "_" + page;
 
     return value;
 }

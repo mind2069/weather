@@ -63,13 +63,35 @@ export async function handleRoutes(request: NextRequest)
     const segments = pathname.split("/").filter(Boolean);
     const language = (LANGUAGES as readonly string[]).includes(segments[0]) ? (segments[0] as typeof LANGUAGES[number]) : LANGUAGES[0];
     
-    let section = segments[1] ?? "";
-    let page = segments[1] ?? "";
-    let filename = segments.pop() ?? "";
+    let section = "";
+    let page  = "";
+    let filename = "";
+
+    if(segments.length === 2)
+    {
+        section = language == "en-ca" ? "public" : "publique";
+        page = segments[1] ?? "";
+        filename = "";
+    }
+    else if(segments.length === 3)
+    {
+        if(segments[1] == "day" || segments[1] == "journee")
+        {
+            section = language == "en-ca" ? "public" : "publique";
+            page = segments[1] ?? "";
+            filename = segments[2] ?? "";
+        }
+        else
+        {
+            section = segments[1] ?? "";
+            page = segments[1] ?? "";
+            filename = "";
+        }
+    }
 
     if(section === page)
     {
-        section = "public";
+        section = language == "en-ca" ? "public" : "publique";
     }
 
     if (RouteProtected(pathname))

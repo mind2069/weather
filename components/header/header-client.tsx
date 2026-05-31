@@ -13,12 +13,21 @@ interface ClientProperties
 
 export default function HeaderClient({session}: ClientProperties)
 {
-    LanguagesHelper.Initialize(session.language.code);
+    const language = session.language.code;
 
-    const pathCode = session.tracking.code;
-    const pathEnglish = LanguagesHelper.PathLanguage(pathCode, "1");
-    const pathFrench = LanguagesHelper.PathLanguage(pathCode, "2");
+    LanguagesHelper.Initialize(language);
+
     const unitValue = session.user.unit === "imperial" ? "imperial" : "metric";
+    const pathCode = session.tracking.code;
+
+    let pathEnglish = LanguagesHelper.PathLanguage(pathCode, "1");
+    let pathFrench = LanguagesHelper.PathLanguage(pathCode, "2");
+
+    if(session.tracking.filename !== "")    
+    {
+        pathEnglish += "/" + session.tracking.filename;
+        pathFrench += "/" + session.tracking.filename;
+    }
 
     const [navMenuOpen, setNavMenuOpen] = useState(false);
     const [langMenuOpen, setLangMenuOpen] = useState(false);
@@ -182,12 +191,16 @@ export default function HeaderClient({session}: ClientProperties)
                             </button>
                             {langMenuOpen ? (
                                 <div className="dropdown">
-                                    <a href={pathEnglish} onClick={() => setLangMenuOpen(false)}>
-                                        English
-                                    </a>
-                                    <a href={pathFrench} onClick={() => setLangMenuOpen(false)}>
-                                        Français
-                                    </a>
+                                    {( language !== "en-ca" && 
+                                        <a href={pathEnglish} onClick={() => setLangMenuOpen(false)}>
+                                            English
+                                        </a>
+                                    )}
+                                    {( language !== "fr-ca" && 
+                                        <a href={pathFrench} onClick={() => setLangMenuOpen(false)}>
+                                            Français
+                                        </a>
+                                    )}
                                 </div>
                             ) : null}
                         </div>
