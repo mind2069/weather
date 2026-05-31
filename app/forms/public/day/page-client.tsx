@@ -493,7 +493,7 @@ export default function Client({ session, date, kind }: ClientProperties)
                                         <div className="item">
                                             <div className="row">
                                                 <span className="label">
-                                                    {LanguagesHelper.Caption("Low")}
+                                                    {LanguagesHelper.Caption("TemperatureMin")}
                                                 </span>
                                                 <span className="value">
                                                     {Math.round(day.tempMin)}°{tempUnitSuffix}
@@ -501,7 +501,7 @@ export default function Client({ session, date, kind }: ClientProperties)
                                             </div>
                                             <div className="row">
                                                 <span className="label">
-                                                    {LanguagesHelper.Caption("High")}
+                                                    {LanguagesHelper.Caption("TemperatureMax")}
                                                 </span>
                                                 <span className="value">
                                                     {Math.round(day.tempMax)}°{tempUnitSuffix}

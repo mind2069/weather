@@ -138,4 +138,8 @@ export const LANGUAGES_CAPTION: Record<string, string> =
     "2_AfterTomorrow": "Après Demain",
     "1_To": "To",
     "2_To": "Au",
+    "1_TemperatureMin": "Temperature min",
+    "2_TemperatureMin": "Température min",
+    "1_TemperatureMax": "Temperature max",
+    "2_TemperatureMax": "Température max",
 };
