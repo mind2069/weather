@@ -3,6 +3,7 @@ import { MetaData, LanguageId, META_CONSTANTS, JsonLdData } from "@/scripts/type
 import { FormattingHelper } from "@/scripts/helpers/formatting";
 import { MetaOpenGraph, MetaTwitter, MetaLanguageAlternates, MetaGeoTags, MetaJsonLdWebPage, type MetaLocationInput, IsEnglish } from "@/scripts/helpers/meta-helpers";
 import type { DayRoute, DayRouteKind } from "./resolve-route";
+import { ConfigurationsShared } from "@/scripts/configurations/configurations-shared";
 
 export interface DayMetaContext
 {
@@ -42,7 +43,7 @@ function dayPath(languageId: LanguageId, kind: DayRouteKind, date: string): stri
 
 function titleFor(context: DayMetaContext, languageId: LanguageId): string
 {
-    const site = META_CONSTANTS.SITE_NAME;
+    const site = ConfigurationsShared.Name;
     const locale = localeCode(languageId);
     const dateLabel = FormattingHelper.DateFull(context.date, locale);
 

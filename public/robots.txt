@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://weather-kappa-azure.vercel.app/sitemap.xml
+Sitemap: https://weathersimple.app/sitemap.xml

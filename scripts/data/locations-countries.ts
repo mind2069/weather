@@ -50,5 +50,13 @@ export const COUNTRIES: readonly Country[] =
         latitude: 35.8617,
         longitude: 104.1954,
     },
+    {
+        id: 7,
+        name: "Bahamas",
+        name_normalized: "bahamas",
+        code: "BS",
+        latitude: 24.25,
+        longitude: -76.00,
+    },
 
 ] as const;

@@ -83,4 +83,22 @@ export const STATES: readonly State[] =
       latitude: 42.9513,
       longitude: 89.1897,
     },
+    {
+      id: 10,
+      countryId: 2,
+      name: "New York",
+      name_normalized: "newyork",
+      code: "NY",
+      latitude: 40.7128,
+      longitude: -74.0060,
+    },
+    {
+      id: 11,
+      countryId: 7,
+      name: "New Providence",
+      name_normalized: "newprovidence",
+      code: "NP",
+      latitude: 25.0340,
+      longitude: -77.3964,
+    },
 ] as const;

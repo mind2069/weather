@@ -62,24 +62,8 @@ export interface MetaData
     JsonLd(languageId: LanguageId, context?: unknown): JsonLdData;
 }
 
-export function metaBaseUrlFromHeaders(headers: Headers): string
-{
-    const hostHeader = headers.get("host");
-    const host = headers.get("x-hostname")?.trim().toLowerCase() ?? hostHeader?.split(":")[0]?.trim().toLowerCase() ?? "localhost";
-
-    let protocol = headers.get("x-forwarded-proto")?.split(",")[0]?.trim().toLowerCase();
-
-    if (protocol !== "http" && protocol !== "https")
-    {
-        protocol = host === "localhost" || host.startsWith("127.0.0.1") ? "http" : "https";
-    }
-
-    return `${protocol}://${host}`.replace(/\/$/, "");
-}
-
 export const META_CONSTANTS =
 {
-    SITE_NAME: "Weather",
     TWITTER_HANDLE: "",
     LOCALES:
     {

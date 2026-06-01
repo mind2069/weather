@@ -150,6 +150,7 @@ export default function Client({ session, date, kind }: ClientProperties)
 {
     LanguagesHelper.Initialize(session.language.code);
 
+    const pageReady = useRef(Boolean(false));        
     const locale = session.user.locale;
     const effectiveDate = useMemo(() => EffectiveDayDate(kind, date), [kind, date]);
     const windSpeedUnit = session.user.unit === "imperial" ? "mph" : "km/h";
@@ -163,23 +164,16 @@ export default function Client({ session, date, kind }: ClientProperties)
     const [chartScrollNarrowLayout, setChartScrollNarrowLayout] = useState(false);
     const [chartNeedsHorizontalScroll, setChartNeedsHorizontalScroll] = useState(false);
 
-    const refreshChartScrollHints = useCallback(() =>
+    useEffect(() =>
     {
-        const el = chartScrollRef.current;
-
-        if (!el)
+        if (pageReady.current === false)
         {
-            setChartNeedsHorizontalScroll(false);
+            pageReady.current = true;
 
-            return;
+            void Load();
         }
-
-        const { clientWidth, scrollWidth } = el;
-        const epsilon = 2;
-
-        setChartNeedsHorizontalScroll(scrollWidth > clientWidth + epsilon);
-
-    }, []);
+        
+    }, [effectiveDate]);
 
     useEffect(() =>
     {
@@ -200,51 +194,7 @@ export default function Client({ session, date, kind }: ClientProperties)
         };
 
     }, []);
-
-    const chartScrollByPage = useCallback((direction: -1 | 1) =>
-    {
-        const el = chartScrollRef.current;
-
-        if (!el)
-        {
-            return;
-        }
-
-        const instant =
-            typeof window !== "undefined" &&
-            window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-        const behavior: ScrollBehavior = instant ? "auto" : "smooth";
-        const epsilon = 2;
-
-        if (direction === -1 && el.scrollLeft <= epsilon)
-        {
-            el.scrollTo({
-                left: el.scrollWidth - el.clientWidth,
-                behavior,
-            });
-
-            return;
-        }
-
-        if (direction === 1 && el.scrollLeft + el.clientWidth >= el.scrollWidth - epsilon)
-        {
-            el.scrollTo({ left: 0, behavior });
-
-            return;
-        }
-
-        const delta = Math.max(120, Math.round(el.clientWidth * 0.85)) * direction;
-
-        el.scrollBy({ left: delta, behavior });
-    }, []);
-
-    useEffect(() =>
-    {
-        void Load();
-        
-    }, [effectiveDate]);
-
+    
     const Load = async () =>
     {
         setLoading(true);
@@ -286,6 +236,63 @@ export default function Client({ session, date, kind }: ClientProperties)
 
         setLoading(false);
     }
+
+    const refreshChartScrollHints = useCallback(() =>
+    {
+        const el = chartScrollRef.current;
+
+        if (!el)
+        {
+            setChartNeedsHorizontalScroll(false);
+
+            return;
+        }
+
+        const { clientWidth, scrollWidth } = el;
+        const epsilon = 2;
+
+        setChartNeedsHorizontalScroll(scrollWidth > clientWidth + epsilon);
+
+    }, []);
+
+    const chartScrollByPage = useCallback((direction: -1 | 1) =>
+    {
+        const el = chartScrollRef.current;
+
+        if (!el)
+        {
+            return;
+        }
+
+        const instant =
+            typeof window !== "undefined" &&
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const behavior: ScrollBehavior = instant ? "auto" : "smooth";
+        const epsilon = 2;
+
+        if (direction === -1 && el.scrollLeft <= epsilon)
+        {
+            el.scrollTo({
+                left: el.scrollWidth - el.clientWidth,
+                behavior,
+            });
+
+            return;
+        }
+
+        if (direction === 1 && el.scrollLeft + el.clientWidth >= el.scrollWidth - epsilon)
+        {
+            el.scrollTo({ left: 0, behavior });
+
+            return;
+        }
+
+        const delta = Math.max(120, Math.round(el.clientWidth * 0.85)) * direction;
+
+        el.scrollBy({ left: delta, behavior });
+
+    }, []);
 
     const hourlyNormalized: HourlyNormalized[] = day?.hourly ?? [];
 

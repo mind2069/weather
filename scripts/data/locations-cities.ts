@@ -92,5 +92,23 @@ export const CITIES: readonly City[] =
         latitude: 42.9513,
         longitude: 89.1897,
     },
+    {
+        id: 10,
+        countryId: 2,
+        stateId: 10,
+        name: "New York City",
+        name_normalized: "newyorkcity",
+        latitude: 40.7128,
+        longitude: -74.0060,
+    },
+    {
+        id: 11,
+        countryId: 7,
+        stateId: 11,
+        name: "Nassau",
+        name_normalized: "nassau",
+        latitude: 25.0479,
+        longitude: -77.3554,
+    },
 
 ] as const;

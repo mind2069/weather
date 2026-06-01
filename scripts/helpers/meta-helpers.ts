@@ -1,12 +1,6 @@
-import
-{
-    LanguageId,
-    OpenGraphData,
-    TwitterData,
-    LanguageAlternates,
-    JsonLdData,
-    META_CONSTANTS,
-} from "@/scripts/types/meta";
+import { LanguageId, OpenGraphData, TwitterData, LanguageAlternates, JsonLdData, META_CONSTANTS } from "@/scripts/types/meta";
+import { ConfigurationsShared } from "@/scripts/configurations/configurations-shared";
+
 import { CookiesHelper } from "@/scripts/helpers/cookies";
 
 export interface MetaLocationInput
@@ -26,11 +20,9 @@ export const MetaOpenGraph = (
     title,
     description,
     url,
-    siteName: META_CONSTANTS.SITE_NAME,
+    siteName: ConfigurationsShared.Name,
     images: [],
-    locale: languageId === META_CONSTANTS.LANGUAGES.EN
-        ? META_CONSTANTS.LOCALES.EN
-        : META_CONSTANTS.LOCALES.FR,
+    locale: languageId === META_CONSTANTS.LANGUAGES.EN ? META_CONSTANTS.LOCALES.EN : META_CONSTANTS.LOCALES.FR,
     type: "website",
 });
 
@@ -43,9 +35,7 @@ export const MetaTwitter = (
     title,
     description,
     images: [],
-    ...(META_CONSTANTS.TWITTER_HANDLE
-        ? { site: META_CONSTANTS.TWITTER_HANDLE, creator: META_CONSTANTS.TWITTER_HANDLE }
-        : {}),
+    ...(META_CONSTANTS.TWITTER_HANDLE ? { site: META_CONSTANTS.TWITTER_HANDLE, creator: META_CONSTANTS.TWITTER_HANDLE } : {}),
 });
 
 export const MetaLanguageAlternates = (

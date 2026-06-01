@@ -2,96 +2,96 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <!-- 14-day forecast -->
   <url>
-    <loc>https://weather-kappa-azure.vercel.app/en-ca/forecast</loc>
-    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weather-kappa-azure.vercel.app/en-ca/forecast-14-days" />
-    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weather-kappa-azure.vercel.app/fr-ca/prevision-14-jours" />
+    <loc>https://weathersimple.app/en-ca/forecast</loc>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weathersimple.app/en-ca/forecast-14-days" />
+    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weathersimple.app/fr-ca/prevision-14-jours" />
     <priority>1.0</priority>
     <lastmod>2026-05-18</lastmod>
   </url>
   <url>
-    <loc>https://weather-kappa-azure.vercel.app/fr-ca/prevision</loc>
-    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weather-kappa-azure.vercel.app/en-ca/forecast-14-days" />
-    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weather-kappa-azure.vercel.app/fr-ca/prevision-14-jours" />
+    <loc>https://weathersimple.app/fr-ca/prevision</loc>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weathersimple.app/en-ca/forecast-14-days" />
+    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weathersimple.app/fr-ca/prevision-14-jours" />
     <priority>1.0</priority>
     <lastmod>2026-05-18</lastmod>
   </url>
 
   <!-- 7-day forecast -->
   <url>
-    <loc>https://weather-kappa-azure.vercel.app/en-ca/forecast</loc>
-    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weather-kappa-azure.vercel.app/en-ca/forecast-7-days" />
-    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weather-kappa-azure.vercel.app/fr-ca/prevision-7-jours" />
+    <loc>https://weathersimple.app/en-ca/forecast</loc>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weathersimple.app/en-ca/forecast-7-days" />
+    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weathersimple.app/fr-ca/prevision-7-jours" />
     <priority>1.0</priority>
     <lastmod>2026-05-18</lastmod>
   </url>
   <url>
-    <loc>https://weather-kappa-azure.vercel.app/fr-ca/prevision</loc>
-    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weather-kappa-azure.vercel.app/en-ca/forecast-7-days" />
-    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weather-kappa-azure.vercel.app/fr-ca/prevision-7-jours" />
+    <loc>https://weathersimple.app/fr-ca/prevision</loc>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weathersimple.app/en-ca/forecast-7-days" />
+    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weathersimple.app/fr-ca/prevision-7-jours" />
     <priority>1.0</priority>
     <lastmod>2026-05-18</lastmod>
   </url>
 
   <!-- Today -->
   <url>
-    <loc>https://weather-kappa-azure.vercel.app/en-ca/today</loc>
-    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weather-kappa-azure.vercel.app/en-ca/today" />
-    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weather-kappa-azure.vercel.app/fr-ca/aujourdhui" />
+    <loc>https://weathersimple.app/en-ca/today</loc>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weathersimple.app/en-ca/today" />
+    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weathersimple.app/fr-ca/aujourdhui" />
     <priority>0.9</priority>
     <lastmod>2026-05-18</lastmod>
   </url>
   <url>
-    <loc>https://weather-kappa-azure.vercel.app/fr-ca/aujourdhui</loc>
-    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weather-kappa-azure.vercel.app/en-ca/today" />
-    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weather-kappa-azure.vercel.app/fr-ca/aujourdhui" />
+    <loc>https://weathersimple.app/fr-ca/aujourdhui</loc>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weathersimple.app/en-ca/today" />
+    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weathersimple.app/fr-ca/aujourdhui" />
     <priority>0.9</priority>
     <lastmod>2026-05-18</lastmod>
   </url>
 
   <!-- Tomorrow -->
   <url>
-    <loc>https://weather-kappa-azure.vercel.app/en-ca/tomorrow</loc>
-    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weather-kappa-azure.vercel.app/en-ca/tomorrow" />
-    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weather-kappa-azure.vercel.app/fr-ca/demain" />
+    <loc>https://weathersimple.app/en-ca/tomorrow</loc>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weathersimple.app/en-ca/tomorrow" />
+    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weathersimple.app/fr-ca/demain" />
     <priority>0.9</priority>
     <lastmod>2026-05-18</lastmod>
   </url>
   <url>
-    <loc>https://weather-kappa-azure.vercel.app/fr-ca/demain</loc>
-    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weather-kappa-azure.vercel.app/en-ca/tomorrow" />
-    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weather-kappa-azure.vercel.app/fr-ca/demain" />
+    <loc>https://weathersimple.app/fr-ca/demain</loc>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weathersimple.app/en-ca/tomorrow" />
+    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weathersimple.app/fr-ca/demain" />
     <priority>0.9</priority>
     <lastmod>2026-05-18</lastmod>
   </url>
 
   <!-- After Tomorrow -->
   <url>
-    <loc>https://weather-kappa-azure.vercel.app/en-ca/after-tomorrow</loc>
-    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weather-kappa-azure.vercel.app/en-ca/after-tomorrow" />
-    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weather-kappa-azure.vercel.app/fr-ca/apres-demain" />
+    <loc>https://weathersimple.app/en-ca/after-tomorrow</loc>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weathersimple.app/en-ca/after-tomorrow" />
+    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weathersimple.app/fr-ca/apres-demain" />
     <priority>0.9</priority>
     <lastmod>2026-05-18</lastmod>
   </url>
   <url>
-    <loc>https://weather-kappa-azure.vercel.app/fr-ca/apres-demain</loc>
-    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weather-kappa-azure.vercel.app/en-ca/after-tomorrow" />
-    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weather-kappa-azure.vercel.app/fr-ca/apres-demain" />
+    <loc>https://weathersimple.app/fr-ca/apres-demain</loc>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weathersimple.app/en-ca/after-tomorrow" />
+    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weathersimple.app/fr-ca/apres-demain" />
     <priority>0.9</priority>
     <lastmod>2026-05-18</lastmod>
   </url>
 
   <!-- Day (hourly) -->
   <url>
-    <loc>https://weather-kappa-azure.vercel.app/en-ca/day</loc>
-    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weather-kappa-azure.vercel.app/en-ca/day" />
-    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weather-kappa-azure.vercel.app/fr-ca/journee" />
+    <loc>https://weathersimple.app/en-ca/day</loc>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weathersimple.app/en-ca/day" />
+    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weathersimple.app/fr-ca/journee" />
     <priority>0.8</priority>
     <lastmod>2026-05-18</lastmod>
   </url>
   <url>
-    <loc>https://weather-kappa-azure.vercel.app/fr-ca/journee</loc>
-    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weather-kappa-azure.vercel.app/en-ca/day" />
-    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weather-kappa-azure.vercel.app/fr-ca/journee" />
+    <loc>https://weathersimple.app/fr-ca/journee</loc>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://weathersimple.app/en-ca/day" />
+    <xhtml:link rel="alternate" hreflang="fr-ca" href="https://weathersimple.app/fr-ca/journee" />
     <priority>0.8</priority>
     <lastmod>2026-05-18</lastmod>
   </url>

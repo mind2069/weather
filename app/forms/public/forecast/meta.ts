@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { MetaData, LanguageId, META_CONSTANTS, JsonLdData } from "@/scripts/types/meta";
 import { MetaOpenGraph, MetaTwitter, MetaLanguageAlternates, MetaGeoTags, MetaJsonLdWebPage, type MetaLocationInput, IsEnglish } from "@/scripts/helpers/meta-helpers";
 import { FORECAST_DEFAULT_DAYS, type ForecastRoute } from "./resolve-route";
+import { ConfigurationsShared } from "@/scripts/configurations/configurations-shared";
 
 export interface ForecastMetaContext
 {
@@ -23,7 +24,7 @@ function forecastPath(languageId: LanguageId, days: number): string
 
 function titleFor(context: ForecastMetaContext, languageId: LanguageId): string
 {
-    const site = META_CONSTANTS.SITE_NAME;
+    const site = ConfigurationsShared.Name;
     const days = context.days;
 
     if (IsEnglish(languageId))

@@ -1,14 +1,6 @@
 export type TypeConfigurationsServer =
 {
     Environment: string;
-    Api:
-    {
-        Base: string;
-    };
-    Website:
-    {
-        Base: string;
-    };
 };
 
 function ConfigurationsServerValidate(value: string, name: string): string
@@ -37,13 +29,5 @@ const isDevelopment = process.env.NODE_ENV === "development";
 
 export const ConfigurationsServer: TypeConfigurationsServer =
 {
-    Environment: isDevelopment ? "development" : "production",
-    Website:
-    {
-        Base: isDevelopment ? "http://localhost:3000" : "http://localhost:3000"
-    },
-    Api:
-    {
-        Base: isDevelopment ? "http://localhost:3000" : "http://localhost:3000"
-    }
+    Environment: isDevelopment ? "development" : "production"
 };
