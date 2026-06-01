@@ -117,13 +117,12 @@ export default function HeaderLocationSearch({ session }: HeaderLocationSearchPr
         try
         {
             const response = await LocationsServiceClient.Search(
-                {
-                    session,
-                    keyword,
-                    locations_countries_id: 0,
-                    locations_provinces_id: 0,
-                },
-            );
+            {
+                session,
+                keyword,
+                locations_countries_id: 0,
+                locations_provinces_id: 0,
+            });
 
             if (currentIndex !== searchIndexRef.current)
             {

@@ -5,14 +5,19 @@ import { Session } from "@/scripts/types/session";
 
 export class OpenMeteoServiceServer
 {
+    private static readonly CACHE_KEY_VERSION = "1.3";
+
     public static async Forecast( parameters: OpenMeteoTypes.OpenMeteoForecastParameters ): Promise<OpenMeteoTypes.OpenMeteoForecastResponse>
     {
+        const latitude = parameters.session.user.location.latitude.toFixed(2);
+        const longitude = parameters.session.user.location.longitude.toFixed(2);
+
         return unstable_cache(
             async () => OpenMeteoServiceServer.ForecastUncached(parameters),
             [
-                "open-meteo-forecast-1.2",
-                String(parameters.session.user.location.latitude),
-                String(parameters.session.user.location.longitude),
+                `open-meteo-forecast-${OpenMeteoServiceServer.CACHE_KEY_VERSION}`,
+                latitude,
+                longitude,
                 String(parameters.days),
                 parameters.session.user.unit,
             ],
@@ -45,9 +50,11 @@ export class OpenMeteoServiceServer
             ];
 
             const url = new URL("https://api.open-meteo.com/v1/forecast");
+            const latitude = parameters.session.user.location.latitude.toFixed(2);
+            const longitude = parameters.session.user.location.longitude.toFixed(2);
 
-            url.searchParams.set("latitude", String(parameters.session.user.location.latitude));
-            url.searchParams.set("longitude", String(parameters.session.user.location.longitude));
+            url.searchParams.set("latitude", latitude);
+            url.searchParams.set("longitude", longitude);
             url.searchParams.set("forecast_days", String(parameters.days));
             url.searchParams.set("timezone", "auto");
             url.searchParams.set("daily", daily.join(","));
@@ -96,12 +103,15 @@ export class OpenMeteoServiceServer
 
     public static async Day( parameters: OpenMeteoTypes.OpenMeteoDayParameters ): Promise<OpenMeteoTypes.OpenMeteoDayResponse>
     {
+        const latitude = parameters.session.user.location.latitude.toFixed(2);
+        const longitude = parameters.session.user.location.longitude.toFixed(2);
+
         return unstable_cache(
             async () => OpenMeteoServiceServer.DayUncached(parameters),
             [
-                "open-meteo-day-1.1",
-                String(parameters.session.user.location.latitude),
-                String(parameters.session.user.location.longitude),
+                `open-meteo-day-${OpenMeteoServiceServer.CACHE_KEY_VERSION}`,
+                latitude,
+                longitude,
                 parameters.date.trim(),
                 parameters.session.user.unit,
             ],
@@ -139,9 +149,11 @@ export class OpenMeteoServiceServer
             ];
 
             const url = new URL("https://api.open-meteo.com/v1/forecast");
+            const latitude = parameters.session.user.location.latitude.toFixed(2);
+            const longitude = parameters.session.user.location.longitude.toFixed(2);
 
-            url.searchParams.set("latitude", String(parameters.session.user.location.latitude));
-            url.searchParams.set("longitude", String(parameters.session.user.location.longitude));
+            url.searchParams.set("latitude", latitude);
+            url.searchParams.set("longitude", longitude);
             url.searchParams.set("timezone", "auto");
             url.searchParams.set("start_date", day);
             url.searchParams.set("end_date", day);
