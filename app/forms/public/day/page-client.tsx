@@ -498,80 +498,100 @@ export default function Client({ session, date, kind }: ClientProperties)
                                 <div className="summary">
                                     <div className="content">
                                         <div className="item">
-                                            <div className="row">
-                                                <span className="label">
-                                                    {LanguagesHelper.Caption("TemperatureMin")}
-                                                </span>
-                                                <span className="value">
-                                                    {Math.round(day.tempMin)}°{tempUnitSuffix}
-                                                </span>
+                                            <div className="name">
+                                                {LanguagesHelper.Caption("Temperature")}
                                             </div>
-                                            <div className="row">
-                                                <span className="label">
-                                                    {LanguagesHelper.Caption("TemperatureMax")}
-                                                </span>
-                                                <span className="value">
-                                                    {Math.round(day.tempMax)}°{tempUnitSuffix}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="item">
-                                            <div className="row">
-                                                <span className="label">
-                                                    {LanguagesHelper.Caption("WindMin")}
-                                                </span>
-                                                <span className="value">
-                                                {Math.round(day.windMin)} {windSpeedUnitDisplay}
-                                                </span>
-                                            </div>
-                                            <div className="row">
-                                                <span className="label">
-                                                    {LanguagesHelper.Caption("WindMax")}
-                                                </span>
-                                                <span className="value end">
-                                                    {Math.round(day.windMax)}
-                                                    {windSpeedUnitDisplay}
-                                                </span>
+                                            <div className="values">
+                                                <div className="row">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Minimum")}
+                                                    </span>
+                                                    <span className="value">
+                                                        {Math.round(day.tempMin)}°{tempUnitSuffix}
+                                                    </span>
+                                                </div>
+                                                <div className="row">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Maximum")}
+                                                    </span>
+                                                    <span className="value">
+                                                        {Math.round(day.tempMax)}°{tempUnitSuffix}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="item">
-                                            <div className="row">
-                                                <span className="label">
-                                                    {LanguagesHelper.Caption("UVMin")} 
-                                                </span>
-                                                <span className="value">
-                                                    {FormattingHelper.UvIndex(day.uvMin)}
-                                                </span>
+                                            <div className="name">
+                                                {LanguagesHelper.Caption("Wind")}
                                             </div>
-                                            <div className="row">
-                                                <span className="label">
-                                                    {LanguagesHelper.Caption("UVMax")}
-                                                </span>
-                                                <span className="value end">
-                                                    {FormattingHelper.UvIndex(day.uvMax)}
-                                                </span>
+                                            <div className="values">
+                                                <div className="row">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Minimum")}
+                                                    </span>
+                                                    <span className="value">
+                                                    {Math.round(day.windMin)} {windSpeedUnitDisplay}
+                                                    </span>
+                                                </div>
+                                                <div className="row">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Maximum")}
+                                                    </span>
+                                                    <span className="value end">
+                                                        {Math.round(day.windMax)}
+                                                        {windSpeedUnitDisplay}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="item">
-                                            <div className="row">
-                                                <span className="label">
-                                                    {LanguagesHelper.Caption("Sunrise")}
-                                                </span>
-                                                <span className="value">
-                                                    {day.sunrise
-                                                        ? FormattingHelper.LocalTime(day.sunrise, locale)
-                                                        : "-"}
-                                                </span>
+                                            <div className="name">
+                                                {LanguagesHelper.Caption("UVIndex")}
                                             </div>
-                                            <div className="row">
-                                                <span className="label">
-                                                    {LanguagesHelper.Caption("Sunset")}
-                                                </span>
-                                                <span className="value">
-                                                    {day.sunset
-                                                        ? FormattingHelper.LocalTime(day.sunset, locale)
-                                                        : "-"}
-                                                </span>
+                                            <div className="values">
+                                                <div className="row">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Minimum")} 
+                                                    </span>
+                                                    <span className="value">
+                                                        {FormattingHelper.UvIndex(day.uvMin)}
+                                                    </span>
+                                                </div>
+                                                <div className="row">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Maximum")}
+                                                    </span>
+                                                    <span className="value end">
+                                                        {FormattingHelper.UvIndex(day.uvMax)}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="item">
+                                            <div className="name">
+                                                {LanguagesHelper.Caption("Sun")}
+                                            </div>
+                                            <div className="values">
+                                                <div className="row">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Rise")}
+                                                    </span>
+                                                    <span className="value">
+                                                        {day.sunrise
+                                                            ? FormattingHelper.LocalTime(day.sunrise, locale)
+                                                            : "-"}
+                                                    </span>
+                                                </div>
+                                                <div className="row">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Set")}
+                                                    </span>
+                                                    <span className="value">
+                                                        {day.sunset
+                                                            ? FormattingHelper.LocalTime(day.sunset, locale)
+                                                            : "-"}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

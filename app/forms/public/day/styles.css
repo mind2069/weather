@@ -137,7 +137,7 @@
 {
     grid-area: content;
     display: grid;
-    grid-template-columns: repeat(4, auto);
+    grid-template-columns: repeat(4, auto );
     width: max-content;
     max-width: 100%;
     font-size: 0.75rem;
@@ -166,7 +166,21 @@
     border-right: none;
 }
 
-.day .details .header .summary .content .row
+.day .details .header .summary .content .item .name
+{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+}
+
+.day .details .header .summary .content .item .values
+{
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.day .details .header .summary .content .values .row
 {
     display: flex;
     align-items: baseline;
@@ -174,12 +188,12 @@
     gap: 0.5rem;
 }
 
-.day .details .header .summary .content .label
+.day .details .header .summary .content .values .row .label
 {
     color: rgba(255, 255, 255, 0.8);
 }
 
-.day .details .header .summary .content .value
+.day .details .header .summary .content .values .row .value
 {
     color: #ffffff;
 }
