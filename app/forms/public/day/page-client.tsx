@@ -65,6 +65,43 @@ function ZeroBandYDomain(vals: number[]): [number, number]
     });
 }
 
+function HumidityYDomain(vals: number[]): [number, number]
+{
+    if (vals.length === 0)
+    {
+        return [0, 100];
+    }
+
+    const lo = Math.min(...vals);
+    const hi = Math.max(...vals);
+    const epsilon = 0.001;
+    const topHeadroom = 8;
+    const minDisplaySpan = 30;
+
+    if (hi - lo < epsilon)
+    {
+        const padding = IconBandPadding(20 + topHeadroom, 2.5);
+
+        return [lo - padding, lo + 20 + topHeadroom];
+    }
+
+    const span = Math.max(8, hi - lo);
+    const topPad = Math.max(topHeadroom, span * 0.08);
+    const bottomPad = lo <= 0.5
+        ? IconBandPadding(hi + topPad - lo, 2.5)
+        : Math.min(20, Math.max(4, span * 0.2));
+
+    let domainMin = lo <= 0.5 ? lo - bottomPad : Math.max(0, lo - bottomPad);
+    let domainMax = hi + topPad;
+
+    if (domainMax - domainMin < minDisplaySpan)
+    {
+        domainMin = domainMax - minDisplaySpan;
+    }
+
+    return [domainMin, domainMax];
+}
+
 function ChartSpanYDomain(
     vals: number[],
     flatSpan: number,
@@ -488,13 +525,7 @@ export default function Client({ session, date, kind }: ClientProperties)
     {
         const vals = chartData.map((d) => d.humidity);
 
-        return ChartSpanYDomain(vals, 4, 8,
-        {
-            minClamp: 0,
-            maxClamp: 100,
-            iconBandFloor: 2.5,
-            flatDisplayHeadroom: 20,
-        });
+        return HumidityYDomain(vals);
 
     }, [chartData]);
 
