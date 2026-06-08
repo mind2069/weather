@@ -15,7 +15,7 @@ export class LocationsServiceServer
 
         if(parameters.latitude === -999999 || parameters.longitude === -999999)
         {
-            data = { name: 'Laval, QC, Canada (Default)', latitude: 45.6068, longitude: -73.7129 };
+            data = { name: 'Laval, QC, Canada (Default 1)', latitude: 45.6068, longitude: -73.7129 };
             success = true;
             codes = ['Success'];
             message = 'Locations default data retrieved successfully';
@@ -24,7 +24,7 @@ export class LocationsServiceServer
         {
             // TO DO MAP CLOSER CITY BY LATITUDE AND LONGITUDE
     
-            data = { name: 'Montreal, QC, Canada (Default)', latitude: 45.5017, longitude: -73.5673 };
+            data = { name: 'Laval, QC, Canada (Default 2)', latitude: 45.6068, longitude: -73.7129 };
             success = true;
             codes = ['Success'];
             message = 'Locations default data retrieved successfully';
