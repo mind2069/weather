@@ -8,7 +8,7 @@ import "./styles-responsive.css";
 async function Header()
 {
     const headersList = await headers();
-    const session: Session = SessionServiceShared.Build(headersList);
+    const session: Session = await SessionServiceShared.Build(headersList);
 
     return ( <HeaderClient session={session}/> );
 }

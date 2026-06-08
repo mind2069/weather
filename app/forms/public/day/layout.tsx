@@ -12,7 +12,7 @@ import { ConfigurationsShared } from "@/scripts/configurations/configurations-sh
 export async function generateMetadata(): Promise<Metadata>
 {
     const headersList = await headers();
-    const session = SessionServiceShared.Build(headersList);
+    const session = await SessionServiceShared.Build(headersList);
     const languageCode = session.language.code;
     const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
     const page = session.tracking.page;
@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata>
 export default async function LayoutBase({ children }: { children: React.ReactNode })
 {
     const headersList = await headers();
-    const session = SessionServiceShared.Build(headersList);
+    const session = await SessionServiceShared.Build(headersList);
     const languageCode = session.language.code;
     const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
     const page = session.tracking.page;

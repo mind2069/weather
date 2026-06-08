@@ -30,7 +30,7 @@ export const CITIES: readonly City[] =
         longitude: -73.7129,
     },
     {
-        id: 3,
+        id: 4,
         countryId: 3,
         stateId: 4,
         name: "Ottawa",
@@ -39,7 +39,7 @@ export const CITIES: readonly City[] =
         longitude: -75.6972,
     }, 
     {
-        id: 3,
+        id: 5,
         countryId: 3,
         stateId: 4,
         name: "Toronto",
@@ -48,7 +48,7 @@ export const CITIES: readonly City[] =
         longitude: -79.4163,
     },
     {
-        id: 3,
+        id: 6,
         countryId: 2,
         stateId: 5,
         name: "Miami",
@@ -57,7 +57,7 @@ export const CITIES: readonly City[] =
         longitude: -80.1918,
     },
     {
-        id: 3,
+        id: 7,
         countryId: 2,
         stateId: 6,
         name: "Anchorage",
@@ -66,7 +66,7 @@ export const CITIES: readonly City[] =
         longitude: -149.9003,
     },
     {
-        id: 7,
+        id: 8,
         countryId: 4,
         stateId: 7,
         name: "Yakutsk",
@@ -75,7 +75,7 @@ export const CITIES: readonly City[] =
         longitude: 129.6755,
     },
     {
-        id: 8,
+        id: 9,
         countryId: 5,
         stateId: 8,
         name: "Singapore",
@@ -84,7 +84,7 @@ export const CITIES: readonly City[] =
         longitude: 103.8198,
     },
     {
-        id: 9,
+        id: 10,
         countryId: 6,
         stateId: 9,
         name: "Turpan",
@@ -93,7 +93,7 @@ export const CITIES: readonly City[] =
         longitude: 89.1897,
     },
     {
-        id: 10,
+        id: 11,
         countryId: 2,
         stateId: 10,
         name: "New York City",
@@ -102,13 +102,22 @@ export const CITIES: readonly City[] =
         longitude: -74.0060,
     },
     {
-        id: 11,
+        id: 12,
         countryId: 7,
         stateId: 11,
         name: "Nassau",
         name_normalized: "nassau",
         latitude: 25.0479,
         longitude: -77.3554,
+    },
+    {
+        id: 13,
+        countryId: 3,
+        stateId: 3,
+        name: "Montreal",
+        name_normalized: "montreal",
+        latitude: 45.5017,
+        longitude: -73.5673,
     },
 
 ] as const;

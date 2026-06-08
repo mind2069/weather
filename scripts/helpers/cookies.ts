@@ -1,3 +1,4 @@
+
 export class CookiesHelper
 {
     public static Get(cookies: string, name: string): string | null
@@ -15,7 +16,21 @@ export class CookiesHelper
             return null;
         }
 
-        return parts.pop()?.split(";")[0]?.trim() || null;
+        const value = parts.pop()?.split(";")[0]?.trim() || null;
+
+        if (value === null)
+        {
+            return null;
+        }
+
+        try
+        {
+            return decodeURIComponent(value);
+        }
+        catch
+        {
+            return value;
+        }
     }
     
     public static Set(name: string, value: string, days: number = 365): void

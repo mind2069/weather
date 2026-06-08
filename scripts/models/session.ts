@@ -36,9 +36,9 @@ export function SessionEmpty(): Session
             locale: 'en-CA',
             location:
             {
-                name: 'Laval, QC, Canada',
-                latitude: 45.6068,
-                longitude: -73.7129,
+                name: '',
+                latitude: -999999,
+                longitude: -999999,
             }
         },
         mode: 'application'

@@ -47,3 +47,10 @@ export interface LocationResults
     locations_countries_latitude: number;
     locations_countries_longitude: number;
 }
+
+export interface LocationDefault
+{
+	name: string;
+	latitude: number;
+	longitude: number;
+}

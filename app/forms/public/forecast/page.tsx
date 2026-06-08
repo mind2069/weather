@@ -1,4 +1,4 @@
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import * as LanguagesHelper from "@/scripts/languages/languages-helper";
 import Client from "./page-client";
@@ -7,6 +7,7 @@ import "./styles-responsive.css";
 import { Session } from "@/scripts/types/session";
 import { SessionServiceShared } from "@/services/session/shared";
 import { ResolveForecastRoute } from "./resolve-route";
+import { CookiesHelper } from "@/scripts/helpers/cookies";
 
 export default async function Page()
 {

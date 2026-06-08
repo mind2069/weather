@@ -8,7 +8,7 @@ import "./styles-responsive.css";
 export default async function Footer()
 {
     const headersList = await headers();
-    const session: Session = SessionServiceShared.Build(headersList);
+    const session: Session = await SessionServiceShared.Build(headersList);
 
     return <FooterClient session={session} />;
 }

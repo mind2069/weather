@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata>
     const baseUrl = ConfigurationsShared.Website.Base;
     const context = ForecastMetaContextFromRoute(route, baseUrl);
     const cookies = headersList.get("cookie") ?? "";
-    const session = SessionServiceShared.Build(headersList);
+    const session = await SessionServiceShared.Build(headersList);
     const location = hasSavedLocationFromCookies(cookies) ? session.user.location : undefined;
 
     return ToNextMetadata(languageId, context, location);

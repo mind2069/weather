@@ -4,6 +4,8 @@ import { ROUTES_PATHS } from "./routes-paths";
 import { RouteAuthorized, RouteProtected } from "./authentification";
 import * as LanguagesHelper from "@/scripts/languages/languages-helper";
 const LANGUAGES = ["en-ca", "fr-ca"] as const;
+import { SessionServiceShared } from "@/services/session/shared";
+import { Session } from "@/scripts/types/session";
 
 function IsAssetRequest(pathname: string): boolean
 {
@@ -17,7 +19,7 @@ function IsAssetRequest(pathname: string): boolean
     );
 }
 
-function WithHeaders(response: NextResponse, language: string, ipAddress: string, hostname: string, pathname: string, section: string, page: string, filename: string)
+function WithHeaders(response: NextResponse, language: string, ipAddress: string, hostname: string, pathname: string, section: string, page: string, filename: string, city: string, country: string, province: string, latitude: string, longitude: string)
 {
     response.headers.set("x-language", language);
     response.headers.set("x-ip-address", ipAddress);
@@ -27,11 +29,43 @@ function WithHeaders(response: NextResponse, language: string, ipAddress: string
     response.headers.set("x-page", page);
     response.headers.set("x-filename", filename);
 
+    response.headers.set("v-city", city);
+    response.headers.set("v-country", country);
+    response.headers.set("v-province", province);
+    response.headers.set("v-latitude", latitude);
+    response.headers.set("v-longitude", longitude);
+
     return response;
 }
 
 function SetRefererCookie(response: NextResponse, referer: string, language: string)
 {
+    return response;
+}
+
+function ApplySession(response: NextResponse, request: NextRequest, language: string, ipAddress: string, hostname: string, pathname: string, section: string, page: string, filename: string, city: string, country: string, province: string, latitude: string, longitude: string): NextResponse
+{
+    const sessionHeaders = SessionServiceShared.HeadersForBuild(request.headers,
+    {
+        language: language,
+        ipAddress: ipAddress,
+        hostname: hostname,
+        pathname: pathname,
+        section: section,
+        page: page,
+        filename: filename,
+        city: city,
+        country: country,
+        province: province,
+        latitude: latitude,
+        longitude: longitude,
+    });
+
+    const session: Session = SessionServiceShared.Build(sessionHeaders);
+    const cookieHeader = request.headers.get("cookie") ?? "";
+
+    SessionServiceShared.Store(response, session, cookieHeader);
+
     return response;
 }
 
@@ -44,6 +78,12 @@ export async function handleRoutes(request: NextRequest)
     const realIp = headers.get('x-real-ip');
     const hostname = request.nextUrl.hostname.toLowerCase();
     const ipAddress = forwarded?.split(',')[0]?.trim() || realIp || (headers.get('cf-connecting-ip') ?? '0.0.0.0');
+
+    const city = headers.get("x-vercel-ip-city") ?? '';
+    const country = headers.get("x-vercel-ip-country") ?? '';
+    const province = headers.get("x-vercel-ip-country-region") ?? '';
+    const latitude = headers.get("x-vercel-ip-latitude") ?? '-999999';
+    const longitude = headers.get("x-vercel-ip-longitude") ?? '-999999';
 
     if (IsAssetRequest(pathname))
     {
@@ -117,9 +157,9 @@ export async function handleRoutes(request: NextRequest)
 
             rewriteUrl.search = request.nextUrl.search;
 
-            const response = WithHeaders( NextResponse.rewrite(rewriteUrl), language, ipAddress, hostname, pathname, section, page, filename);
+            const response = WithHeaders( NextResponse.rewrite(rewriteUrl), language, ipAddress, hostname, pathname, section, page, filename, city, country, province, latitude, longitude);
 
-            return SetRefererCookie(response, referer, language);
+            return SetRefererCookie(ApplySession(response, request, language, ipAddress, hostname, pathname, section, page, filename, city, country, province, latitude, longitude), referer, language);
         }
 
         if (pattern instanceof RegExp)
@@ -139,9 +179,9 @@ export async function handleRoutes(request: NextRequest)
 
                 rewriteUrl.search = request.nextUrl.search;
 
-                const response = WithHeaders(NextResponse.rewrite(rewriteUrl), language, ipAddress, hostname, pathname, section, page, filename);
+                const response = WithHeaders(NextResponse.rewrite(rewriteUrl), language, ipAddress, hostname, pathname, section, page, filename, city, country, province, latitude, longitude);
 
-                return SetRefererCookie(response, referer, language);
+                return SetRefererCookie(ApplySession(response, request, language, ipAddress, hostname, pathname, section, page, filename, city, country, province, latitude, longitude), referer, language);
             }
         }
     }
@@ -151,7 +191,7 @@ export async function handleRoutes(request: NextRequest)
         return NextResponse.redirect(new URL(`/en-ca${pathname}`, request.url));
     }
 
-    const response = WithHeaders(NextResponse.next(), language, ipAddress, hostname, pathname, section, page, filename);
+    const response = WithHeaders(NextResponse.next(), language, ipAddress, hostname, pathname, section, page, filename, city, country, province, latitude, longitude);
 
-    return SetRefererCookie(response, referer, language);
+    return SetRefererCookie(ApplySession(response, request, language, ipAddress, hostname, pathname, section, page, filename, city, country, province, latitude, longitude), referer, language);
 }

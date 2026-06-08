@@ -14,6 +14,7 @@ import ModalLoading from "@/components/modal-loading/modal-loading";
 import ModalMessage from "@/components/modal-message/modal-message";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { EffectiveDayDate, type DayRouteKind } from "./resolve-route";
+import { CookiesHelper } from "@/scripts/helpers/cookies";
 
 interface DayHourlyChartRow
 {
@@ -39,13 +40,10 @@ interface ChartSpanYDomainOptions
 {
     minClamp?: number;
     maxClamp?: number;
-    /** Extends the domain below the minimum so the line clears the weather icons. */
     iconBandFloor?: number;
-    /** Virtual headroom used when all values are equal, so a flat minimum is not pinned on the icons. */
     flatDisplayHeadroom?: number;
 }
 
-/** Keeps minimum values at a stable height above the weather icons as the maximum grows. */
 const ICON_BAND_TARGET_FRACTION = 0.18;
 
 function IconBandPadding(domainTop: number, minPadding: number, targetFraction = ICON_BAND_TARGET_FRACTION): number
@@ -121,8 +119,6 @@ function ChartSpanYDomain(
     const iconFloor = options?.iconBandFloor ?? 0;
     const flatHeadroom = options?.flatDisplayHeadroom ?? flatSpan;
     const minClamp = options?.minClamp;
-    // UV from the API hits exactly 0; preview precipitation tails are ~0.03 (shown as "0.0 mm")
-    // and must still get the sub-zero floor — not only lo === 0.
     const touchesIconBand = minClamp != null && iconFloor > 0 && lo <= minClamp + 0.5;
 
     if (hi - lo < epsilon)
@@ -384,6 +380,8 @@ export default function Client({ session, date, kind }: ClientProperties)
     {
         setLoading(true);
         setError(null);
+
+        console.log(session.user.location.name);
 
         const parametersDay: OpenMeteoDayParameters =
         {
