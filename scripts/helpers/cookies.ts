@@ -1,3 +1,4 @@
+import { LocationHelper } from "@/scripts/helpers/location";
 
 export class CookiesHelper
 {
@@ -55,5 +56,14 @@ export class CookiesHelper
         }
         
         document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+    }
+
+    public static HasCompleteLocation(cookieHeader: string): boolean
+    {
+        const location = CookiesHelper.Get(cookieHeader, "location")?.trim() ?? "";
+        const latitude = LocationHelper.LatitudeNormalize(Number.parseFloat(CookiesHelper.Get(cookieHeader, "latitude") ?? ""));
+        const longitude = LocationHelper.LongitudeNormalize(Number.parseFloat(CookiesHelper.Get(cookieHeader, "longitude") ?? ""));
+
+        return location !== "" && latitude !== -999999 && longitude !== -999999;
     }
 }

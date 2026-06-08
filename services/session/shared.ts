@@ -1,4 +1,17 @@
-import type { NextResponse } from "next/server";
+/**
+ * Session resolution for middleware + getSession().
+ *
+ * Location priority in Build():
+ * 1. Cookies (name + valid lat/lon)
+ * 2. s-* headers (middleware, same request)
+ * 3. Vercel v-* coords
+ * 4. Default() / closest city
+ * 5. Hard fallback (Laval)
+ *
+ * Middleware: CreateResponse() — full resolve, cookies, s-* on request.
+ * App: getSession() only.
+ */
+import { NextResponse } from "next/server";
 import { Session } from '@/scripts/types/session';
 import { SessionEmpty } from '@/scripts/models/session';
 import { CookiesHelper } from '@/scripts/helpers/cookies';
@@ -7,11 +20,11 @@ import { LocationsDefaultParameters, LocationsDefaultResponse } from '@/services
 import { LocationsServiceServer } from '@/services/locations/server';
 import { LocationDefault } from '@/scripts/types/location';
 import { LocationHelper } from '@/scripts/helpers/location';
+import { LocationsData } from '@/scripts/data/locations';
 
 export class SessionServiceShared
 {
-    private static DecodeVercelCity(city: string): string
-    {
+    private static DecodeVercelCity(city: string): string    {
         if (city === '')
         {
             return '';
@@ -27,10 +40,10 @@ export class SessionServiceShared
         }
     }
 
-    public static Build(headers: Headers): Session
+    /** Middleware and getSession() only. App components must use getSession(). */
+    public static async Build(headers: Headers): Promise<Session>
     {
-        let session: Session = SessionEmpty();
-        
+        let session: Session = SessionEmpty();        
         const cookies = headers.get("cookie") ?? "";
 
         const languageHeaders = headers.get("x-language");
@@ -43,12 +56,11 @@ export class SessionServiceShared
         const page = headers.get("x-page") ?? "";
         const filename = headers.get("x-filename") ?? "";
 
-        const cityVercel = SessionServiceShared.DecodeVercelCity(headers.get("v-city") ?? '');
-        const countryVercel = headers.get("v-country") ?? '';
-        const provinceVercel = headers.get("v-province") ?? '';
-        const latitudeVercel = LocationHelper.LatitudeNormalize(Number.parseFloat(headers.get("v-latitude") ?? ''));
-        const longitudeVercel = LocationHelper.LongitudeNormalize(Number.parseFloat(headers.get("v-longitude") ?? ''));
-        const vercelCoordsValid = latitudeVercel !== -999999 && longitudeVercel !== -999999;
+        const cityVercel = SessionServiceShared.DecodeVercelCity(headers.get("v-city") ?? headers.get("x-vercel-ip-city") ?? "");
+        const countryVercel = headers.get("v-country") ?? headers.get("x-vercel-ip-country") ?? "";
+        const provinceVercel = headers.get("v-province") ?? headers.get("x-vercel-ip-country-region") ?? "";
+        const latitudeVercel = LocationHelper.LatitudeNormalize(Number.parseFloat(headers.get("v-latitude") ?? headers.get("x-vercel-ip-latitude") ?? ""));
+        const longitudeVercel = LocationHelper.LongitudeNormalize(Number.parseFloat(headers.get("v-longitude") ?? headers.get("x-vercel-ip-longitude") ?? ""));        const vercelCoordsValid = latitudeVercel !== -999999 && longitudeVercel !== -999999;
         const locationVercel = [cityVercel, provinceVercel, countryVercel].filter((part) => part !== '').join(', ');
 
         let unit = 'metric';
@@ -67,12 +79,9 @@ export class SessionServiceShared
         latitudeCookies = latitudeCookies.trim();
         longitudeCookies = longitudeCookies.trim();
 
-        if(unitCookies !== '')
+        if (unitCookies === 'imperial' || unitCookies === 'metric')
         {
-            if (unitCookies === 'imperial' || unitCookies === 'metric')
-            {
-                unit = 'metric';
-            }
+            unit = unitCookies;
         }
 
         if (latitudeCookies !== '' && longitudeCookies !== '')
@@ -91,41 +100,63 @@ export class SessionServiceShared
 
         if (!cookieLocationComplete)
         {
-            if (!cookieCoordsValid && vercelCoordsValid)
-            {
-                latitude = latitudeVercel;
-                longitude = longitudeVercel;
+            const middlewareLocation = SessionServiceShared.DecodeVercelCity(headers.get("s-location") ?? "");
+            const middlewareLatitude = LocationHelper.LatitudeNormalize(Number.parseFloat(headers.get("s-latitude") ?? ""));
+            const middlewareLongitude = LocationHelper.LongitudeNormalize(Number.parseFloat(headers.get("s-longitude") ?? ""));
+            const middlewareSessionValid = middlewareLocation !== "" && middlewareLatitude !== -999999 && middlewareLongitude !== -999999;
 
-                if (location === '')
+            if (middlewareSessionValid)
+            {
+                location = middlewareLocation;
+                latitude = middlewareLatitude;
+                longitude = middlewareLongitude;
+
+                const middlewareUnit = headers.get("s-unit")?.trim().toLowerCase() ?? "";
+
+                if (middlewareUnit === "imperial" || middlewareUnit === "metric")
                 {
-                    location = locationVercel !== '' ? locationVercel : `${latitude}, ${longitude}`;
+                    unit = middlewareUnit;
                 }
-            }
-
-            const parameters: LocationsDefaultParameters =
-            {
-                latitude: latitude,
-                longitude: longitude
-            };
-
-            const response: LocationsDefaultResponse = LocationsServiceServer.Default(parameters);
-
-            if (response.success)
-            {
-                const locationDefault: LocationDefault = response.data;
-
-                location = locationDefault.name;
-                latitude = locationDefault.latitude;
-                longitude = locationDefault.longitude;
             }
             else
             {
-                location = 'X, QC, Canada';
-                latitude = 45.6068;
-                longitude = -73.7129;
+                if (!cookieCoordsValid && vercelCoordsValid)
+                {
+                    latitude = latitudeVercel;
+                    longitude = longitudeVercel;
+
+                    if (location === '')
+                    {
+                        location = locationVercel !== '' ? locationVercel : `${latitude}, ${longitude}`;
+                    }
+                }
+
+                const parameters: LocationsDefaultParameters =
+                {
+                    latitude: latitude,
+                    longitude: longitude
+                };
+
+                const response: LocationsDefaultResponse = await LocationsServiceServer.Default(parameters);
+
+                if (response.success)
+                {
+                    const locationDefault: LocationDefault = response.data;
+
+                    location = locationDefault.name;
+                    latitude = locationDefault.latitude;
+                    longitude = locationDefault.longitude;
+                }
+                else
+                {
+                    const fallback = LocationsData.DefaultCity();
+
+                    location = fallback.name;
+                    latitude = fallback.latitude;
+                    longitude = fallback.longitude;
+                }
             }
-        }
-        
+        }        
         session.language.id = languageId;
         session.language.code = language;
         session.tracking.ip_address = ipAddress;
@@ -142,15 +173,6 @@ export class SessionServiceShared
         session.user.locale = locale;
 
         return session;
-    }
-
-    private static HasCompleteLocationCookies(cookieHeader: string): boolean
-    {
-        const location = CookiesHelper.Get(cookieHeader, "location")?.trim() ?? "";
-        const latitude = LocationHelper.LatitudeNormalize(Number.parseFloat(CookiesHelper.Get(cookieHeader, "latitude") ?? ""));
-        const longitude = LocationHelper.LongitudeNormalize(Number.parseFloat(CookiesHelper.Get(cookieHeader, "longitude") ?? ""));
-
-        return location !== "" && latitude !== -999999 && longitude !== -999999;
     }
 
     public static HeadersForBuild(requestHeaders: Headers, tracking: { language: string; ipAddress: string; hostname: string; pathname: string; section: string; page: string; filename: string; city: string; country: string; province: string; latitude: string; longitude: string }): Headers
@@ -173,10 +195,29 @@ export class SessionServiceShared
         return headers;
     }
 
+    public static ForwardSessionHeaders(headers: Headers, session: Session): void
+    {
+        headers.set("s-location", session.user.location.name);
+        headers.set("s-latitude", String(session.user.location.latitude));
+        headers.set("s-longitude", String(session.user.location.longitude));
+        headers.set("s-unit", session.user.unit);
+    }
+
     public static Store(response: NextResponse, session: Session, cookieHeader: string): void
     {
-        if (SessionServiceShared.HasCompleteLocationCookies(cookieHeader))
+        SessionServiceShared.ForwardSessionHeaders(response.headers, session);
+
+        const maxAge = 365 * 24 * 60 * 60;
+
+        if (CookiesHelper.HasCompleteLocation(cookieHeader))
         {
+            const unitCookie = CookiesHelper.Get(cookieHeader, "unit")?.trim().toLowerCase() ?? "";
+
+            if (unitCookie !== "imperial" && unitCookie !== "metric")
+            {
+                response.cookies.set("unit", session.user.unit, { path: "/", maxAge, sameSite: "lax" });
+            }
+
             return;
         }
 
@@ -188,11 +229,26 @@ export class SessionServiceShared
             return;
         }
 
-        const maxAge = 365 * 24 * 60 * 60;
-
         response.cookies.set("unit", session.user.unit, { path: "/", maxAge, sameSite: "lax" });
-        response.cookies.set("location", session.user.location.name, { path: "/", maxAge, sameSite: "lax" });
-        response.cookies.set("latitude", String(latitude), { path: "/", maxAge, sameSite: "lax" });
+        response.cookies.set("location", session.user.location.name, { path: "/", maxAge, sameSite: "lax" });        response.cookies.set("latitude", String(latitude), { path: "/", maxAge, sameSite: "lax" });
         response.cookies.set("longitude", String(longitude), { path: "/", maxAge, sameSite: "lax" });
+    }
+
+    public static async CreateResponse(requestHeaders: Headers, rewriteUrl: URL | null, cookieHeader: string, tracking: { language: string; ipAddress: string; hostname: string; pathname: string; section: string; page: string; filename: string; city: string; country: string; province: string; latitude: string; longitude: string }): Promise<NextResponse>
+    {
+        const sessionHeaders = SessionServiceShared.HeadersForBuild(requestHeaders, tracking);
+        const session = await SessionServiceShared.Build(sessionHeaders);
+
+        const forwardedHeaders = SessionServiceShared.HeadersForBuild(requestHeaders, tracking);
+
+        SessionServiceShared.ForwardSessionHeaders(forwardedHeaders, session);
+
+        const response = rewriteUrl
+            ? NextResponse.rewrite(rewriteUrl, { request: { headers: forwardedHeaders } })
+            : NextResponse.next({ request: { headers: forwardedHeaders } });
+
+        SessionServiceShared.Store(response, session, cookieHeader);
+
+        return response;
     }
 }

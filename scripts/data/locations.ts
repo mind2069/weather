@@ -1,8 +1,7 @@
 import { CITIES } from '@/scripts/data/locations-cities';
 import { COUNTRIES } from '@/scripts/data/locations-countries';
 import { STATES } from '@/scripts/data/locations-states';
-import type { LocationResults } from '@/scripts/types/location';
-import type { City } from '@/scripts/types/location';
+import type { City, LocationDefault, LocationResults } from '@/scripts/types/location';
 
 export class LocationsData
 {
@@ -26,7 +25,32 @@ export class LocationsData
             locations_countries_code: country?.code ?? '',
             locations_countries_latitude: country?.latitude ?? 0,
             locations_countries_longitude: country?.longitude ?? 0,
-        };     
+        };
+    }
+
+    public static FormatName(location: LocationResults): string
+    {
+        return location.name + ", " + location.locations_provinces_name + ", " + location.locations_countries_name;
+    }
+
+    public static DefaultCity(): LocationDefault
+    {
+        return { name: "Laval, Quebec, Canada (Default)", latitude: 45.6068, longitude: -73.7129 };
+
+        // const laval = CITIES.find((city) => city.name === "Laval");
+
+        // if (!laval)
+        // {
+        //     return { name: "Laval, Quebec, Canada", latitude: 45.6068, longitude: -73.7129 };
+        // }
+
+        // const location = LocationsData.Get(laval);
+
+        // return {
+        //     name: LocationsData.FormatName(location),
+        //     latitude: location.latitude,
+        //     longitude: location.longitude,
+        // };
     }
 
     private static DistanceSquared(latitudeA: number, longitudeA: number, latitudeB: number, longitudeB: number): number
@@ -37,7 +61,7 @@ export class LocationsData
         return deltaLatitude * deltaLatitude + deltaLongitude * deltaLongitude;
     }
 
-    public static Closest(latitude: number, longitude: number): LocationResults
+    public static async Closest(latitude: number, longitude: number): Promise<LocationResults>
     {
         let closestCity: City = CITIES[0];
         let minDistance = Number.POSITIVE_INFINITY;

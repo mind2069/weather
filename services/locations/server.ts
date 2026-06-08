@@ -6,7 +6,7 @@ import { LocationsData } from '@/scripts/data/locations';
 
 export class LocationsServiceServer
 {
-    public static Default( parameters: LocationsTypes.LocationsDefaultParameters ): LocationsTypes.LocationsDefaultResponse
+    public static async Default( parameters: LocationsTypes.LocationsDefaultParameters ): Promise<LocationsTypes.LocationsDefaultResponse>
     {
         let success = false;
         let data: LocationDefault = { name: '', latitude: 0, longitude: 0 };
@@ -15,17 +15,20 @@ export class LocationsServiceServer
 
         if(parameters.latitude === -999999 || parameters.longitude === -999999)
         {
-            data = { name: 'Laval, QC, Canada (Default)', latitude: 45.6068, longitude: -73.7129 };
+            data = LocationsData.DefaultCity();
             success = true;
             codes = ['Success'];
             message = 'Locations default retrieved successfully';
         }
         else
         {
-            const closest = LocationsData.Closest(parameters.latitude, parameters.longitude);
-            const name = closest.name + ", " + closest.locations_provinces_name + ", " + closest.locations_countries_name;
+            const closest = await LocationsData.Closest(parameters.latitude, parameters.longitude);
 
-            data = { name: name, latitude: closest.latitude, longitude: closest.longitude };
+            data = {
+                name: LocationsData.FormatName(closest),
+                latitude: closest.latitude,
+                longitude: closest.longitude,
+            };
             success = true;
             codes = ['Success'];
             message = 'Locations closest retrieved successfully';

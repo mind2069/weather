@@ -2,6 +2,8 @@ import { LanguageId, OpenGraphData, TwitterData, LanguageAlternates, JsonLdData,
 import { ConfigurationsShared } from "@/scripts/configurations/configurations-shared";
 
 import { CookiesHelper } from "@/scripts/helpers/cookies";
+import { LocationHelper } from "@/scripts/helpers/location";
+import type { Session } from "@/scripts/types/session";
 
 export interface MetaLocationInput
 {
@@ -88,15 +90,30 @@ export const IsFrench = (languageId: LanguageId): boolean => languageId === META
 
 export function hasSavedLocationFromCookies(cookies: string): boolean
 {
-    const name = CookiesHelper.Get(cookies, "location")?.trim();
+    return CookiesHelper.HasCompleteLocation(cookies);
+}
 
-    if (name)
+export function getMetaLocation(cookies: string, session: Session, resolvedLocationHeader: string | null): MetaLocationInput | undefined
+{
+    const hasSaved = CookiesHelper.HasCompleteLocation(cookies);
+    const hasResolved = (resolvedLocationHeader ?? "").trim() !== "";
+
+    if (!hasSaved && !hasResolved)
     {
-        return true;
+        return undefined;
     }
 
-    const latitude = CookiesHelper.Get(cookies, "latitude")?.trim();
-    const longitude = CookiesHelper.Get(cookies, "longitude")?.trim();
+    const latitude = LocationHelper.LatitudeNormalize(session.user.location.latitude);
+    const longitude = LocationHelper.LongitudeNormalize(session.user.location.longitude);
 
-    return Boolean(latitude && longitude);
+    if (session.user.location.name === "" || latitude === -999999 || longitude === -999999)
+    {
+        return undefined;
+    }
+
+    return {
+        name: session.user.location.name,
+        latitude: latitude,
+        longitude: longitude,
+    };
 }
