@@ -22,6 +22,7 @@ interface DayHourlyChartRow
     hourTop: string;
     hourBottom: string;
     icon: string;
+    isCurrent: boolean;
     columnAnchor: number;
     temperature: number;
     precipitation: number;
@@ -187,6 +188,31 @@ function ChartMetricDataKey(metric: ChartMetric): ChartMetricDataKey
     }
 }
 
+function IsCurrentHourSlot(isoTime: string, dayIso: string): boolean
+{
+    const today = FormattingHelper.IsoDateLocal(new Date());
+
+    if (dayIso !== today)
+    {
+        return false;
+    }
+
+    const slot = new Date(isoTime);
+    const now = new Date();
+
+    if (Number.isNaN(slot.getTime()))
+    {
+        return false;
+    }
+
+    return (
+        slot.getFullYear() === now.getFullYear() &&
+        slot.getMonth() === now.getMonth() &&
+        slot.getDate() === now.getDate() &&
+        slot.getHours() === now.getHours()
+    );
+}
+
 function HourChartAxisLabels(iso: string, locale: string): { top: string; bottom: string }
 {
     const d = new Date(iso);
@@ -250,7 +276,7 @@ const DayHourlyColumnShape = (props: BarShapeProps) =>
     const iconY = pb.y + pb.height - 24;
 
     return (
-        <g className="chart-hourly-column">
+        <g className={row.isCurrent ? "chart-hourly-column current" : "chart-hourly-column"}>
             <rect
                 x={innerX}
                 y={pb.y}
@@ -258,7 +284,7 @@ const DayHourlyColumnShape = (props: BarShapeProps) =>
                 height={pb.height}
                 rx={10}
                 ry={10}
-                fill="url(#dayHourlyColumnWash)"
+                fill={row.isCurrent ? "#efefef" : "url(#dayHourlyColumnWash)"}
                 stroke="#e2e8f0"
                 strokeWidth={1}
             />
@@ -487,6 +513,7 @@ export default function Client({ session, date, kind }: ClientProperties)
                     hourTop: top,
                     hourBottom: bottom,
                     icon: item.icon,
+                    isCurrent: IsCurrentHourSlot(item.time, effectiveDate),
                     columnAnchor: 1,
                     temperature: item.temperature,
                     precipitation: item.precipitation,
@@ -496,7 +523,7 @@ export default function Client({ session, date, kind }: ClientProperties)
                 };
             }),
 
-        [hourlyNormalized, locale],
+        [hourlyNormalized, locale, effectiveDate],
     );
 
     const temperatureYDomain = useMemo((): [number, number] =>
@@ -861,7 +888,10 @@ export default function Client({ session, date, kind }: ClientProperties)
                             </div>
                             <div className="hours">
                                 {hourlyNormalized.map((item) => (
-                                    <article className="hour" key={item.time}>
+                                    <article
+                                        className={IsCurrentHourSlot(item.time, effectiveDate) ? "hour current" : "hour"}
+                                        key={item.time}
+                                    >
                                         <div className="overview">
                                             <div className="grid">
                                                 <div className="time">
