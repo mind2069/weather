@@ -102,30 +102,27 @@ export class SessionServiceShared
                 }
             }
 
-            if (location === '' || latitude === -999999 || longitude === -999999)
+            const parameters: LocationsDefaultParameters =
             {
-                const parameters: LocationsDefaultParameters =
-                {
-                    latitude: latitude,
-                    longitude: longitude
-                };
+                latitude: latitude,
+                longitude: longitude
+            };
 
-                const response: LocationsDefaultResponse = LocationsServiceServer.Default(parameters);
+            const response: LocationsDefaultResponse = LocationsServiceServer.Default(parameters);
 
-                if (response.success)
-                {
-                    const locationDefault: LocationDefault = response.data;
+            if (response.success)
+            {
+                const locationDefault: LocationDefault = response.data;
 
-                    location = locationDefault.name;
-                    latitude = locationDefault.latitude;
-                    longitude = locationDefault.longitude;
-                }
-                else
-                {
-                    location = 'X, QC, Canada';
-                    latitude = 45.6068;
-                    longitude = -73.7129;
-                }
+                location = locationDefault.name;
+                latitude = locationDefault.latitude;
+                longitude = locationDefault.longitude;
+            }
+            else
+            {
+                location = 'X, QC, Canada';
+                latitude = 45.6068;
+                longitude = -73.7129;
             }
         }
         
