@@ -124,6 +124,10 @@ export interface DayNormalized
     windDirections: number[];
     uvMin: number;  
     uvMax: number;
+    humidityMin: number;
+    humidityMax: number;
+    precipitationMin: number;
+    precipitationMax: number;
     hourly: HourlyNormalized[];
     highlights: HourlyNormalized;
 }

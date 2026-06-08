@@ -277,6 +277,10 @@ export class OpenMeteoHelper
             windDirections: windDirections,
             uvMin: Math.min(...uvs),
             uvMax: Math.max(...uvs),
+            humidityMin: Math.min(...humidities),
+            humidityMax: Math.max(...humidities),
+            precipitationMin: Math.min(...precips),
+            precipitationMax: Math.max(...precips),
             hourly: hourly,
             highlights: highlights,
         };

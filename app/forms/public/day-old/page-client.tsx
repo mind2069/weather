@@ -22,133 +22,12 @@ interface DayHourlyChartRow
     hourTop: string;
     hourBottom: string;
     icon: string;
-    columnAnchor: number;
     temperature: number;
-    precipitation: number;
     windSpeed: number;
-    humidity: number;
     uvIndex: number;
 }
 
-type ChartMetric = "temperature" | "precipitation" | "wind" | "humidity" | "uv";
-
-type ChartMetricDataKey = "temperature" | "precipitation" | "windSpeed" | "humidity" | "uvIndex";
-
-interface ChartSpanYDomainOptions
-{
-    minClamp?: number;
-    maxClamp?: number;
-    /** Extends the domain below the minimum so the line clears the weather icons. */
-    iconBandFloor?: number;
-    /** Virtual headroom used when all values are equal, so a flat minimum is not pinned on the icons. */
-    flatDisplayHeadroom?: number;
-}
-
-/** Keeps minimum values at a stable height above the weather icons as the maximum grows. */
-const ICON_BAND_TARGET_FRACTION = 0.18;
-
-function IconBandPadding(domainTop: number, minPadding: number, targetFraction = ICON_BAND_TARGET_FRACTION): number
-{
-    const safeTop = Math.max(domainTop, minPadding * 2);
-    const scaled = (targetFraction * safeTop) / (1 - targetFraction);
-
-    return Math.max(minPadding, scaled);
-}
-
-function ZeroBandYDomain(vals: number[]): [number, number]
-{
-    return ChartSpanYDomain(vals, 0.5, 0.5,
-    {
-        minClamp: 0,
-        iconBandFloor: 1.25,
-        flatDisplayHeadroom: 8,
-    });
-}
-
-function ChartSpanYDomain(
-    vals: number[],
-    flatSpan: number,
-    minSpan: number,
-    options?: ChartSpanYDomainOptions,
-): [number, number]
-{
-    if (vals.length === 0)
-    {
-        return [0, 1];
-    }
-
-    const lo = Math.min(...vals);
-    const hi = Math.max(...vals);
-    const epsilon = 0.001;
-    const iconFloor = options?.iconBandFloor ?? 0;
-    const flatHeadroom = options?.flatDisplayHeadroom ?? flatSpan;
-    const minClamp = options?.minClamp;
-    // UV from the API hits exactly 0; preview precipitation tails are ~0.03 (shown as "0.0 mm")
-    // and must still get the sub-zero floor — not only lo === 0.
-    const touchesIconBand = minClamp != null && iconFloor > 0 && lo <= minClamp + 0.5;
-
-    if (hi - lo < epsilon)
-    {
-        if (iconFloor > 0)
-        {
-            let domainMax = lo + flatHeadroom;
-
-            if (options?.maxClamp != null)
-            {
-                domainMax = Math.min(options.maxClamp, domainMax);
-            }
-
-            const padding = IconBandPadding(domainMax - lo, iconFloor);
-
-            return [lo - padding, domainMax];
-        }
-
-        const span = Math.max(flatSpan, minSpan);
-        let domainMax = lo + span;
-
-        if (options?.maxClamp != null)
-        {
-            domainMax = Math.min(options.maxClamp, domainMax);
-        }
-
-        return [lo, domainMax];
-    }
-
-    const span = Math.max(minSpan, hi - lo);
-    const topPad = Math.max(flatSpan * 0.5, span * 0.12);
-    let domainMax = hi + topPad;
-    const bottomPad = touchesIconBand
-        ? IconBandPadding(domainMax - lo, iconFloor)
-        : lo > (minClamp ?? 0) + epsilon
-            ? Math.min(lo * 0.12, span * 0.18)
-            : 0;
-
-    let domainMin = lo - bottomPad;
-
-    if (options?.maxClamp != null)
-    {
-        domainMax = Math.min(options.maxClamp, domainMax);
-    }
-
-    if (domainMax <= domainMin)
-    {
-        domainMax = domainMin + flatSpan;
-    }
-
-    return [domainMin, domainMax];
-}
-
-function ChartMetricDataKey(metric: ChartMetric): ChartMetricDataKey
-{
-    switch (metric)
-    {
-        case "precipitation": return "precipitation";
-        case "wind": return "windSpeed";
-        case "humidity": return "humidity";
-        case "uv": return "uvIndex";
-        default: return "temperature";
-    }
-}
+type ChartMetric = "temperature" | "wind" | "uv";
 
 function HourChartAxisLabels(iso: string, locale: string): { top: string; bottom: string }
 {
@@ -429,11 +308,8 @@ export default function Client({ session, date, kind }: ClientProperties)
                     hourTop: top,
                     hourBottom: bottom,
                     icon: item.icon,
-                    columnAnchor: 1,
                     temperature: item.temperature,
-                    precipitation: item.precipitation,
                     windSpeed: item.windSpeed,
-                    humidity: item.humidity,
                     uvIndex: item.uvIndex,
                 };
             }),
@@ -458,14 +334,6 @@ export default function Client({ session, date, kind }: ClientProperties)
 
     }, [chartData]);
 
-    const precipitationYDomain = useMemo((): [number, number] =>
-    {
-        const vals = chartData.map((d) => d.precipitation);
-
-        return ZeroBandYDomain(vals);
-
-    }, [chartData]);
-
     const windYDomain = useMemo((): [number, number] =>
     {
         if (chartData.length === 0)
@@ -484,56 +352,22 @@ export default function Client({ session, date, kind }: ClientProperties)
 
     }, [chartData]);
 
-    const humidityYDomain = useMemo((): [number, number] =>
-    {
-        const vals = chartData.map((d) => d.humidity);
-
-        return ChartSpanYDomain(vals, 4, 8,
-        {
-            minClamp: 0,
-            maxClamp: 100,
-            iconBandFloor: 2.5,
-            flatDisplayHeadroom: 20,
-        });
-
-    }, [chartData]);
-
     const uvYDomain = useMemo((): [number, number] =>
     {
-        const vals = chartData.map((d) => d.uvIndex);
+        if (chartData.length === 0)
+        {
+            return [0, 1];
+        }
 
-        return ZeroBandYDomain(vals);
+        const vals = chartData.map((d) => d.uvIndex);
+        const hi = Math.max(...vals);
+        const span = Math.max(0.5, hi);
+        const topPad = Math.min(1.25, 0.25 + span * 0.12);
+        const floorBelowZero = Math.min(2.5, 0.5 + span * 0.16);
+
+        return [-floorBelowZero, hi + topPad];
 
     }, [chartData]);
-
-    const chartYDomain = useMemo((): [number, number] =>
-    {
-        switch (chartMetric)
-        {
-            case "precipitation": return precipitationYDomain;
-            case "wind": return windYDomain;
-            case "humidity": return humidityYDomain;
-            case "uv": return uvYDomain;
-            default: return temperatureYDomain;
-        }
-    }, [chartMetric, temperatureYDomain, precipitationYDomain, windYDomain, humidityYDomain, uvYDomain]);
-
-    const formatChartMetricLabel = useCallback((metric: ChartMetric, value: number): string =>
-    {
-        switch (metric)
-        {
-            case "precipitation":
-                return `${value.toFixed(1)} mm`;
-            case "wind":
-                return `${Math.round(value)} ${windSpeedUnitDisplay}`;
-            case "humidity":
-                return `${Math.round(value)}%`;
-            case "uv":
-                return `${FormattingHelper.UvIndex(value)} ${LanguagesHelper.Caption("UV")}`;
-            default:
-                return `${Math.round(value)}°${tempUnitSuffix}`;
-        }
-    }, [tempUnitSuffix, windSpeedUnitDisplay]);
 
     useEffect(() =>
     {
@@ -625,12 +459,12 @@ export default function Client({ session, date, kind }: ClientProperties)
                                         </div>
                                         <div className="overview">
                                             <div className="items">
-                                                <div className="item precipitation">
+                                                <div className="item humidity">
                                                     <span className="label">
-                                                        {LanguagesHelper.Caption("Precipitation")}
+                                                        {LanguagesHelper.Caption("Humidity")}
                                                     </span>
                                                     <span className="value">
-                                                        {day.highlights.precipitation.toFixed(1)} mm
+                                                        {Math.round(day.highlights.humidity)}%
                                                     </span>
                                                 </div>
                                                 <div className="item wind">
@@ -641,20 +475,20 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                         {Math.round(day.highlights.windSpeed)} {windSpeedUnit}
                                                     </span>
                                                 </div>
-                                                <div className="item humidity">
-                                                    <span className="label">
-                                                        {LanguagesHelper.Caption("Humidity")}
-                                                    </span>
-                                                    <span className="value">
-                                                        {Math.round(day.highlights.humidity)}%
-                                                    </span>
-                                                </div>
                                                 <div className="item uv">
                                                     <span className="label">
                                                         {LanguagesHelper.Caption("UV")}
                                                     </span>
                                                     <span className="value">
                                                         {FormattingHelper.UvIndex(day.highlights.uvIndex)}
+                                                    </span>
+                                                </div>
+                                                <div className="item precipitation">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Precipitation")}
+                                                    </span>
+                                                    <span className="value">
+                                                        {day.highlights.precipitation.toFixed(1)} mm
                                                     </span>
                                                 </div>
                                             </div>
@@ -688,29 +522,6 @@ export default function Client({ session, date, kind }: ClientProperties)
                                         </div>
                                         <div className="item">
                                             <div className="name">
-                                                {LanguagesHelper.Caption("Precipitation")}
-                                            </div>
-                                            <div className="values">
-                                                <div className="row">
-                                                    <span className="label">
-                                                        {LanguagesHelper.Caption("Minimum")}
-                                                    </span>
-                                                    <span className="value">
-                                                        {Math.round(day.precipitationMin)} mm
-                                                    </span>
-                                                </div>
-                                                <div className="row">
-                                                    <span className="label">
-                                                        {LanguagesHelper.Caption("Maximum")}
-                                                    </span>
-                                                    <span className="value">
-                                                        {Math.round(day.precipitationMax)} mm
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="item">
-                                            <div className="name">
                                                 {LanguagesHelper.Caption("Wind")}
                                             </div>
                                             <div className="values">
@@ -729,29 +540,6 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                     <span className="value end">
                                                         {Math.round(day.windMax)}
                                                         {windSpeedUnitDisplay}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="item">
-                                            <div className="name">
-                                                {LanguagesHelper.Caption("Humidity")}
-                                            </div>
-                                            <div className="values">
-                                                <div className="row">
-                                                    <span className="label">
-                                                        {LanguagesHelper.Caption("Minimum")}
-                                                    </span>
-                                                    <span className="value">
-                                                     {Math.round(day.humidityMin)} %
-                                                    </span>
-                                                </div>
-                                                <div className="row">
-                                                    <span className="label">
-                                                        {LanguagesHelper.Caption("Maximum")}
-                                                    </span>
-                                                    <span className="value end">
-                                                        {Math.round(day.humidityMax)} %
                                                     </span>
                                                 </div>
                                             </div>
@@ -894,7 +682,7 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                 top: 52,
                                                 right: 0,
                                                 left: 0,
-                                                bottom: chartMetric === "uv" || chartMetric === "precipitation" || chartMetric === "humidity" ? 17 : 4,
+                                                bottom: chartMetric === "uv" ? 17 : 4,
                                             }}
                                             barCategoryGap={4}
                                             barGap={0}
@@ -925,7 +713,13 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                 </linearGradient>
                                             </defs>
                                             <Bar
-                                                dataKey="columnAnchor"
+                                                dataKey={
+                                                    chartMetric === "temperature"
+                                                        ? "temperature"
+                                                        : chartMetric === "wind"
+                                                            ? "windSpeed"
+                                                            : "uvIndex"
+                                                }
                                                 fill="transparent"
                                                 stroke="none"
                                                 isAnimationActive={false}
@@ -947,7 +741,13 @@ export default function Client({ session, date, kind }: ClientProperties)
                                             <YAxis
                                                 hide
                                                 type="number"
-                                                domain={chartYDomain}
+                                                domain={
+                                                    chartMetric === "temperature"
+                                                        ? temperatureYDomain
+                                                        : chartMetric === "wind"
+                                                            ? windYDomain
+                                                            : uvYDomain
+                                                }
                                             />
                                             <Tooltip
                                                 content={({ active, payload }) =>
@@ -970,80 +770,36 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                                 {row.label}
                                                             </p>
                                                             <p className="chart-tooltip-line">
-                                                                {(() =>
-                                                                {
-                                                                    const value = row[ChartMetricDataKey(chartMetric)];
-
-                                                                    if (chartMetric === "precipitation")
-                                                                    {
-                                                                        return (
-                                                                            <>
-                                                                                <span className="chart-tooltip-strong">
-                                                                                    {value.toFixed(1)}
-                                                                                </span>
-                                                                                <span className="chart-tooltip-muted">
-                                                                                    {" "}
-                                                                                    mm
-                                                                                </span>
-                                                                            </>
-                                                                        );
-                                                                    }
-
-                                                                    if (chartMetric === "wind")
-                                                                    {
-                                                                        return (
-                                                                            <>
-                                                                                <span className="chart-tooltip-strong">
-                                                                                    {Math.round(value)}
-                                                                                </span>
-                                                                                <span className="chart-tooltip-muted">
-                                                                                    {" "}
-                                                                                    {windSpeedUnitDisplay}
-                                                                                </span>
-                                                                            </>
-                                                                        );
-                                                                    }
-
-                                                                    if (chartMetric === "humidity")
-                                                                    {
-                                                                        return (
-                                                                            <>
-                                                                                <span className="chart-tooltip-strong">
-                                                                                    {Math.round(value)}
-                                                                                </span>
-                                                                                <span className="chart-tooltip-muted">
-                                                                                    %
-                                                                                </span>
-                                                                            </>
-                                                                        );
-                                                                    }
-
-                                                                    if (chartMetric === "uv")
-                                                                    {
-                                                                        return (
-                                                                            <>
-                                                                                <span className="chart-tooltip-strong">
-                                                                                    {FormattingHelper.UvIndex(value)}
-                                                                                </span>
-                                                                                <span className="chart-tooltip-muted">
-                                                                                    {" "}
-                                                                                    {LanguagesHelper.Caption("UV")}
-                                                                                </span>
-                                                                            </>
-                                                                        );
-                                                                    }
-
-                                                                    return (
-                                                                        <>
-                                                                            <span className="chart-tooltip-strong">
-                                                                                {Math.round(value)}
-                                                                            </span>
-                                                                            <span className="chart-tooltip-muted">
-                                                                                °{tempUnitSuffix}
-                                                                            </span>
-                                                                        </>
-                                                                    );
-                                                                })()}
+                                                                {chartMetric === "wind" ? (
+                                                                    <>
+                                                                        <span className="chart-tooltip-strong">
+                                                                            {Math.round(row.windSpeed)}
+                                                                        </span>
+                                                                        <span className="chart-tooltip-muted">
+                                                                            {" "}
+                                                                            {windSpeedUnitDisplay}
+                                                                        </span>
+                                                                    </>
+                                                                ) : chartMetric === "uv" ? (
+                                                                    <>
+                                                                        <span className="chart-tooltip-strong">
+                                                                            {FormattingHelper.UvIndex(row.uvIndex)}
+                                                                        </span>
+                                                                        <span className="chart-tooltip-muted">
+                                                                            {" "}
+                                                                            {LanguagesHelper.Caption("UV")}
+                                                                        </span>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <span className="chart-tooltip-strong">
+                                                                            {Math.round(row.temperature)}
+                                                                        </span>
+                                                                        <span className="chart-tooltip-muted">
+                                                                            °{tempUnitSuffix}
+                                                                        </span>
+                                                                    </>
+                                                                )}
                                                             </p>
                                                         </div>
                                                     );
@@ -1051,7 +807,13 @@ export default function Client({ session, date, kind }: ClientProperties)
                                             />
                                             <Line
                                                 type="monotone"
-                                                dataKey={ChartMetricDataKey(chartMetric)}
+                                                dataKey={
+                                                    chartMetric === "temperature"
+                                                        ? "temperature"
+                                                        : chartMetric === "wind"
+                                                            ? "windSpeed"
+                                                            : "uvIndex"
+                                                }
                                                 stroke="#0369a1"
                                                 strokeWidth={2}
                                                 dot={{
@@ -1064,14 +826,24 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                 zIndex={50}
                                             >
                                                 <LabelList
-                                                    dataKey={ChartMetricDataKey(chartMetric)}
+                                                    dataKey={
+                                                        chartMetric === "temperature"
+                                                            ? "temperature"
+                                                            : chartMetric === "wind"
+                                                                ? "windSpeed"
+                                                                : "uvIndex"
+                                                    }
                                                     position="top"
                                                     offset={8}
                                                     fill="#334155"
                                                     fontSize={11}
                                                     fontWeight={600}
                                                     formatter={(label) =>
-                                                        formatChartMetricLabel(chartMetric, Number(label))
+                                                        chartMetric === "uv"
+                                                            ? `${FormattingHelper.UvIndex(Number(label))} ${LanguagesHelper.Caption("UV")}`
+                                                            : chartMetric === "temperature"
+                                                                ? `${Math.round(Number(label))}°${tempUnitSuffix}`
+                                                                : `${Math.round(Number(label))} ${windSpeedUnitDisplay}`
                                                     }
                                                 />
                                             </Line>
@@ -1117,28 +889,10 @@ export default function Client({ session, date, kind }: ClientProperties)
                                     <div>
                                         <button
                                             type="button"
-                                            className={chartMetric === "precipitation"? "btn btn-brand": "btn"}
-                                            onClick={() => setChartMetric("precipitation")}
-                                        >
-                                            {LanguagesHelper.Caption("Precipitation")}
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button
-                                            type="button"
                                             className={chartMetric === "wind"? "btn btn-brand": "btn"}
                                             onClick={() => setChartMetric("wind")}
                                         >
                                             {LanguagesHelper.Caption("Wind")}
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button
-                                            type="button"
-                                            className={chartMetric === "humidity"? "btn btn-brand": "btn"}
-                                            onClick={() => setChartMetric("humidity")}
-                                        >
-                                            {LanguagesHelper.Caption("Humidity")}
                                         </button>
                                     </div>
                                     <div>
@@ -1149,31 +903,6 @@ export default function Client({ session, date, kind }: ClientProperties)
                                         >
                                             {LanguagesHelper.Caption("UvIndex")}
                                         </button>
-                                    </div>
-                                </div>
-                                <div className="dropdown">
-                                    <div>
-                                        <select
-                                            className="select"
-                                            value={chartMetric}
-                                            onChange={(e) => setChartMetric(e.target.value as ChartMetric)}
-                                        >
-                                            <option value="temperature">
-                                                {LanguagesHelper.Caption("Temperature")}
-                                            </option>
-                                            <option value="precipitation">
-                                                {LanguagesHelper.Caption("Precipitation")}
-                                            </option>
-                                            <option value="wind">
-                                                {LanguagesHelper.Caption("Wind")}
-                                            </option>
-                                            <option value="humidity">
-                                                {LanguagesHelper.Caption("Humidity")}
-                                            </option>
-                                            <option value="uv">
-                                                {LanguagesHelper.Caption("UvIndex")}
-                                            </option>
-                                        </select>
                                     </div>
                                 </div>
                             </div>

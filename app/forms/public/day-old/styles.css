@@ -137,7 +137,7 @@
 {
     grid-area: content;
     display: grid;
-    grid-template-columns: repeat(6, auto);
+    grid-template-columns: repeat(4, auto );
     width: max-content;
     max-width: 100%;
     font-size: 0.75rem;
@@ -408,12 +408,11 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    width: 150px;
+    width: 100px;
     height: 49px;
     padding: 0;
     line-height: 1;
     text-transform: none;
-    box-shadow: none;
 }
 
 .day .chart .navigator .arrow svg
@@ -440,7 +439,7 @@
 .day .chart .actions .grid
 {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.75rem;
 }
 
@@ -448,18 +447,6 @@
 {
     width: 100%;
     max-width: 100%;
-}
-
-.day .chart .actions .dropdown
-{
-    display: none;
-    justify-content: center;
-    align-items: center;
-}
-
-.day .chart .actions .dropdown > div
-{
-    width: 100%;
 }
 
 .chart-hourly-column
