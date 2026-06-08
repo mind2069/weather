@@ -12,7 +12,7 @@ import { FormattingHelper } from "@/scripts/helpers/formatting";
 import { Session } from "@/scripts/types/session";
 import ModalLoading from "@/components/modal-loading/modal-loading";
 import ModalMessage from "@/components/modal-message/modal-message";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { EffectiveDayDate, type DayRouteKind } from "./resolve-route";
 
 interface DayHourlyChartRow
@@ -318,6 +318,7 @@ export default function Client({ session, date, kind }: ClientProperties)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [chartMetric, setChartMetric] = useState<ChartMetric>("temperature");
+    const [chartActionsOpen, setChartActionsOpen] = useState(false);
     const chartScrollRef = useRef<HTMLDivElement>(null);
     const [chartScrollNarrowLayout, setChartScrollNarrowLayout] = useState(false);
     const [chartNeedsHorizontalScroll, setChartNeedsHorizontalScroll] = useState(false);
@@ -454,6 +455,26 @@ export default function Client({ session, date, kind }: ClientProperties)
 
     const hourlyNormalized: HourlyNormalized[] = day?.hourly ?? [];
 
+    const ChartMetricLabel = useMemo(() => 
+    {
+        switch (chartMetric)
+        {
+            case "temperature": return "Temperature";
+            case "precipitation": return "Precipitation";
+            case "wind": return "Wind";
+            case "humidity": return "Humidity";
+            case "uv": return "UVIndex";
+            default: return "Temperature";
+        }
+
+    }, [chartMetric]);
+
+    const selectChartMetric = useCallback((metric: ChartMetric) =>
+    {
+        setChartMetric(metric);
+        setChartActionsOpen(false);
+    }, []);
+
     const chartData: DayHourlyChartRow[] = useMemo(
         () =>
             hourlyNormalized.map((item) =>
@@ -541,12 +562,14 @@ export default function Client({ session, date, kind }: ClientProperties)
     {
         switch (chartMetric)
         {
+            case "temperature": return temperatureYDomain;
             case "precipitation": return precipitationYDomain;
             case "wind": return windYDomain;
             case "humidity": return humidityYDomain;
             case "uv": return uvYDomain;
             default: return temperatureYDomain;
         }
+
     }, [chartMetric, temperatureYDomain, precipitationYDomain, windYDomain, humidityYDomain, uvYDomain]);
 
     const formatChartMetricLabel = useCallback((metric: ChartMetric, value: number): string =>
@@ -1135,12 +1158,27 @@ export default function Client({ session, date, kind }: ClientProperties)
                                 </div>
                             ) : null}
                             <div className="actions">
-                                <div className="grid">
+                                <div className="toggle">
+                                    <button
+                                        type="button"
+                                        className="btn"
+                                        aria-expanded={chartActionsOpen}
+                                        onClick={() => setChartActionsOpen((open) => !open)}
+                                    >
+                                        <span>
+                                            {LanguagesHelper.Caption(ChartMetricLabel)}
+                                        </span>
+                                        <span className="icon">
+                                            <ChevronDown aria-hidden size={20} strokeWidth={2} />
+                                        </span>
+                                    </button>
+                                </div>
+                                <div className={chartActionsOpen ? "grid show" : "grid"}>
                                     <div>
                                         <button
                                             type="button"
                                             className={chartMetric === "temperature"? "btn btn-brand": "btn"}
-                                            onClick={() => setChartMetric("temperature")}
+                                            onClick={() => selectChartMetric("temperature")}
                                         >
                                             {LanguagesHelper.Caption("Temperature")}
                                         </button>
@@ -1149,7 +1187,7 @@ export default function Client({ session, date, kind }: ClientProperties)
                                         <button
                                             type="button"
                                             className={chartMetric === "precipitation"? "btn btn-brand": "btn"}
-                                            onClick={() => setChartMetric("precipitation")}
+                                            onClick={() => selectChartMetric("precipitation")}
                                         >
                                             {LanguagesHelper.Caption("Precipitation")}
                                         </button>
@@ -1158,7 +1196,7 @@ export default function Client({ session, date, kind }: ClientProperties)
                                         <button
                                             type="button"
                                             className={chartMetric === "wind"? "btn btn-brand": "btn"}
-                                            onClick={() => setChartMetric("wind")}
+                                            onClick={() => selectChartMetric("wind")}
                                         >
                                             {LanguagesHelper.Caption("Wind")}
                                         </button>
@@ -1167,7 +1205,7 @@ export default function Client({ session, date, kind }: ClientProperties)
                                         <button
                                             type="button"
                                             className={chartMetric === "humidity"? "btn btn-brand": "btn"}
-                                            onClick={() => setChartMetric("humidity")}
+                                            onClick={() => selectChartMetric("humidity")}
                                         >
                                             {LanguagesHelper.Caption("Humidity")}
                                         </button>
@@ -1176,35 +1214,10 @@ export default function Client({ session, date, kind }: ClientProperties)
                                         <button
                                             type="button"
                                             className={chartMetric === "uv"? "btn btn-brand": "btn"}
-                                            onClick={() => setChartMetric("uv")}
+                                            onClick={() => selectChartMetric("uv")}
                                         >
                                             {LanguagesHelper.Caption("UvIndex")}
                                         </button>
-                                    </div>
-                                </div>
-                                <div className="dropdown">
-                                    <div>
-                                        <select
-                                            className="select"
-                                            value={chartMetric}
-                                            onChange={(e) => setChartMetric(e.target.value as ChartMetric)}
-                                        >
-                                            <option value="temperature">
-                                                {LanguagesHelper.Caption("Temperature")}
-                                            </option>
-                                            <option value="precipitation">
-                                                {LanguagesHelper.Caption("Precipitation")}
-                                            </option>
-                                            <option value="wind">
-                                                {LanguagesHelper.Caption("Wind")}
-                                            </option>
-                                            <option value="humidity">
-                                                {LanguagesHelper.Caption("Humidity")}
-                                            </option>
-                                            <option value="uv">
-                                                {LanguagesHelper.Caption("UvIndex")}
-                                            </option>
-                                        </select>
                                     </div>
                                 </div>
                             </div>

@@ -435,6 +435,12 @@
     margin-top: 2rem;
     display: flex;
     justify-content: center;
+    position: relative;
+}
+
+.day .chart .actions .toggle
+{
+    display: none;
 }
 
 .day .chart .actions .grid
@@ -450,16 +456,9 @@
     max-width: 100%;
 }
 
-.day .chart .actions .dropdown
+.day .chart .actions .toggle .btn .icon
 {
     display: none;
-    justify-content: center;
-    align-items: center;
-}
-
-.day .chart .actions .dropdown > div
-{
-    width: 100%;
 }
 
 .chart-hourly-column

@@ -159,11 +159,23 @@
     }
 }
 
-@media (max-width: 899px)
+@media (max-width: 1099px)
 {
+    .day .chart .navigator
+    {
+        margin-top: 2rem;
+        display: block;
+    }
+
+    .day .chart .navigator .arrow
+    {
+        width: 100%;
+    }
+
     .day .chart .actions    
     {
         display: block;
+        margin-top: 0.75rem;
     }
 
     .day .chart .actions .grid
@@ -177,7 +189,7 @@
     .day .details .header .summary .content
     {
         grid-template-columns: repeat(3, auto);
-        row-gap: 0.75rem;
+        row-gap: 0rem;
         column-gap: 0;
     }
 
@@ -192,6 +204,21 @@
     {
         padding-left: 0;
         border-left: none;
+    }
+
+    .day .details .header .summary .content .item:nth-child(1),
+    .day .details .header .summary .content .item:nth-child(2),
+    .day .details .header .summary .content .item:nth-child(3)
+    {
+        padding-bottom: 0.75rem;
+    }
+
+    .day .details .header .summary .content .item:nth-child(4),
+    .day .details .header .summary .content .item:nth-child(5),
+    .day .details .header .summary .content .item:nth-child(6)
+    {
+        padding-top: 0.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.25);
     }
 }
 
@@ -209,30 +236,52 @@
         grid-template-columns: auto auto;
     }
 
-    .day .chart .navigator
+    .day .chart .actions .toggle
     {
-        margin-top: 2rem;
         display: block;
     }
 
-    .day .chart .navigator .arrow
+    .day .chart .actions .toggle .btn
     {
-        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
     }
 
-    .day .chart .actions    
+    .day .chart .actions .toggle .btn .icon
     {
-        margin-top: 0.75rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        line-height: 0;
+    }
+
+    .day .chart .actions .toggle .btn .icon svg
+    {
+        display: block;
     }
 
     .day .chart .actions .grid
     {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 0.5rem;
         display: none;
+        padding: 0.5rem;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        background-color: #f5f5f5;
+        border-radius: 0.5rem;
+        border: 1px solid #e2e8f0;
     }
 
-    .day .chart .actions .dropdown
+    .day .chart .actions .grid.show
     {
-        display: block;
+        display: grid;
     }
 }
 
@@ -344,6 +393,18 @@
         border-right: none;
         padding-left: 1rem;
         border-left: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .day .details .header .summary .content .item:nth-child(3)
+    {
+        border-top: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .day .details .header .summary .content .item:nth-child(3),
+    .day .details .header .summary .content .item:nth-child(4)
+    {
+        padding-top: 0.5rem;
+        padding-bottom: 0.75rem;
     }
 
     .day .details .header .highlights .temperature > div
