@@ -28,4 +28,36 @@ export class LocationsData
             locations_countries_longitude: country?.longitude ?? 0,
         };     
     }
+
+    private static DistanceSquared(latitudeA: number, longitudeA: number, latitudeB: number, longitudeB: number): number
+    {
+        const deltaLatitude = latitudeB - latitudeA;
+        const deltaLongitude = longitudeB - longitudeA;
+
+        return deltaLatitude * deltaLatitude + deltaLongitude * deltaLongitude;
+    }
+
+    public static Closest(latitude: number, longitude: number): LocationResults
+    {
+        let closestCity: City = CITIES[0];
+        let minDistance = Number.POSITIVE_INFINITY;
+
+        for (const city of CITIES)
+        {
+            if (city.name_normalized === "unknown")
+            {
+                continue;
+            }
+
+            const distance = LocationsData.DistanceSquared(latitude, longitude, city.latitude, city.longitude);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestCity = city;
+            }
+        }
+
+        return LocationsData.Get(closestCity);
+    }
 }

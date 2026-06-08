@@ -15,19 +15,20 @@ export class LocationsServiceServer
 
         if(parameters.latitude === -999999 || parameters.longitude === -999999)
         {
-            data = { name: 'Laval, QC, Canada (Default 1)', latitude: 45.6068, longitude: -73.7129 };
+            data = { name: 'Laval, QC, Canada (Default)', latitude: 45.6068, longitude: -73.7129 };
             success = true;
             codes = ['Success'];
-            message = 'Locations default data retrieved successfully';
+            message = 'Locations default retrieved successfully';
         }
         else
         {
-            // TO DO MAP CLOSER CITY BY LATITUDE AND LONGITUDE
-    
-            data = { name: 'Laval, QC, Canada (Default 2)', latitude: 45.6068, longitude: -73.7129 };
+            const closest = LocationsData.Closest(parameters.latitude, parameters.longitude);
+            const name = closest.name + ", " + closest.locations_provinces_name + ", " + closest.locations_countries_name;
+
+            data = { name: name, latitude: closest.latitude, longitude: closest.longitude };
             success = true;
             codes = ['Success'];
-            message = 'Locations default data retrieved successfully';
+            message = 'Locations closest retrieved successfully';
         }
 
         const json: LocationsTypes.LocationsDefaultResponse = 
