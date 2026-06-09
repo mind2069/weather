@@ -40,4 +40,21 @@ export class TextHelper
 
         return coalesced.replace( /[^0-9]/g, "" );
     }
+
+    public static Decode( text: string | null | undefined ): string
+    {
+        if (text === '')
+        {
+            return '';
+        }
+
+        try
+        {
+            return decodeURIComponent(text ?? '');
+        }
+        catch
+        {
+            return text ?? '';
+        }
+    }
 }

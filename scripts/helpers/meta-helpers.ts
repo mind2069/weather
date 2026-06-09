@@ -1,7 +1,5 @@
 import { LanguageId, OpenGraphData, TwitterData, LanguageAlternates, JsonLdData, META_CONSTANTS } from "@/scripts/types/meta";
 import { ConfigurationsShared } from "@/scripts/configurations/configurations-shared";
-
-import { CookiesHelper } from "@/scripts/helpers/cookies";
 import { LocationHelper } from "@/scripts/helpers/location";
 import type { Session } from "@/scripts/types/session";
 
@@ -88,14 +86,9 @@ export const MetaJsonLdWebPage = (
 export const IsEnglish = (languageId: LanguageId): boolean => languageId === META_CONSTANTS.LANGUAGES.EN;
 export const IsFrench = (languageId: LanguageId): boolean => languageId === META_CONSTANTS.LANGUAGES.FR;
 
-export function hasSavedLocationFromCookies(cookies: string): boolean
+export function MetaLocation(cookies: string, session: Session, resolvedLocationHeader: string | null): MetaLocationInput | undefined
 {
-    return CookiesHelper.HasCompleteLocation(cookies);
-}
-
-export function getMetaLocation(cookies: string, session: Session, resolvedLocationHeader: string | null): MetaLocationInput | undefined
-{
-    const hasSaved = CookiesHelper.HasCompleteLocation(cookies);
+    const hasSaved = LocationHelper.CookiesCompleted(cookies);
     const hasResolved = (resolvedLocationHeader ?? "").trim() !== "";
 
     if (!hasSaved && !hasResolved)

@@ -4,12 +4,12 @@ import Client from "./page-client";
 import "./styles.css";
 import "./styles-responsive.css";
 import { Session } from "@/scripts/types/session";
-import { getSession } from "@/services/session/get-session";
+import { Cache } from "@/scripts/cache/cache";
 import { ResolveForecastRoute } from "./resolve-route";
 
 export default async function Page()
 {
-    const session: Session = await getSession();
+    const session: Session = await Cache.Session();
     const language = session.language.code;
     const page = session.tracking.page;
 

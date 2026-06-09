@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import LayoutPublic from "@/layouts/public/public";
 import { LANGUAGES_ID } from "@/scripts/languages/languages-id";
 import { type LanguageId } from "@/scripts/types/meta";
-import { getMetaLocation } from "@/scripts/helpers/meta-helpers";
-import { getSession } from "@/services/session/get-session";
+import { MetaLocation } from "@/scripts/helpers/meta-helpers";
+import { Cache } from "@/scripts/cache/cache";
 import { DayMetaContextFromRoute, Meta, ToNextMetadata } from "./meta";
 import { ResolveDayRoute } from "./resolve-route";
 import { ConfigurationsShared } from "@/scripts/configurations/configurations-shared";
@@ -12,7 +12,7 @@ import { ConfigurationsShared } from "@/scripts/configurations/configurations-sh
 export async function generateMetadata(): Promise<Metadata>
 {
     const headersList = await headers();
-    const session = await getSession();
+    const session = await Cache.Session();
     const languageCode = session.language.code;
     const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
     const page = session.tracking.page;
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata>
     const baseUrl = ConfigurationsShared.Website.Base;
     const context = DayMetaContextFromRoute(route, baseUrl);
     const cookies = headersList.get("cookie") ?? "";
-    const location = getMetaLocation(cookies, session, headersList.get("s-location"));
+    const location = MetaLocation(cookies, session, headersList.get("s-location"));
 
     return ToNextMetadata(languageId, context, location);
 }

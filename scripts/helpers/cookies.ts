@@ -1,5 +1,16 @@
 import { LocationHelper } from "@/scripts/helpers/location";
 
+export const COOKIE_PATH = "/";
+export const COOKIE_MAX_AGE_SECONDS = 365 * 24 * 60 * 60;
+export const COOKIE_SAME_SITE = "lax" as const;
+export const COOKIE_DEFAULT_OPTIONS = 
+{
+    path: COOKIE_PATH,
+    maxAge: COOKIE_MAX_AGE_SECONDS,
+    sameSite: COOKIE_SAME_SITE,
+    
+} as const;
+
 export class CookiesHelper
 {
     public static Get(cookies: string, name: string): string | null
@@ -34,36 +45,25 @@ export class CookiesHelper
         }
     }
     
-    public static Set(name: string, value: string, days: number = 365): void
+    public static Set(name: string, value: string, maxAgeSeconds: number = COOKIE_MAX_AGE_SECONDS): void
     {
-        if (typeof document === 'undefined')
+        if (typeof document === "undefined")
         {
             return;
         }
-        
-        const expires = new Date();
-        
-        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-        
-        document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+
+        const encodedValue = encodeURIComponent(value);
+
+        document.cookie = `${name}=${encodedValue};path=${COOKIE_PATH};max-age=${maxAgeSeconds};SameSite=${COOKIE_SAME_SITE}`;
     }
-    
+
     public static Delete(name: string): void
     {
-        if (typeof document === 'undefined')
+        if (typeof document === "undefined")
         {
             return;
         }
-        
-        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
-    }
 
-    public static HasCompleteLocation(cookieHeader: string): boolean
-    {
-        const location = CookiesHelper.Get(cookieHeader, "location")?.trim() ?? "";
-        const latitude = LocationHelper.LatitudeNormalize(Number.parseFloat(CookiesHelper.Get(cookieHeader, "latitude") ?? ""));
-        const longitude = LocationHelper.LongitudeNormalize(Number.parseFloat(CookiesHelper.Get(cookieHeader, "longitude") ?? ""));
-
-        return location !== "" && latitude !== -999999 && longitude !== -999999;
+        document.cookie = `${name}=;path=${COOKIE_PATH};max-age=0;SameSite=${COOKIE_SAME_SITE}`;
     }
 }

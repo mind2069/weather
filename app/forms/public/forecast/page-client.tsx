@@ -525,14 +525,6 @@ export default function Client({ session, days }: ClientProperties)
                                                             {Math.round(item.tempMin)}°{tempUnitSuffix}
                                                         </div>
                                                     </div>
-                                                    <div className="statistic precipitation">
-                                                        <div className="label">
-                                                            {LanguagesHelper.Caption("Precip")}
-                                                        </div>
-                                                        <div className="value">
-                                                            {item.rainProbability}%
-                                                        </div>
-                                                    </div>
                                                     <div className="statistic humidity">
                                                         <span className="label">
                                                             {LanguagesHelper.Caption("Humidity")}
@@ -542,7 +534,7 @@ export default function Client({ session, days }: ClientProperties)
                                                         </span>
                                                     </div>
                                                     <div className="rain">
-                                                        <span>💧</span>{" "}{item.rainProbability}%
+                                                        <span>💧</span>{" "}{item.precipitation.toFixed(1)} mm / {item.rainProbability}%
                                                     </div>
                                                 </div>
                                             </div>
@@ -569,7 +561,7 @@ export default function Client({ session, days }: ClientProperties)
                                                             {LanguagesHelper.Caption("Precip")}
                                                         </div>
                                                         <div className="value">
-                                                            {item.rainProbability}%
+                                                            {item.precipitation.toFixed(1)} mm, {item.rainProbability}%
                                                         </div>
                                                     </div>              
                                                     <div className="meta humidity">

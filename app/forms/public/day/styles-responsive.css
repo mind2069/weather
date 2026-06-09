@@ -56,8 +56,8 @@
 
     .day .details .hours .hour .metas .grid
     {
-        grid-template-areas: "precipitation wind humidity uv";
-        grid-template-columns: auto auto auto auto;
+        grid-template-areas: "precipitation rain wind humidity uv";
+        grid-template-columns: auto auto auto auto auto;
         row-gap: 0.25rem;
         column-gap: 1rem;
     }
@@ -203,7 +203,12 @@
     .day .details .header .summary .content .item:nth-child(4)
     {
         padding-left: 0;
-        border-left: none;
+    }
+
+    .day .details .header .summary .content .item:nth-child(1)::before,
+    .day .details .header .summary .content .item:nth-child(4)::before
+    {
+        content: none;
     }
 
     .day .details .header .summary .content .item:nth-child(1),
@@ -218,7 +223,18 @@
     .day .details .header .summary .content .item:nth-child(6)
     {
         padding-top: 0.5rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.25);
+        border-top: 1px dotted rgba(255, 255, 255, 0.3);
+    }
+
+    .day .details .hours .hour .metas .grid
+    {
+        grid-template-areas: "precipitation rain" "wind humidity" "empty uv";
+        grid-template-columns: auto auto;
+    }
+
+    .day .details .hours .hour .metas .meta.empty
+    {
+        display: block;
     }
 }
 
@@ -228,12 +244,6 @@
     {
         font-weight: 500;
         font-size: 1rem;
-    }
-
-    .day .details .hours .hour .metas .grid
-    {
-        grid-template-areas: "precipitation wind" "humidity uv";
-        grid-template-columns: auto auto;
     }
 
     .day .chart .actions .toggle
@@ -306,8 +316,8 @@
 
     .day .details .hours .hour .overview .icon img
     {
-        width: 32px;
-        height: 32px;
+        width: 46px;
+        height: 46px;
     }
 
     .day .details .hours .hour .overview .temperature
@@ -325,7 +335,7 @@
     .day .details .hours .hour .overview .temperature .value
     {
         padding-left: 0.25rem;
-        font-size: 24px;
+        font-size: 28px;
         line-height: 1;
     }
 
@@ -340,13 +350,19 @@
     {  
         display: block;  
         min-height: auto;
+        font-size: 13px;
     }
 
     .day .details .hours .hour .metas .grid
     {
-        grid-template-areas: "precipitation" "wind" "humidity" "uv";
+        grid-template-areas: "precipitation" "rain" "wind" "humidity" "uv";
         grid-template-columns: auto;
         row-gap: 0.125rem;
+    }
+
+    .day .details .hours .hour .metas .meta.empty
+    {
+        display: none;
     }
 }
 
@@ -392,12 +408,12 @@
         padding-right: 0;
         border-right: none;
         padding-left: 1rem;
-        border-left: 1px solid rgba(255, 255, 255, 0.25);
+        border-left: 1px dotted rgba(255, 255, 255, 0.3);
     }
 
     .day .details .header .summary .content .item:nth-child(3)
     {
-        border-top: 1px solid rgba(255, 255, 255, 0.25);
+        border-top: 1px dotted rgba(255, 255, 255, 0.3);
     }
 
     .day .details .header .summary .content .item:nth-child(3),

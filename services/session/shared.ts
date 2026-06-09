@@ -1,46 +1,18 @@
-/**
- * Session resolution for middleware + getSession().
- *
- * Location priority in Build():
- * 1. Cookies (name + valid lat/lon)
- * 2. s-* headers (middleware, same request)
- * 3. Vercel v-* coords
- * 4. Default() / closest city
- * 5. Hard fallback (Laval)
- *
- * Middleware: CreateResponse() — full resolve, cookies, s-* on request.
- * App: getSession() only.
- */
+
 import { NextResponse } from "next/server";
 import { Session } from '@/scripts/types/session';
 import { SessionEmpty } from '@/scripts/models/session';
-import { CookiesHelper } from '@/scripts/helpers/cookies';
+import { COOKIE_DEFAULT_OPTIONS, CookiesHelper } from '@/scripts/helpers/cookies';
 import * as LanguagesHelper from '@/scripts/languages/languages-helper';
 import { LocationsDefaultParameters, LocationsDefaultResponse } from '@/services/locations/types';
 import { LocationsServiceServer } from '@/services/locations/server';
 import { LocationDefault } from '@/scripts/types/location';
 import { LocationHelper } from '@/scripts/helpers/location';
 import { LocationsData } from '@/scripts/data/locations';
+import { TextHelper } from "@/scripts/helpers/text";
 
 export class SessionServiceShared
 {
-    private static DecodeVercelCity(city: string): string    {
-        if (city === '')
-        {
-            return '';
-        }
-
-        try
-        {
-            return decodeURIComponent(city);
-        }
-        catch
-        {
-            return city;
-        }
-    }
-
-    /** Middleware and getSession() only. App components must use getSession(). */
     public static async Build(headers: Headers): Promise<Session>
     {
         let session: Session = SessionEmpty();        
@@ -56,7 +28,7 @@ export class SessionServiceShared
         const page = headers.get("x-page") ?? "";
         const filename = headers.get("x-filename") ?? "";
 
-        const cityVercel = SessionServiceShared.DecodeVercelCity(headers.get("v-city") ?? headers.get("x-vercel-ip-city") ?? "");
+        const cityVercel = TextHelper.Decode(headers.get("v-city") ?? headers.get("x-vercel-ip-city") ?? "");
         const countryVercel = headers.get("v-country") ?? headers.get("x-vercel-ip-country") ?? "";
         const provinceVercel = headers.get("v-province") ?? headers.get("x-vercel-ip-country-region") ?? "";
         const latitudeVercel = LocationHelper.LatitudeNormalize(Number.parseFloat(headers.get("v-latitude") ?? headers.get("x-vercel-ip-latitude") ?? ""));
@@ -100,22 +72,22 @@ export class SessionServiceShared
 
         if (!cookieLocationComplete)
         {
-            const middlewareLocation = SessionServiceShared.DecodeVercelCity(headers.get("s-location") ?? "");
-            const middlewareLatitude = LocationHelper.LatitudeNormalize(Number.parseFloat(headers.get("s-latitude") ?? ""));
-            const middlewareLongitude = LocationHelper.LongitudeNormalize(Number.parseFloat(headers.get("s-longitude") ?? ""));
-            const middlewareSessionValid = middlewareLocation !== "" && middlewareLatitude !== -999999 && middlewareLongitude !== -999999;
+            const locationMiddleware = TextHelper.Decode(headers.get("s-location") ?? "");
+            const latitudeMiddleware = LocationHelper.LatitudeNormalize(Number.parseFloat(headers.get("s-latitude") ?? ""));
+            const longitudeMiddleware = LocationHelper.LongitudeNormalize(Number.parseFloat(headers.get("s-longitude") ?? ""));
+            const sessionValidMiddleware = locationMiddleware !== "" && latitudeMiddleware !== -999999 && longitudeMiddleware !== -999999;
 
-            if (middlewareSessionValid)
+            if (sessionValidMiddleware)
             {
-                location = middlewareLocation;
-                latitude = middlewareLatitude;
-                longitude = middlewareLongitude;
+                location = locationMiddleware;
+                latitude = latitudeMiddleware;
+                longitude = longitudeMiddleware;
 
-                const middlewareUnit = headers.get("s-unit")?.trim().toLowerCase() ?? "";
+                const unitMiddleware = headers.get("s-unit")?.trim().toLowerCase() ?? "";
 
-                if (middlewareUnit === "imperial" || middlewareUnit === "metric")
+                if (unitMiddleware === "imperial" || unitMiddleware === "metric")
                 {
-                    unit = middlewareUnit;
+                    unit = unitMiddleware;
                 }
             }
             else
@@ -207,15 +179,13 @@ export class SessionServiceShared
     {
         SessionServiceShared.ForwardSessionHeaders(response.headers, session);
 
-        const maxAge = 365 * 24 * 60 * 60;
-
-        if (CookiesHelper.HasCompleteLocation(cookieHeader))
+        if (LocationHelper.CookiesCompleted(cookieHeader))
         {
             const unitCookie = CookiesHelper.Get(cookieHeader, "unit")?.trim().toLowerCase() ?? "";
 
             if (unitCookie !== "imperial" && unitCookie !== "metric")
             {
-                response.cookies.set("unit", session.user.unit, { path: "/", maxAge, sameSite: "lax" });
+                response.cookies.set("unit", session.user.unit, COOKIE_DEFAULT_OPTIONS);
             }
 
             return;
@@ -229,9 +199,10 @@ export class SessionServiceShared
             return;
         }
 
-        response.cookies.set("unit", session.user.unit, { path: "/", maxAge, sameSite: "lax" });
-        response.cookies.set("location", session.user.location.name, { path: "/", maxAge, sameSite: "lax" });        response.cookies.set("latitude", String(latitude), { path: "/", maxAge, sameSite: "lax" });
-        response.cookies.set("longitude", String(longitude), { path: "/", maxAge, sameSite: "lax" });
+        response.cookies.set("unit", session.user.unit, COOKIE_DEFAULT_OPTIONS);
+        response.cookies.set("location", session.user.location.name, COOKIE_DEFAULT_OPTIONS);
+        response.cookies.set("latitude", String(latitude), COOKIE_DEFAULT_OPTIONS);
+        response.cookies.set("longitude", String(longitude), COOKIE_DEFAULT_OPTIONS);
     }
 
     public static async CreateResponse(requestHeaders: Headers, rewriteUrl: URL | null, cookieHeader: string, tracking: { language: string; ipAddress: string; hostname: string; pathname: string; section: string; page: string; filename: string; city: string; country: string; province: string; latitude: string; longitude: string }): Promise<NextResponse>
@@ -243,9 +214,7 @@ export class SessionServiceShared
 
         SessionServiceShared.ForwardSessionHeaders(forwardedHeaders, session);
 
-        const response = rewriteUrl
-            ? NextResponse.rewrite(rewriteUrl, { request: { headers: forwardedHeaders } })
-            : NextResponse.next({ request: { headers: forwardedHeaders } });
+        const response = rewriteUrl ? NextResponse.rewrite(rewriteUrl, { request: { headers: forwardedHeaders } }) : NextResponse.next({ request: { headers: forwardedHeaders } });
 
         SessionServiceShared.Store(response, session, cookieHeader);
 

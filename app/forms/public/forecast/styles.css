@@ -195,11 +195,6 @@
     margin-bottom: 2px;
 }
 
-.forecast .details .items .item .statistics .precipitation
-{
-    display: none;
-}
-
 .forecast .details .items .item .statistics .humidity
 {
     display: none;

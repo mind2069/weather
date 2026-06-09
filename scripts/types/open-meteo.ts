@@ -17,6 +17,7 @@ export interface OpenMeteoForecast
         sunrise: string;
         sunset: string;
         precipitation_probability_max?: string;
+        precipitation_sum?: string;
         relative_humidity_2m_mean?: string;
     };
     daily: 
@@ -33,6 +34,7 @@ export interface OpenMeteoForecast
         sunrise: string[];
         sunset: string[];
         precipitation_probability_max?: number[];
+        precipitation_sum?: number[];
         relative_humidity_2m_mean?: number[];
     };
     hourly_units?:
@@ -59,6 +61,7 @@ export interface ForecastNormalized
     windMax: number;
     windDirection: number;
     rainProbability: number;
+    precipitation: number;
     forecast: string;
     icon: string;
     severityForecast: string;
@@ -79,6 +82,7 @@ export interface OpenMeteoDay
         apparent_temperature: string;
         relative_humidity_2m: string;
         precipitation: string;
+        precipitation_probability: string;
         wind_speed_10m: string;
         wind_direction_10m: string;
         uv_index: string;
@@ -91,6 +95,7 @@ export interface OpenMeteoDay
         apparent_temperature: number[];
         relative_humidity_2m: number[];
         precipitation: number[];
+        precipitation_probability: number[];
         wind_speed_10m: number[];
         wind_direction_10m: number[];
         uv_index: number[];
@@ -139,6 +144,7 @@ export interface HourlyNormalized
     feelsLike: number;
     humidity: number;
     precipitation: number;
+    rainProbability: number;
     windSpeed: number;
     windDirection: number;
     uvIndex: number;

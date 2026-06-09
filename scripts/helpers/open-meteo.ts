@@ -124,6 +124,7 @@ export class OpenMeteoHelper
         return data.daily.time.map((date, i) =>
         {
             const p = data.daily.precipitation_probability_max?.[i];
+            const precip = data.daily.precipitation_sum?.[i];
             const rh = data.daily.relative_humidity_2m_mean?.[i];
             const sunrise = data.daily.sunrise[i];
             const sunset = data.daily.sunset[i]; 
@@ -152,6 +153,7 @@ export class OpenMeteoHelper
                 windMax: data.daily.wind_speed_10m_max[i],
                 windDirection,
                 rainProbability: p == null || Number.isNaN(p) ? 0 : Math.round(Math.min(100, Math.max(0, p))),
+                precipitation: precip == null || Number.isNaN(precip) ? 0 : Math.max(0, precip),
                 forecast: LanguagesHelper.WeatherCaption(displayCode),
                 icon: WEATHER_ICONS[displayCode] ?? WEATHER_ICONS_UNKNOWN,
                 severityForecast: LanguagesHelper.WeatherCaption(displayCodeFallback),
@@ -175,6 +177,15 @@ export class OpenMeteoHelper
         }
 
         const num = (v: number | null | undefined): number => v == null || Number.isNaN(v) ? 0 : v;
+        const rainChance = (v: number | null | undefined): number =>
+        {
+            if (v == null || Number.isNaN(v))
+            {
+                return 0;
+            }
+
+            return Math.round(Math.min(100, Math.max(0, v)));
+        };
         const date = times[0].split("T")[0];
         const sunrise = data.daily.sunrise[0] ?? "";
         const sunset = data.daily.sunset[0] ?? "";
@@ -189,6 +200,7 @@ export class OpenMeteoHelper
                 feelsLike: num(h.apparent_temperature[i]),
                 humidity: num(h.relative_humidity_2m[i]),
                 precipitation: num(h.precipitation[i]),
+                rainProbability: rainChance(h.precipitation_probability[i]),
                 windSpeed: num(h.wind_speed_10m[i]),
                 windDirection: num(h.wind_direction_10m[i]),
                 uvIndex: num(h.uv_index[i]),
@@ -201,6 +213,7 @@ export class OpenMeteoHelper
         const feels = h.apparent_temperature.map(num);
         const humidities = h.relative_humidity_2m.map(num);
         const precips = h.precipitation.map(num);
+        const rainProbabilities = h.precipitation_probability.map(rainChance);
         const winds = h.wind_speed_10m.map(num);
         const windDirections = h.wind_direction_10m.map(num);
         const uvs = h.uv_index.map(num);
@@ -258,6 +271,7 @@ export class OpenMeteoHelper
                 feelsLike: Math.max(...feels),
                 humidity: Math.max(...humidities),
                 precipitation: Math.max(...precips),
+                rainProbability: Math.max(...rainProbabilities),
                 windSpeed: maxWind,
                 windDirection: windMaxIdx >= 0 ? num(h.wind_direction_10m[windMaxIdx]) : (fallbackHour?.windDirection ?? 0),
                 uvIndex: Math.max(...uvs),

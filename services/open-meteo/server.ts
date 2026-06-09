@@ -1,11 +1,10 @@
 import { unstable_cache } from "next/cache";
 import * as OpenMeteoTypes from "@/services/open-meteo/types";
 import { OpenMeteoForecast, OpenMeteoDay } from "@/scripts/types/open-meteo";
-import { Session } from "@/scripts/types/session";
 
 export class OpenMeteoServiceServer
 {
-    private static readonly CACHE_KEY_VERSION = "1.3";
+    private static readonly CACHE_KEY_VERSION = "1.5";
 
     public static async Forecast( parameters: OpenMeteoTypes.OpenMeteoForecastParameters ): Promise<OpenMeteoTypes.OpenMeteoForecastResponse>
     {
@@ -46,6 +45,7 @@ export class OpenMeteoServiceServer
                 "sunrise",
                 "sunset",
                 "precipitation_probability_max",
+                "precipitation_sum",
                 "relative_humidity_2m_mean",
             ];
 
@@ -142,6 +142,7 @@ export class OpenMeteoServiceServer
                 "apparent_temperature",
                 "relative_humidity_2m",
                 "precipitation",
+                "precipitation_probability",
                 "wind_speed_10m",
                 "wind_direction_10m",
                 "uv_index",

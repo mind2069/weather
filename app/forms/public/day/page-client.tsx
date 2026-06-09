@@ -925,6 +925,19 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                         {item.precipitation.toFixed(1)} mm
                                                     </div>
                                                 </div>
+                                                <div className="meta rain">
+                                                    <div className="label">
+                                                        <span className="long">
+                                                            {LanguagesHelper.Caption("RainProbability")}
+                                                        </span>
+                                                        <span className="short">
+                                                            {LanguagesHelper.Caption("RainProb")}
+                                                        </span>
+                                                    </div>
+                                                    <div className="value">
+                                                        {item.rainProbability}%
+                                                    </div>
+                                                </div>
                                                 <div className="meta wind">
                                                     <div className="label">
                                                         {LanguagesHelper.Caption("Wind")}
@@ -940,6 +953,8 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                     <div className="value">
                                                         {Math.round(item.humidity)}%
                                                     </div>
+                                                </div>
+                                                <div className="meta empty">
                                                 </div>
                                                 <div className="meta uv">
                                                     <div className="label">
