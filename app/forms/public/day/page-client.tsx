@@ -712,6 +712,14 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                         {day.highlights.precipitation.toFixed(1)} mm
                                                     </span>
                                                 </div>
+                                                <div className="item rain">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("RainProbability")}
+                                                    </span>
+                                                    <span className="value">
+                                                        {day.highlights.rainProbability}%
+                                                    </span>
+                                                </div>
                                                 <div className="item wind">
                                                     <span className="label">
                                                         {LanguagesHelper.Caption("Wind")}

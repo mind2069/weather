@@ -78,7 +78,7 @@
     margin-top: -5px;
     display: flex;
     align-items: flex-start;
-    font-size: 4.5rem;
+    font-size: 5rem;
     line-height: 1;
 }
 
@@ -104,7 +104,6 @@
 .day .details .header .highlights .overview .items
 {
     font-size: 0.75rem;
-    line-height: 1.125rem;
 }
 
 .day .details .header .highlights .overview .items .item
@@ -113,6 +112,11 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
+}
+
+.day .details .header .highlights .overview .items .humidity
+{
+    display: none;
 }
 
 .day .details .header .highlights .overview .items .item .label
