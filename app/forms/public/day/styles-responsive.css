@@ -426,6 +426,7 @@
     .day .details .header .highlights .temperature > div
     {
         font-size: 4rem;
+        margin-top: -5px;
     }
 }
 
