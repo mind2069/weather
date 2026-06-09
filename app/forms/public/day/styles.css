@@ -75,10 +75,10 @@
 .day .details .header .highlights .temperature > div
 {
     position: relative;
-    margin-top: -5px;
+    margin-top: -9px;
     display: flex;
     align-items: flex-start;
-    font-size: 5rem;
+    font-size: 4.5rem;
     line-height: 1;
 }
 
