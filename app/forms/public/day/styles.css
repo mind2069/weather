@@ -103,6 +103,10 @@
 
 .day .details .header .highlights .overview .items
 {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 1rem;
+    row-gap: 0.15rem;
     font-size: 0.75rem;
 }
 
@@ -112,11 +116,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
-}
-
-.day .details .header .highlights .overview .items .humidity
-{
-    display: none;
 }
 
 .day .details .header .highlights .overview .items .item .label
@@ -133,7 +132,7 @@
 {
     grid-area: summary;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: flex-end;
 }
 
@@ -211,7 +210,7 @@
 
 .day .details .hours
 {
-    margin-top: 1.25rem;
+    margin-top: 1rem;
     display: grid;
     gap: 0.75rem;
     padding-bottom: 0.25rem;
@@ -285,7 +284,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .day .details .hours .hour .overview .temperature > div
@@ -331,7 +330,7 @@
 .day .details .hours .hour .metas .grid
 {
     display: grid;
-    grid-template-areas: "precipitation" "rain" "wind" "humidity" "uv";
+    grid-template-areas: "precipitation" "rain" "wind" "direction" "humidity" "uv";
     grid-template-columns: 1fr;
     gap: 0.25rem;
 }
@@ -346,14 +345,14 @@
     grid-area: rain;
 }
 
-.day .details .hours .hour .metas .empty
-{
-    grid-area: empty;
-}
-
 .day .details .hours .hour .metas .wind
 {
     grid-area: wind;
+}
+
+.day .details .hours .hour .metas .direction
+{
+    grid-area: direction;
 }
 
 .day .details .hours .hour .metas .humidity
@@ -370,11 +369,6 @@
 {
     display: flex;
     justify-content: space-between;
-}
-
-.day .details .hours .hour .metas .meta.empty
-{
-    display: none;
 }
 
 .day .details .hours .hour .metas .meta .label

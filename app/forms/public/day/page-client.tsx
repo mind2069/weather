@@ -14,7 +14,7 @@ import ModalLoading from "@/components/modal-loading/modal-loading";
 import ModalMessage from "@/components/modal-message/modal-message";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { EffectiveDayDate, type DayRouteKind } from "./resolve-route";
-import { CookiesHelper } from "@/scripts/helpers/cookies";
+import { WindHelper } from "@/scripts/helpers/wind";
 
 interface DayHourlyChartRow
 {
@@ -728,6 +728,14 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                         {Math.round(day.highlights.windSpeed)} {windSpeedUnit}
                                                     </span>
                                                 </div>
+                                                <div className="item direction">
+                                                    <span className="label">
+                                                        {LanguagesHelper.Caption("Direction")}
+                                                    </span>
+                                                    <span className="value">
+                                                        {LanguagesHelper.Caption(WindHelper.Caption(day.highlights.windDirection))}
+                                                    </span>
+                                                </div>
                                                 <div className="item humidity">
                                                     <span className="label">
                                                         {LanguagesHelper.Caption("Humidity")}
@@ -954,6 +962,19 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                         {Math.round(item.windSpeed)} {windSpeedUnit}
                                                     </div>
                                                 </div>
+                                                <div className="meta direction">
+                                                    <div className="label">
+                                                        <span className="long">
+                                                            {LanguagesHelper.Caption("Direction")}
+                                                        </span>
+                                                        <span className="short">
+                                                            {LanguagesHelper.Caption("Dir")}
+                                                        </span>
+                                                    </div>
+                                                    <div className="value">
+                                                        {LanguagesHelper.Caption(WindHelper.Caption(item.windDirection))}
+                                                    </div>
+                                                </div>
                                                 <div className="meta humidity">
                                                     <div className="label">
                                                         {LanguagesHelper.Caption("Humidity")}
@@ -961,8 +982,6 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                     <div className="value">
                                                         {Math.round(item.humidity)}%
                                                     </div>
-                                                </div>
-                                                <div className="meta empty">
                                                 </div>
                                                 <div className="meta uv">
                                                     <div className="label">
