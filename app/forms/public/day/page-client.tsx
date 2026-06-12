@@ -924,6 +924,9 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                 <div className="forecast">
                                                     {item.forecast}
                                                 </div>
+                                                <div className="rain">
+                                                {LanguagesHelper.Caption("RainProbability")}: {item.rainProbability}%
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="metas">

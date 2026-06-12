@@ -271,6 +271,11 @@
     grid-area: forecast;
 }
 
+.day .details .hours .hour .overview .rain
+{
+    grid-area: rain;
+}
+
 .day .details .hours .hour .overview .time
 {
     display: flex;
@@ -316,6 +321,13 @@
     justify-content: center;
     min-height: 2rem;
     font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.day .details .hours .hour .overview .rain
+{
+    display: none;
+    font-size: 13px;
     color: rgba(255, 255, 255, 0.9);
 }
 

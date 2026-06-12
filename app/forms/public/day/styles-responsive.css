@@ -421,23 +421,43 @@
 {
     .day .details .hours .hour .overview .grid
     {
-        grid-template-columns: 46px auto;
-        row-gap: 0.5rem;
+        grid-template-areas: "time time" "icon temperature" "forecast forecast" "rain rain";
+        grid-template-columns: 34px auto;
+        row-gap: 0.15rem;
     }
 
     .day .details .hours .hour .overview .temperature
     {
         position: relative;
-        top: -2px;
+        top: -1px;
+        justify-content: flex-start;
     }
 
     .day .details .hours .hour .overview .temperature > div
     {
         display: flex;
         gap: 1px;
-        font-size: 1.5rem;
-        padding-left: 0.25rem;
+        font-size: 1.35rem;
+        padding-left: 0.15rem;
     }
+
+    .day .details .hours .hour .overview .rain
+    {
+        padding-top: 0.1rem;
+        display: block;
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 12px;
+    }
+
+    /* .day .details .hours .hour .overview .time
+    {
+        font-weight: 400;
+    }
+
+    .day .details .hours .hour .overview .forecast
+    {    
+        font-weight: 500;
+    } */
 
     .day .details .hours .hour .overview .icon
     {
@@ -449,15 +469,20 @@
 
     .day .details .hours .hour .overview .icon img
     {
-        width: 50px;
-        height: 50px;
+        width: 34px;
+        height: 34px;
         display: block;
     }
 
     .day .details .hours .hour .metas .grid
     {
-        grid-template-areas: "precipitation" "rain" "wind" "direction" "humidity" "uv";
+        grid-template-areas: "precipitation" "wind" "direction" "humidity" "uv";
         grid-template-columns: auto;
         row-gap: 0.125rem;
+    }
+
+    .day .details .hours .hour .metas .rain
+    {
+        display: none;
     }
 }
