@@ -159,7 +159,7 @@ export const LANGUAGES_CAPTION: Record<string, string> =
     "1_Maximum": "Maximum",
     "2_Maximum": "Maximum",
     "1_RainProbability": "Rain Probability",
-    "2_RainProbability": "Probabilité de pluie",
+    "2_RainProbability": "Probabilité pluie",
     "1_RainProb": "Rain Pr.",
     "2_RainProb": "Pr. pluie",
     "1_Direction": "Direction",

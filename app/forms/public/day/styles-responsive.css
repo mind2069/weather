@@ -60,6 +60,7 @@
     {
         position: relative;
         top: -1px;
+        justify-content: flex-start;
     }
 
     .day .details .hours .hour .overview .temperature > div
@@ -424,13 +425,6 @@
         grid-template-areas: "time time" "icon temperature" "forecast forecast" "rain rain";
         grid-template-columns: 34px auto;
         row-gap: 0.15rem;
-    }
-
-    .day .details .hours .hour .overview .temperature
-    {
-        position: relative;
-        top: -1px;
-        justify-content: flex-start;
     }
 
     .day .details .hours .hour .overview .temperature > div
