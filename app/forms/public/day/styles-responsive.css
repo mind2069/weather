@@ -417,6 +417,7 @@
     .day .details .header .highlights .temperature > div
     {
         font-size: 3rem;
+        top: -3px;
     }
 
     .day .details .header .highlights .overview .items
