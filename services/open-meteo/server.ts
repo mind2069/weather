@@ -103,60 +103,38 @@ export class OpenMeteoServiceServer
 
     public static async Day( parameters: OpenMeteoTypes.OpenMeteoDayParameters ): Promise<OpenMeteoTypes.OpenMeteoDayResponse>
     {
-        let success = false;
-        let data: OpenMeteoDay | null = null;
-        let codes: string[] = ["UnknownError"];
-        let message = "";
-        let process = true;
-
-        if (parameters.cached)
-        {
-            const cacheExists = await unstable_cache(async () => { throw new Error("CacheMiss"); }, [`open-meteo-day-${OpenMeteoServiceServer.CACHE_KEY_VERSION}`, parameters.session.user.location.latitude.toFixed(2), parameters.session.user.location.longitude.toFixed(2), parameters.date.trim(), parameters.session.user.unit], { revalidate: 1800 })().then(() => true).catch(() => false);
+        const latitude = parameters.session.user.location.latitude.toFixed(2);
+        const longitude = parameters.session.user.location.longitude.toFixed(2);
         
-            if (!cacheExists)
+        let cached = true;
+
+        const response = await unstable_cache(
+            async () =>
             {
-                process = false;
+                cached = false;
 
-                codes = ["CacheMissing"];
-                message = "Cache missing";
-            }  
-        }
+                return OpenMeteoServiceServer.DayUncached(parameters);
+            },
+            [
+                `open-meteo-day-${OpenMeteoServiceServer.CACHE_KEY_VERSION}`,
+                latitude,
+                longitude,
+                parameters.date.trim(),
+                parameters.session.user.unit,
+            ],
+            { revalidate: 1800 }
+        )();
 
-        if (process)
-        {
-            const latitude = parameters.session.user.location.latitude.toFixed(2);
-            const longitude = parameters.session.user.location.longitude.toFixed(2);
-    
-            const response = await unstable_cache(
-                async () => OpenMeteoServiceServer.DayUncached(parameters),
-                [
-                    `open-meteo-day-${OpenMeteoServiceServer.CACHE_KEY_VERSION}`,
-                    latitude,
-                    longitude,
-                    parameters.date.trim(),
-                    parameters.session.user.unit,
-                ],
-                { revalidate: 1800 }
-            )();
-
-            success = response.success;
-            data = response.data;
-            codes = response.codes;
-            message = response.message;
-        }
-
-        const json: OpenMeteoTypes.OpenMeteoDayResponse =
-        {
-            success: success,
-            data: data,
-            codes: codes,
-            message: message,
+        return {
+            success: response.success,
+            data: response.data,
+            codes: response.codes,
+            message: response.message,
+            cached: cached,
         };
-
-        return json;
     }
 
-    private static async DayUncached( parameters: OpenMeteoTypes.OpenMeteoDayParameters ): Promise<OpenMeteoTypes.OpenMeteoDayResponse>
+    private static async DayUncached( parameters: OpenMeteoTypes.OpenMeteoDayParameters ): Promise<Omit<OpenMeteoTypes.OpenMeteoDayResponse, "cached">>
     {
         let success = false;
         let data: OpenMeteoDay | null = null;
@@ -173,55 +151,55 @@ export class OpenMeteoServiceServer
             }
             else
             {
-            const hourlyVars =
-            [
-                "temperature_2m",
-                "apparent_temperature",
-                "relative_humidity_2m",
-                "precipitation",
-                "precipitation_probability",
-                "wind_speed_10m",
-                "wind_direction_10m",
-                "uv_index",
-                "weather_code",
-            ];
+                const hourlyVars =
+                [
+                    "temperature_2m",
+                    "apparent_temperature",
+                    "relative_humidity_2m",
+                    "precipitation",
+                    "precipitation_probability",
+                    "wind_speed_10m",
+                    "wind_direction_10m",
+                    "uv_index",
+                    "weather_code",
+                ];
 
-            const url = new URL("https://api.open-meteo.com/v1/forecast");
-            const latitude = parameters.session.user.location.latitude.toFixed(2);
-            const longitude = parameters.session.user.location.longitude.toFixed(2);
+                const url = new URL("https://api.open-meteo.com/v1/forecast");
+                const latitude = parameters.session.user.location.latitude.toFixed(2);
+                const longitude = parameters.session.user.location.longitude.toFixed(2);
 
-            url.searchParams.set("latitude", latitude);
-            url.searchParams.set("longitude", longitude);
-            url.searchParams.set("timezone", "auto");
-            url.searchParams.set("start_date", day);
-            url.searchParams.set("end_date", day);
-            url.searchParams.set("hourly", hourlyVars.join(","));
-            url.searchParams.set("daily", "sunrise,sunset,weather_code");
+                url.searchParams.set("latitude", latitude);
+                url.searchParams.set("longitude", longitude);
+                url.searchParams.set("timezone", "auto");
+                url.searchParams.set("start_date", day);
+                url.searchParams.set("end_date", day);
+                url.searchParams.set("hourly", hourlyVars.join(","));
+                url.searchParams.set("daily", "sunrise,sunset,weather_code");
 
-            if (parameters.session.user.unit == "imperial")
-            {
-                url.searchParams.set("temperature_unit", "fahrenheit");
-                url.searchParams.set("wind_speed_unit", "mph");
-            }
-            else
-            {
-                url.searchParams.set("temperature_unit", "celsius");
-                url.searchParams.set("wind_speed_unit", "kmh");
-            }
+                if (parameters.session.user.unit == "imperial")
+                {
+                    url.searchParams.set("temperature_unit", "fahrenheit");
+                    url.searchParams.set("wind_speed_unit", "mph");
+                }
+                else
+                {
+                    url.searchParams.set("temperature_unit", "celsius");
+                    url.searchParams.set("wind_speed_unit", "kmh");
+                }
 
-            const response = await fetch(url.toString());
+                const response = await fetch(url.toString());
 
-            if (response.ok)
-            {
-                data = await response.json() as OpenMeteoDay;
-                success = true;
-                codes = ["Success"];
-                message = "Open-Meteo day hourly forecast retrieved";
-            }
-            else
-            {
-                message = response.statusText;
-            }
+                if (response.ok)
+                {
+                    data = await response.json() as OpenMeteoDay;
+                    success = true;
+                    codes = ["Success"];
+                    message = "Open-Meteo day hourly forecast retrieved";
+                }
+                else
+                {
+                    message = response.statusText;
+                }
             }
         }
         catch (error)
@@ -229,14 +207,11 @@ export class OpenMeteoServiceServer
             message = (error instanceof Error) ? error.message : String(error);
         }
 
-        const json: OpenMeteoTypes.OpenMeteoDayResponse =
-        {
+        return {
             success: success,
             data: data,
             codes: codes,
             message: message,
         };
-
-        return json;
     }
 }

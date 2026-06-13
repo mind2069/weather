@@ -352,8 +352,6 @@ export default function Client({ session, date, kind, dayData }: ClientPropertie
         {
             pageReady.current = true;
 
-            console.log(dayData);
-
             if (dayData)
             {
                 const dayNormalize: DayNormalized | null = OpenMeteoHelper.DayNormalize(session, dayData);
@@ -398,10 +396,11 @@ export default function Client({ session, date, kind, dayData }: ClientPropertie
         {
             session: session,
             date: effectiveDate,
-            cached: false,
         };
 
         const responseDay: OpenMeteoDayResponse = await WeatherServiceClient.Day(parametersDay);
+
+        console.log(responseDay);
 
         if (responseDay.success && responseDay.data)
         {

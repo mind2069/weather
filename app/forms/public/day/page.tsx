@@ -7,9 +7,6 @@ import { Session } from "@/scripts/types/session";
 import { Cache } from "@/scripts/cache/cache";
 import { ResolveDayRoute } from "./resolve-route";
 import { OpenMeteoDay } from "@/scripts/types/open-meteo";
-import { OpenMeteoDayParameters, OpenMeteoDayResponse } from "@/services/open-meteo/types";
-import { OpenMeteoServiceServer } from "@/services/open-meteo/server";
-import { EffectiveDayDate } from "./resolve-route";
 
 export default async function Page()
 {
@@ -27,24 +24,6 @@ export default async function Page()
     if (!route.valid)
     {
         redirect(LanguagesHelper.Path("Public_Day"));
-    }
-    else
-    {
-        const effectiveDate = EffectiveDayDate(route.kind, route.date);
-
-        const parametersDay: OpenMeteoDayParameters =
-        {
-            session: session,
-            date: effectiveDate,
-            cached: true,
-        };
-
-        const responseDay: OpenMeteoDayResponse = await OpenMeteoServiceServer.Day(parametersDay);
-
-        if (responseDay.success && responseDay.data)
-        {
-            dayData = responseDay.data;
-        }
     }
 
     return <Client session={session} date={route.date} kind={route.kind} dayData={dayData} />;
