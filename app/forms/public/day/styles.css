@@ -48,8 +48,53 @@
 .day .details .header .highlights .wrapper
 {
     display: grid;
+    grid-template-areas: "icon temperature overview";
     grid-template-columns: auto auto auto;
     gap: 0.5rem;
+}
+
+.day .details .header .highlights .wrapper .forecast
+{
+    grid-area: forecast;
+}
+
+.day .details .header .highlights .wrapper .icon
+{
+    grid-area: icon;
+}
+
+.day .details .header .highlights .wrapper .temperature
+{
+    grid-area: temperature;
+}
+
+.day .details .header .highlights .wrapper .overview
+{
+    grid-area: overview;
+}
+
+.day .details .header .highlights .wrapper .info
+{
+    grid-area: info;
+}
+
+.day .details .header .highlights .wrapper .forecast
+{
+    display: none;
+}
+
+.day .details .header .highlights .wrapper .info
+{
+    display: none;
+}
+
+.day .details .header .highlights .forecast
+{
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .day .details .header .highlights .icon
@@ -61,8 +106,8 @@
 
 .day .details .header .highlights .icon img
 {
-    width: 4.5rem;
-    height: 4.5rem;
+    width: 4rem;
+    height: 4rem;
     display: block;
 }
 
@@ -75,10 +120,10 @@
 .day .details .header .highlights .temperature > div
 {
     position: relative;
-    margin-top: -9px;
+    top: -5px;
     display: flex;
     align-items: flex-start;
-    font-size: 4.5rem;
+    font-size: 4rem;
     line-height: 1;
 }
 
@@ -126,6 +171,11 @@
 .day .details .header .highlights .overview .items .item .value
 {
     color: #ffffff;
+}
+
+.day .details .header .highlights .info
+{
+    font-size: 0.75rem;
 }
 
 .day .details .header .summary

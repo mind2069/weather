@@ -685,6 +685,9 @@ export default function Client({ session, date, kind }: ClientProperties)
                                 </div>
                                 <div className="highlights">
                                     <div className="wrapper">
+                                        <div className="forecast">
+                                            {day.highlights.forecast}
+                                        </div>
                                         <div className="icon">
                                             <img
                                                 src={day.highlights.icon}
@@ -753,6 +756,9 @@ export default function Client({ session, date, kind }: ClientProperties)
                                                     </span>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div className="info">
+                                            <span>{LanguagesHelper.Caption("RainProbability")}:</span> <span>{day.highlights.rainProbability}%</span>
                                         </div>
                                     </div>
                                 </div>
