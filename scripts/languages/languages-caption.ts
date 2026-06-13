@@ -184,4 +184,6 @@ export const LANGUAGES_CAPTION: Record<string, string> =
     "2_NorthWest": "Nord-Ouest",
     "1_Unknown": "Unknown",
     "2_Unknown": "Inconnu",
+    "1_CacheMissing": "Cache missing",
+    "2_CacheMissing": "Cache manquant",
 };

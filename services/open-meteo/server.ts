@@ -103,20 +103,57 @@ export class OpenMeteoServiceServer
 
     public static async Day( parameters: OpenMeteoTypes.OpenMeteoDayParameters ): Promise<OpenMeteoTypes.OpenMeteoDayResponse>
     {
-        const latitude = parameters.session.user.location.latitude.toFixed(2);
-        const longitude = parameters.session.user.location.longitude.toFixed(2);
+        let success = false;
+        let data: OpenMeteoDay | null = null;
+        let codes: string[] = ["UnknownError"];
+        let message = "";
+        let process = true;
 
-        return unstable_cache(
-            async () => OpenMeteoServiceServer.DayUncached(parameters),
-            [
-                `open-meteo-day-${OpenMeteoServiceServer.CACHE_KEY_VERSION}`,
-                latitude,
-                longitude,
-                parameters.date.trim(),
-                parameters.session.user.unit,
-            ],
-            { revalidate: 1800 }
-        )();
+        if (parameters.cached)
+        {
+            const cacheExists = await unstable_cache(async () => { throw new Error("CacheMiss"); }, [`open-meteo-day-${OpenMeteoServiceServer.CACHE_KEY_VERSION}`, parameters.session.user.location.latitude.toFixed(2), parameters.session.user.location.longitude.toFixed(2), parameters.date.trim(), parameters.session.user.unit], { revalidate: 1800 })().then(() => true).catch(() => false);
+        
+            if (!cacheExists)
+            {
+                process = false;
+
+                codes = ["CacheMissing"];
+                message = "Cache missing";
+            }  
+        }
+
+        if (process)
+        {
+            const latitude = parameters.session.user.location.latitude.toFixed(2);
+            const longitude = parameters.session.user.location.longitude.toFixed(2);
+    
+            const response = await unstable_cache(
+                async () => OpenMeteoServiceServer.DayUncached(parameters),
+                [
+                    `open-meteo-day-${OpenMeteoServiceServer.CACHE_KEY_VERSION}`,
+                    latitude,
+                    longitude,
+                    parameters.date.trim(),
+                    parameters.session.user.unit,
+                ],
+                { revalidate: 1800 }
+            )();
+
+            success = response.success;
+            data = response.data;
+            codes = response.codes;
+            message = response.message;
+        }
+
+        const json: OpenMeteoTypes.OpenMeteoDayResponse =
+        {
+            success: success,
+            data: data,
+            codes: codes,
+            message: message,
+        };
+
+        return json;
     }
 
     private static async DayUncached( parameters: OpenMeteoTypes.OpenMeteoDayParameters ): Promise<OpenMeteoTypes.OpenMeteoDayResponse>

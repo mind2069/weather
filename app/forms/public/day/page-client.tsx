@@ -324,9 +324,10 @@ interface ClientProperties
     session: Session;
     date: string;
     kind: DayRouteKind;
+    dayData: OpenMeteoDay | null;
 }
 
-export default function Client({ session, date, kind }: ClientProperties)
+export default function Client({ session, date, kind, dayData }: ClientProperties)
 {
     LanguagesHelper.Initialize(session.language.code);
 
@@ -337,7 +338,7 @@ export default function Client({ session, date, kind }: ClientProperties)
     const windSpeedUnitDisplay = session.user.unit === "imperial" ? "MPH" : "KM/H";
     const tempUnitSuffix = session.user.unit === "imperial" ? "F" : "C";
     const [day, setDay] = useState<DayNormalized | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(!dayData);
     const [error, setError] = useState<string | null>(null);
     const [chartMetric, setChartMetric] = useState<ChartMetric>("temperature");
     const [chartActionsOpen, setChartActionsOpen] = useState(false);
@@ -351,7 +352,19 @@ export default function Client({ session, date, kind }: ClientProperties)
         {
             pageReady.current = true;
 
-            void Load();
+            console.log(dayData);
+
+            if (dayData)
+            {
+                const dayNormalize: DayNormalized | null = OpenMeteoHelper.DayNormalize(session, dayData);
+
+                setDay(dayNormalize);
+                setLoading(false);
+            }
+            else
+            {
+                void Load();
+            }
         }
         
     }, [effectiveDate]);
@@ -381,12 +394,11 @@ export default function Client({ session, date, kind }: ClientProperties)
         setLoading(true);
         setError(null);
 
-        console.log(session.user.location.name);
-
         const parametersDay: OpenMeteoDayParameters =
         {
             session: session,
             date: effectiveDate,
+            cached: false,
         };
 
         const responseDay: OpenMeteoDayResponse = await WeatherServiceClient.Day(parametersDay);

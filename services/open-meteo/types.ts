@@ -19,6 +19,7 @@ export interface OpenMeteoDayParameters
 {
     session: Session;
     date: string;
+    cached: boolean;
 }
 
 export interface OpenMeteoDayResponse

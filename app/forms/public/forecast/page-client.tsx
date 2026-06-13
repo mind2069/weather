@@ -401,6 +401,7 @@ export default function Client({ session, days }: ClientProperties)
         {
             session: session,
             date: date,
+            cached: false
         };
 
         const responseDay: OpenMeteoDayResponse = await WeatherServiceClient.Day(parametersDay);
