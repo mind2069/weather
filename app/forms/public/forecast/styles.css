@@ -52,10 +52,10 @@
     background-color: rgba(255, 255, 255, 0.1);
     padding: 1rem 0.75rem 0.75rem 0.75rem;
     text-align: center;
-    font-size: 14px;
+    font-size: 0.875rem;
     line-height: 1.375;
     color: inherit;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.05), 0 0 0 0.0625rem rgba(255, 255, 255, 0.15);
     transition: background-color 0.15s ease, color 0.15s ease;
     white-space: nowrap;
 }
@@ -67,8 +67,8 @@
 
 .forecast .details .items .item:focus-visible
 {
-    outline: 2px solid rgba(255, 255, 255, 0.9);
-    outline-offset: 2px;
+    outline: 0.125rem solid rgba(255, 255, 255, 0.9);
+    outline-offset: 0.125rem;
 }
 
 .forecast .details .items .item .title
@@ -78,7 +78,7 @@
     align-items: center;
     gap: 1rem;
     padding-bottom: 0.5rem;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 500;
 }
 
@@ -134,7 +134,7 @@
 
 .forecast .details .items .item .overview .date
 {
-    font-size: 12px;
+    font-size: 0.75rem;
     line-height: 1.25;
     color: rgba(255, 255, 255, 0.75);
 }
@@ -149,8 +149,8 @@
 
 .forecast .details .items .item .overview .icon img
 {
-    width: 48px;
-    height: 48px;
+    width: 3rem;
+    height: 3rem;
     display: block;
 }
 
@@ -159,7 +159,7 @@
     display: flex;
     align-items: center;
     justify-content:center;
-    font-size: 18px;
+    font-size: 1.125rem;
     font-weight: 500;
     line-height: 1.25;
     color: rgba(255, 255, 255, 0.9);
@@ -168,7 +168,7 @@
 .forecast .details .items .item .overview .temperature > div
 {
     display: flex;
-    gap: 1px;
+    gap: 0.0625rem;
 }
 
 .forecast .details .items .item .overview .blurb
@@ -179,7 +179,7 @@
     min-height: 2.5rem;
     color: rgba(255, 255, 255, 0.95);
     white-space: normal;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .forecast .details .items .item .statistics
@@ -192,7 +192,7 @@
     display: flex;
     justify-content: space-between;
     gap: 0.5rem;
-    margin-bottom: 2px;
+    margin-bottom: 0.125rem;
 }
 
 .forecast .details .items .item .statistics .humidity
@@ -215,8 +215,8 @@
 {
     margin: 0.75rem 0 0;
     padding: 0.75rem 0 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: 12px;
+    border-top: 0.0625rem solid rgba(255, 255, 255, 0.2);
+    font-size: 0.75rem;
 }
 
 .forecast .details .items .item .metas .grid
@@ -319,7 +319,7 @@
 
 .forecast .chart .wrapper-2
 {
-    height: 288px;
+    height: 18rem;
     width: 100%;
 }
 
@@ -344,8 +344,8 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    width: 100px;
-    height: 49px;
+    width: 6.25rem;
+    height: 3.0625rem;
     padding: 0;
     line-height: 1;
     text-transform: none;
@@ -392,8 +392,8 @@
 .forecast .chart .actions .toggle .btn .icon
 {
     position: absolute;
-    top: 14px;
-    right: 14px;
+    top: 0.875rem;
+    right: 0.875rem;
 }
 
 .forecast .chart .actions .toggle .btn .icon svg
@@ -416,12 +416,12 @@
 .chart-tooltip
 {
     border-radius: 0.5rem;
-    border: 1px solid #e2e8f0;
+    border: 0.0625rem solid #e2e8f0;
     background-color: #ffffff;
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     line-height: 1.25rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(0, 0, 0, 0.1), 0 0.125rem 0.25rem -0.125rem rgba(0, 0, 0, 0.1);
 }
 
 .chart-tooltip-title

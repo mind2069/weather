@@ -120,7 +120,7 @@
 .day .details .header .highlights .temperature > div
 {
     position: relative;
-    top: -5px;
+    top: -0.3125rem;
     display: flex;
     align-items: flex-start;
     font-size: 4rem;
@@ -199,7 +199,7 @@
 
 .day .details .header .summary .content .item
 {
-    border-left: 1px dotted rgba(255, 255, 255, 0.3);
+    border-left: 0.0625rem dotted rgba(255, 255, 255, 0.3);
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
@@ -275,9 +275,9 @@
     text-align: center;
     border-radius: 0.5rem;
     background-color: rgba(255, 255, 255, 0.1);
-    font-size: 14px;
+    font-size: 0.875rem;
     line-height: 1.375;
-    box-shadow: 2px 1px 3px rgba(0, 0, 0, 0.02);
+    box-shadow: 0.125rem 0.0625rem 0.1875rem rgba(0, 0, 0, 0.02);
 }
 
 .day .details .hours .hour.current
@@ -345,7 +345,7 @@
 .day .details .hours .hour .overview .temperature > div
 {
     display: flex;
-    gap: 1px;
+    gap: 0.0625rem;
     font-size: 1rem;
 }
 
@@ -359,8 +359,8 @@
 
 .day .details .hours .hour .overview .icon img
 {
-    width: 36px;
-    height: 36px;
+    width: 2.25rem;
+    height: 2.25rem;
     display: block;
 }
 
@@ -377,7 +377,7 @@
 .day .details .hours .hour .overview .rain
 {
     display: none;
-    font-size: 13px;
+    font-size: 0.8125rem;
     color: rgba(255, 255, 255, 0.9);
 }
 
@@ -385,7 +385,7 @@
 {
     margin: 0.5rem 0 0;
     padding: 0.5rem 0 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 0.0625rem solid rgba(255, 255, 255, 0.2);
     font-size: 0.75rem;
 }
 
@@ -467,7 +467,7 @@
 
 .day .chart .wrapper-2
 {
-    height: 288px;
+    height: 18rem;
     width: 100%;
 }
 
@@ -492,8 +492,8 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    width: 150px;
-    height: 49px;
+    width: 9.375rem;
+    height: 3.0625rem;
     padding: 0;
     line-height: 1;
     text-transform: none;
@@ -541,8 +541,8 @@
 .day .chart .actions .toggle .btn .icon
 {
     position: absolute;
-    top: 14px;
-    right: 14px;
+    top: 0.875rem;
+    right: 0.875rem;
 }
 
 .day .chart .actions .toggle .btn .icon svg
@@ -570,12 +570,12 @@
 .chart-tooltip
 {
     border-radius: 0.5rem;
-    border: 1px solid #e2e8f0;
+    border: 0.0625rem solid #e2e8f0;
     background-color: #ffffff;
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     line-height: 1.25rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(0, 0, 0, 0.1), 0 0.125rem 0.25rem -0.125rem rgba(0, 0, 0, 0.1);
 }
 
 .chart-tooltip-title
