@@ -522,27 +522,39 @@
     position: relative;
 }
 
-.day .chart .actions .toggle
-{
-    display: none;
-}
-
-.day .chart .actions .grid
-{
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0.75rem;
-}
-
 .day .chart .actions .btn
 {
     width: 100%;
     max-width: 100%;
 }
 
-.day .chart .actions .toggle .btn .icon
+.day .chart .actions .toggle 
 {
     display: none;
+}
+
+.day .chart .actions .toggle .btn
+{
+    position: relative;
+}
+
+.day .chart .actions .toggle .btn .icon
+{
+    position: absolute;
+    top: 14px;
+    right: 14px;
+}
+
+.day .chart .actions .toggle .btn .icon svg
+{
+    display: block;
+}
+
+.day .chart .actions .metrics
+{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
 }
 
 .chart-hourly-column

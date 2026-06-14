@@ -4,7 +4,7 @@ import { OpenMeteoForecast, OpenMeteoDay } from "@/scripts/types/open-meteo";
 
 export class OpenMeteoServiceServer
 {
-    private static readonly CACHE_KEY_VERSION = "1.5";
+    private static readonly CACHE_KEY_VERSION = "1.6";
 
     public static async Forecast( parameters: OpenMeteoTypes.OpenMeteoForecastParameters ): Promise<OpenMeteoTypes.OpenMeteoForecastResponse>
     {
@@ -47,6 +47,8 @@ export class OpenMeteoServiceServer
                 "precipitation_probability_max",
                 "precipitation_sum",
                 "relative_humidity_2m_mean",
+                "relative_humidity_2m_min",
+                "relative_humidity_2m_max",
             ];
 
             const url = new URL("https://api.open-meteo.com/v1/forecast");

@@ -113,6 +113,11 @@ function DisplayWeatherCode(
     return dailyCode;
 }
 
+function ClampHumidityPercent(value: number | null | undefined): number
+{
+    return value == null || Number.isNaN(value) ? 0 : Math.round(Math.min(100, Math.max(0, value)));
+}
+
 export class OpenMeteoHelper
 {
     public static ForecastNormalize(session: Session, data: OpenMeteoForecast): ForecastNormalized[]
@@ -126,6 +131,8 @@ export class OpenMeteoHelper
             const p = data.daily.precipitation_probability_max?.[i];
             const precip = data.daily.precipitation_sum?.[i];
             const rh = data.daily.relative_humidity_2m_mean?.[i];
+            const rhMin = data.daily.relative_humidity_2m_min?.[i];
+            const rhMax = data.daily.relative_humidity_2m_max?.[i];
             const sunrise = data.daily.sunrise[i];
             const sunset = data.daily.sunset[i]; 
             const displayCodeFallback = data.daily.weather_code[i];
@@ -145,7 +152,9 @@ export class OpenMeteoHelper
                 date: date,
                 tempMin: data.daily.temperature_2m_min[i],
                 tempMax: data.daily.temperature_2m_max[i],
-                humidity: rh == null || Number.isNaN(rh) ? 0 : Math.round(Math.min(100, Math.max(0, rh))),
+                humidity: ClampHumidityPercent(rh),
+                humidityMin: ClampHumidityPercent(rhMin ?? rh),
+                humidityMax: ClampHumidityPercent(rhMax ?? rh),
                 uvMin: 0,
                 uvMax: data.daily.uv_index_max[i],
                 uvClearSkyMax: data.daily.uv_index_clear_sky_max[i],

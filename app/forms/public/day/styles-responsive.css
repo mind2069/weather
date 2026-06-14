@@ -218,7 +218,7 @@
         margin-top: 0.75rem;
     }
 
-    .day .chart .actions .grid
+    .day .chart .actions .metrics
     {
         width: 100%;
     }
@@ -280,29 +280,7 @@
         display: block;
     }
 
-    .day .chart .actions .toggle .btn
-    {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.25rem;
-    }
-
-    .day .chart .actions .toggle .btn .icon
-    {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        line-height: 0;
-    }
-
-    .day .chart .actions .toggle .btn .icon svg
-    {
-        display: block;
-    }
-
-    .day .chart .actions .grid
+    .day .chart .actions .metrics
     {
         grid-template-columns: repeat(1, 1fr);
         gap: 0.5rem;
@@ -318,7 +296,7 @@
         border: 1px solid #e2e8f0;
     }
 
-    .day .chart .actions .grid.show
+    .day .chart .actions .metrics.show
     {
         display: grid;
     }

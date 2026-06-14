@@ -324,10 +324,9 @@ interface ClientProperties
     session: Session;
     date: string;
     kind: DayRouteKind;
-    dayData: OpenMeteoDay | null;
 }
 
-export default function Client({ session, date, kind, dayData }: ClientProperties)
+export default function Client({ session, date, kind}: ClientProperties)
 {
     LanguagesHelper.Initialize(session.language.code);
 
@@ -338,7 +337,7 @@ export default function Client({ session, date, kind, dayData }: ClientPropertie
     const windSpeedUnitDisplay = session.user.unit === "imperial" ? "MPH" : "KM/H";
     const tempUnitSuffix = session.user.unit === "imperial" ? "F" : "C";
     const [day, setDay] = useState<DayNormalized | null>(null);
-    const [loading, setLoading] = useState(!dayData);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [chartMetric, setChartMetric] = useState<ChartMetric>("temperature");
     const [chartActionsOpen, setChartActionsOpen] = useState(false);
@@ -352,17 +351,7 @@ export default function Client({ session, date, kind, dayData }: ClientPropertie
         {
             pageReady.current = true;
 
-            if (dayData)
-            {
-                const dayNormalize: DayNormalized | null = OpenMeteoHelper.DayNormalize(session, dayData);
-
-                setDay(dayNormalize);
-                setLoading(false);
-            }
-            else
-            {
-                void Load();
-            }
+            void Load();
         }
         
     }, [effectiveDate]);
@@ -399,8 +388,6 @@ export default function Client({ session, date, kind, dayData }: ClientPropertie
         };
 
         const responseDay: OpenMeteoDayResponse = await WeatherServiceClient.Day(parametersDay);
-
-        console.log(responseDay);
 
         if (responseDay.success && responseDay.data)
         {
@@ -1263,7 +1250,7 @@ export default function Client({ session, date, kind, dayData }: ClientPropertie
                                         </span>
                                     </button>
                                 </div>
-                                <div className={chartActionsOpen ? "grid show" : "grid"}>
+                                <div className={chartActionsOpen ? "metrics show" : "metrics"}>
                                     <div>
                                         <button
                                             type="button"

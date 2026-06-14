@@ -19,6 +19,8 @@ export interface OpenMeteoForecast
         precipitation_probability_max?: string;
         precipitation_sum?: string;
         relative_humidity_2m_mean?: string;
+        relative_humidity_2m_min?: string;
+        relative_humidity_2m_max?: string;
     };
     daily: 
     {
@@ -36,6 +38,8 @@ export interface OpenMeteoForecast
         precipitation_probability_max?: number[];
         precipitation_sum?: number[];
         relative_humidity_2m_mean?: number[];
+        relative_humidity_2m_min?: number[];
+        relative_humidity_2m_max?: number[];
     };
     hourly_units?:
     {
@@ -54,6 +58,8 @@ export interface ForecastNormalized
     tempMin: number;
     tempMax: number;
     humidity: number;
+    humidityMin: number;
+    humidityMax: number;
     uvMin: number;
     uvMax: number;
     uvClearSkyMax: number;

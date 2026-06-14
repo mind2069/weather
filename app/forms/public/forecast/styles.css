@@ -363,19 +363,42 @@
     margin-top: 2rem;
     display: flex;
     justify-content: center;
-}
-
-.forecast .chart .actions .grid
-{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
+    position: relative;
 }
 
 .forecast .chart .actions .btn
 {
     width: 100%;
     max-width: 100%;
+}
+
+.forecast .chart .actions .toggle 
+{
+    display: none;
+}
+
+.forecast .chart .actions .toggle .btn
+{
+    position: relative;
+}
+
+.forecast .chart .actions .toggle .btn .icon
+{
+    position: absolute;
+    top: 14px;
+    right: 14px;
+}
+
+.forecast .chart .actions .toggle .btn .icon svg
+{
+    display: block;
+}
+
+.forecast .chart .actions .metrics
+{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
 }
 
 .chart-hourly-column
