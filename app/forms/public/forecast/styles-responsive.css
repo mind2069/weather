@@ -98,15 +98,14 @@
 
     .forecast .details .items .item .metas .grid
     {
-        grid-template-areas: "low high precipitation humidity" "uv wind sunrise sunset";
-        grid-template-columns: auto auto auto auto;
+        grid-template-areas: "low precipitation wind humidity sunrise" "high rain direction uv sunset";
+        grid-template-columns: auto auto auto auto auto;
         row-gap: 0.25rem;
         column-gap: 1rem;
     }
     
     .forecast .details .items .item .metas .grid .low,
-    .forecast .details .items .item .metas .grid .high,
-    .forecast .details .items .item .metas .grid .precipitation
+    .forecast .details .items .item .metas .grid .high
     {
         display: flex;
     }
@@ -136,7 +135,7 @@
     }
 }
 
-@media (max-width: 699px)
+@media (max-width: 749px)
 {
     .forecast .details .items .item .overview .grid
     {
@@ -152,11 +151,6 @@
     }
     
 
-    .forecast .details .items .item .overview .icon img
-    {
-        width: 32px;
-        height: 32px;
-    }
 
     .forecast .details .items .item .overview .temperature
     {
@@ -176,40 +170,11 @@
 
     .forecast .details .items .item .metas .grid
     {
-        grid-template-areas: "low high" "precipitation humidity" "uv wind" "sunrise sunset";
+        grid-template-areas: "low high" "precipitation rain" "humidity uv" "wind direction" "sunrise sunset";
         grid-template-columns: auto auto;
         row-gap: 0.25rem;
         column-gap: 1rem;
     } 
-}
-
-@media (max-width: 599px)
-{
-    .forecast .details .head
-    {
-        text-align: center;
-        flex-direction: column;
-        justify-content: center;
-        gap: 0.25rem;
-    }
-
-    .forecast .details .head .label
-    {
-        font-size: 1.25rem;
-    }
-    
-    .forecast .details .head .dates
-    {
-        margin-top: 0rem;
-        justify-content: center;
-        font-size: 1rem;
-        font-weight: 300;
-    }
-
-    .forecast .details .items 
-    {
-        margin-top: 0.5rem;
-    }
 }
 
 @media (max-width: 1099px)
@@ -265,3 +230,46 @@
         display: grid;
     }
 }
+
+@media (max-width: 599px)
+{
+    .forecast .details .head
+    {
+        text-align: center;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.25rem;
+    }
+
+    .forecast .details .head .label
+    {
+        font-size: 1.25rem;
+    }
+    
+    .forecast .details .head .dates
+    {
+        margin-top: 0rem;
+        justify-content: center;
+        font-size: 1rem;
+        font-weight: 300;
+    }
+
+    .forecast .details .items 
+    {
+        margin-top: 0.5rem;
+    }
+}
+
+@media (max-width: 449px)
+{
+    .forecast .details .items .item .metas .meta .label .short
+    {
+        display: inline;
+    }
+
+    .forecast .details .items .item .metas .meta .label .long
+    {
+        display: none;
+    }
+}
+

@@ -4,7 +4,7 @@ import { OpenMeteoForecast, OpenMeteoDay } from "@/scripts/types/open-meteo";
 
 export class OpenMeteoServiceServer
 {
-    private static readonly CACHE_KEY_VERSION = "1.6";
+    private static readonly CACHE_KEY_VERSION = "1.7";
 
     public static async Forecast( parameters: OpenMeteoTypes.OpenMeteoForecastParameters ): Promise<OpenMeteoTypes.OpenMeteoForecastResponse>
     {
@@ -41,6 +41,7 @@ export class OpenMeteoServiceServer
                 "uv_index_clear_sky_max",
                 "wind_speed_10m_max",
                 "wind_speed_10m_min",
+                "wind_direction_10m_dominant",
                 "weather_code",
                 "sunrise",
                 "sunset",

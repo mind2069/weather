@@ -14,6 +14,7 @@ import ModalDay from "@/components/modal-day/modal-day";
 import ModalLoading from "@/components/modal-loading/modal-loading";
 import ModalMessage from "@/components/modal-message/modal-message";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { WindHelper } from "@/scripts/helpers/wind";
 
 interface ClientProperties
 {
@@ -789,9 +790,6 @@ export default function Client({ session, days }: ClientProperties)
                                                             {Math.round(item.humidity)}%
                                                         </span>
                                                     </div>
-                                                    <div className="rain">
-                                                        <span>💧</span>{" "}{item.precipitation.toFixed(1)} mm / {item.rainProbability}%
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="metas">
@@ -814,12 +812,30 @@ export default function Client({ session, days }: ClientProperties)
                                                     </div>
                                                     <div className="meta precipitation">
                                                         <div className="label">
-                                                            {LanguagesHelper.Caption("Precip")}
+                                                            <span className="long">
+                                                                {LanguagesHelper.Caption("Precipitation")}
+                                                            </span>
+                                                            <span className="short">
+                                                                {LanguagesHelper.Caption("Precip")}
+                                                            </span>
                                                         </div>
                                                         <div className="value">
-                                                            {item.precipitation.toFixed(1)} mm, {item.rainProbability}%
+                                                            {item.precipitation.toFixed(1)} mm
                                                         </div>
-                                                    </div>              
+                                                    </div> 
+                                                    <div className="meta rain">
+                                                        <div className="label">
+                                                            <span className="long">
+                                                                {LanguagesHelper.Caption("RainProbability")}
+                                                            </span>
+                                                            <span className="short">
+                                                                {LanguagesHelper.Caption("RainProb")}
+                                                            </span>
+                                                        </div>
+                                                        <div className="value">
+                                                            {item.rainProbability}%
+                                                        </div>
+                                                    </div>         
                                                     <div className="meta humidity">
                                                         <div className="label">
                                                             {LanguagesHelper.Caption("Humidity")}
@@ -828,20 +844,33 @@ export default function Client({ session, days }: ClientProperties)
                                                             {Math.round(item.humidity)}%
                                                         </div>
                                                     </div>
-                                                    <div className="meta uv">
-                                                        <div className="label">
-                                                            {LanguagesHelper.Caption("UV")}
-                                                        </div>
-                                                        <div className="value">
-                                                            {FormattingHelper.UvIndex(item.uvMax)}
-                                                        </div>
-                                                    </div>
                                                     <div className="meta wind">
                                                         <div className="label">
                                                             {LanguagesHelper.Caption("Wind")}
                                                         </div>
                                                         <div className="value">
                                                             {Math.round(item.windMax)}{" "}{windSpeedUnit}
+                                                        </div>
+                                                    </div>
+                                                    <div className="meta direction">
+                                                        <div className="label">
+                                                            <span className="long">
+                                                                {LanguagesHelper.Caption("Direction")}
+                                                            </span>
+                                                            <span className="short">
+                                                                {LanguagesHelper.Caption("Dir")}
+                                                            </span>
+                                                        </div>
+                                                        <div className="value">
+                                                            {LanguagesHelper.Caption(WindHelper.Caption(item.windDirection))}
+                                                        </div>
+                                                    </div>
+                                                    <div className="meta uv">
+                                                        <div className="label">
+                                                            {LanguagesHelper.Caption("UV")}
+                                                        </div>
+                                                        <div className="value">
+                                                            {FormattingHelper.UvIndex(item.uvMax)}
                                                         </div>
                                                     </div>
                                                     <div className="meta sunrise">

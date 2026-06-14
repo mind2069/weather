@@ -211,16 +211,10 @@
     font-weight: 600;
 }
 
-.forecast .details .items .item .statistics .rain
-{
-    margin: 0.5rem 0 0;
-    color: rgba(255, 255, 255, 0.65);
-}
-
 .forecast .details .items .item .metas
 {
-    margin: 1rem 0 0;
-    padding: 0.5rem 0 0;
+    margin: 0.75rem 0 0;
+    padding: 0.75rem 0 0;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     font-size: 12px;
 }
@@ -228,8 +222,7 @@
 .forecast .details .items .item .metas .grid
 {
     display: grid;
-    /* grid-template-areas: "low" "high" "humidity" "uv" "wind" "sunrise" "sunset"; */
-    grid-template-areas: "humidity" "uv" "wind" "sunrise" "sunset";
+    grid-template-areas: "precipitation" "rain" "humidity" "wind" "direction" "uv" "sunrise" "sunset";
     grid-template-columns: 1fr;
     gap: 0.25rem;
 }
@@ -249,7 +242,11 @@
 .forecast .details .items .item .metas .grid .precipitation
 {
     grid-area: precipitation;
-    display: none;
+}
+
+.forecast .details .items .item .metas .grid .rain
+{
+    grid-area: rain;
 }
 
 .forecast .details .items .item .metas .grid .humidity
@@ -265,6 +262,11 @@
 .forecast .details .items .item .metas .grid .wind
 {
     grid-area: wind;
+}
+
+.forecast .details .items .item .metas .grid .direction
+{
+    grid-area: direction;
 }
 
 .forecast .details .items .item .metas .grid .sunrise
@@ -286,6 +288,11 @@
 .forecast .details .items .item .metas .meta .label
 {
     color: rgba(255, 255, 255, 0.65);
+}
+
+.forecast .details .items .item .metas .meta .label .short
+{
+    display: none;
 }
 
 .forecast .details .items .item .metas .meta .value
