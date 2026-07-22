@@ -6,6 +6,7 @@ import { CookiesHelper } from "@/scripts/helpers/cookies";
 import { LocationsServiceClient } from "@/services/locations/client";
 import type { LocationResults } from "@/scripts/types/location";
 import type { Session } from "@/scripts/types/session";
+import { LocationsSearchParameters } from "@/services/locations/types";
 
 interface HeaderLocationSearchProperties
 {
@@ -116,13 +117,15 @@ export default function HeaderLocationSearch({ session }: HeaderLocationSearchPr
 
         try
         {
-            const response = await LocationsServiceClient.Search(
+            const parameters: LocationsSearchParameters = 
             {
                 session,
-                keyword,
-                locations_countries_id: 0,
-                locations_provinces_id: 0,
-            });
+                keyword
+            };
+            
+            const response = await LocationsServiceClient.Search(parameters);
+
+            console.log(response);
 
             if (currentIndex !== searchIndexRef.current)
             {
@@ -172,7 +175,7 @@ export default function HeaderLocationSearch({ session }: HeaderLocationSearchPr
 
     const onSelect = (item: LocationResults) =>
     {
-        const location = item.name + ", " + item.locations_provinces_name + ", " + item.locations_countries_name;
+        const location = `${item.city}, ${item.province}, ${item.country}`;
         const latitude = item.latitude;
         const longitude = item.longitude;
 
@@ -184,7 +187,7 @@ export default function HeaderLocationSearch({ session }: HeaderLocationSearchPr
         CookiesHelper.Set("latitude", String(latitude));
         CookiesHelper.Set("longitude", String(longitude));
 
-        setQuery(item.name);
+        setQuery(location);
         setResults([]);
         setSearching(false);
 
@@ -212,13 +215,12 @@ export default function HeaderLocationSearch({ session }: HeaderLocationSearchPr
                     {results.length > 0 ? (
                         results.map((item) => (
                             <button
-                                key={`${item.id}-${item.locations_provinces_id}-${item.name}-${item.latitude}`}
+                                key={`${item.id}`}
                                 type="button"
                                 onMouseDown={(e) => e.preventDefault()}
                                 onClick={() => onSelect(item)}
                             >
-                                {item.name} &middot; {item.locations_provinces_name} &middot;{" "}
-                                {item.locations_countries_name}
+                                {item.city} &middot; {item.province} &middot; {item.country}
                             </button>
                         ))
                     ) : (

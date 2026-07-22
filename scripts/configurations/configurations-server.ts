@@ -1,6 +1,12 @@
 export type TypeConfigurationsServer =
 {
     Environment: string;
+    Supabase:
+    {
+        Url: string;
+        ServiceRoleKey: string;
+        AnonKey: string;
+    };
 };
 
 function ConfigurationsServerValidate(value: string, name: string): string
@@ -29,5 +35,11 @@ const isDevelopment = process.env.NODE_ENV === "development";
 
 export const ConfigurationsServer: TypeConfigurationsServer =
 {
-    Environment: isDevelopment ? "development" : "production"
+    Environment: isDevelopment ? "development" : "production",
+    Supabase:
+    {
+        Url: ConfigurationsServerValidate(process.env.SUPABASE_URL || "", "SUPABASE_URL"),
+        ServiceRoleKey: ConfigurationsServerValidate(process.env.SUPABASE_SERVICE_ROLE_KEY || "", "SUPABASE_SERVICE_ROLE_KEY"),
+        AnonKey: ConfigurationsServerValidate(process.env.SUPABASE_ANON_KEY || "", "SUPABASE_ANON_KEY")
+    },
 };

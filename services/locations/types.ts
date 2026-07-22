@@ -19,8 +19,6 @@ export interface LocationsSearchParameters
 {
     session: Session;
     keyword: string;
-    locations_countries_id: number;
-    locations_provinces_id: number;
 }
 
 export interface LocationsSearchResponse

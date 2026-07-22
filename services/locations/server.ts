@@ -1,7 +1,6 @@
-import { CITIES } from '@/scripts/data/locations-cities';
+import { SupabaseConnectionServer } from '@/scripts/connections/supabase/supabase-server';
 import type { LocationDefault, LocationResults } from '@/scripts/types/location';
 import * as LocationsTypes from '@/services/locations/types';
-import { TextHelper } from '@/scripts/helpers/text';
 import { LocationsData } from '@/scripts/data/locations';
 
 export class LocationsServiceServer
@@ -22,16 +21,33 @@ export class LocationsServiceServer
         }
         else
         {
-            const closest = await LocationsData.Closest(parameters.latitude, parameters.longitude);
+            const supabaseServer = SupabaseConnectionServer();
 
-            data = {
-                name: LocationsData.FormatName(closest),
-                latitude: closest.latitude,
-                longitude: closest.longitude,
-            };
-            success = true;
-            codes = ['Success'];
-            message = 'Locations closest retrieved successfully';
+            const { data: dataLocations, error: errorLocations } = await supabaseServer.rpc('locations_closest',
+            {
+                p_latitude: parameters.latitude,
+                p_longitude: parameters.longitude,
+            });
+
+            if (errorLocations)
+            {
+                throw new Error(errorLocations.message);
+            }
+            else if (dataLocations && dataLocations.length > 0)
+            {
+                const closest = dataLocations[0] as LocationResults;
+
+                data = 
+                {
+                    name: `${closest.city}, ${closest.province}, ${closest.country}`,
+                    latitude: Number(closest.latitude),
+                    longitude: Number(closest.longitude),
+                };
+                
+                success = true;
+                codes = ['Success'];
+                message = 'Locations closest retrieved successfully';
+            }
         }
 
         const json: LocationsTypes.LocationsDefaultResponse = 
@@ -53,34 +69,35 @@ export class LocationsServiceServer
         let codes: string[] = ['UnknownError'];
         let message = '';
 
-        const keyword = TextHelper.Normalize(parameters.keyword);
-        const filterCountryId = parameters.locations_countries_id > 0 ? parameters.locations_countries_id : null;
-        const filterProvinceId = parameters.locations_provinces_id > 0 ? parameters.locations_provinces_id : null;
+        const supabaseServer = await SupabaseConnectionServer();
 
-        const matched = CITIES.filter( ( city ) =>
+        const { data: dataLocations, error: errorLocations } = await supabaseServer.rpc('locations_search', 
         {
-            if ( filterCountryId !== null && city.countryId !== filterCountryId )
-            {
-                return false;
-            }
-            if ( filterProvinceId !== null && city.stateId !== filterProvinceId )
-            {
-                return false;
-            }
-            if ( !keyword )
-            {
-                return false;
-            }
-            return (
-                city.name_normalized.includes( keyword ) ||
-                city.name.toLowerCase().includes( keyword )
-            );
-        } );
+            p_keyword: parameters.keyword,
+        });
 
-        data = matched.map( LocationsData.Get );
-        success = true;
-        codes = ['Success'];
-        message = 'Locations cities searched successfully';
+        if (errorLocations)
+        {
+            throw new Error(errorLocations.message);
+        }
+        else if (dataLocations)
+        {
+            data = (dataLocations as any[]).map((item: any): LocationResults =>
+            {
+                return {
+                    id: item.id,
+                    country: item.country,
+                    province: item.province,
+                    city: item.city,
+                    latitude: item.latitude,
+                    longitude: item.longitude,
+                };
+            });
+
+            success = true;
+            codes = ['Success'];
+            message = 'Locations cities searched successfully';
+        }
 
         const json: LocationsTypes.LocationsSearchResponse = 
         {
