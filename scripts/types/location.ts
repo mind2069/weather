@@ -11,7 +11,10 @@ export interface LocationResults
 
 export interface LocationDefault
 {
-	name: string;
+	id: number;
+	city: string;
+	province: string;
+	country: string;
 	latitude: number;
 	longitude: number;
 }

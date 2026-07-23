@@ -96,16 +96,16 @@ export function MetaLocation(cookies: string, session: Session, resolvedLocation
         return undefined;
     }
 
-    const latitude = LocationHelper.LatitudeNormalize(session.user.location.latitude);
-    const longitude = LocationHelper.LongitudeNormalize(session.user.location.longitude);
+    const latitude = LocationHelper.LatitudeNormalize(session.weather.location.latitude);
+    const longitude = LocationHelper.LongitudeNormalize(session.weather.location.longitude);
 
-    if (session.user.location.name === "" || latitude === -999999 || longitude === -999999)
+    if (session.weather.location.name === "" || latitude === -999999 || longitude === -999999)
     {
         return undefined;
     }
 
     return {
-        name: session.user.location.name,
+        name: session.weather.location.name,
         latitude: latitude,
         longitude: longitude,
     };

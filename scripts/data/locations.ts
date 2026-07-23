@@ -1,14 +1,24 @@
-import type { LocationDefault, LocationResults } from '@/scripts/types/location';
+import type { LocationDefault } from '@/scripts/types/location';
 
 export class LocationsData
 {
-    public static FormatName(location: LocationResults): string
+    public static FormatName(location: Pick<LocationDefault, "city" | "province" | "country">): string
     {
         return `${location.city}, ${location.province}, ${location.country}`;
     }
 
     public static DefaultCity(): LocationDefault
     {
-        return { name: "Laval, Quebec, Canada (Default)", latitude: 45.6068, longitude: -73.7129 };
+        const location = 
+        { 
+            id: 0,
+            city: "Laval", 
+            province: "Quebec", 
+            country: "Canada", 
+            latitude: 45.6068, 
+            longitude: -73.7129 
+        };
+
+        return location;
     }
 }

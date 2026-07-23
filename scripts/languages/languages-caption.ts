@@ -148,6 +148,8 @@ export const LANGUAGES_CAPTION: Record<string, string> =
     "2_Rise": "Lever",
     "1_Set": "Set",
     "2_Set": "Coucher",
+    "1_Use": "Use",
+    "2_Use": "Utiliser",
     "1_UVIndex": "UV Index",
     "2_UVIndex": "Index UV",
     "1_Min": "Min",

@@ -8,7 +8,7 @@ export class LocationsServiceServer
     public static async Default( parameters: LocationsTypes.LocationsDefaultParameters ): Promise<LocationsTypes.LocationsDefaultResponse>
     {
         let success = false;
-        let data: LocationDefault = { name: '', latitude: 0, longitude: 0 };
+        let data: LocationDefault = { id: 0, city: '', province: '', country: '', latitude: 0, longitude: 0 };
         let codes: string[] = ['UnknownError'];
         let message = '';
 
@@ -39,7 +39,10 @@ export class LocationsServiceServer
 
                 data = 
                 {
-                    name: `${closest.city}, ${closest.province}, ${closest.country}`,
+                    id: closest.id,
+                    city: closest.city,
+                    province: closest.province,
+                    country: closest.country,
                     latitude: Number(closest.latitude),
                     longitude: Number(closest.longitude),
                 };

@@ -41,6 +41,15 @@ export function SessionEmpty(): Session
                 longitude: -999999,
             }
         },
+        weather:
+        {
+            location:
+            {
+                name: '',
+                latitude: -999999,
+                longitude: -999999,
+            }
+        },
         mode: 'application'
     };
 

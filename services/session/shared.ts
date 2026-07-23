@@ -15,7 +15,8 @@ export class SessionServiceShared
 {
     public static async Build(headers: Headers): Promise<Session>
     {
-        let session: Session = SessionEmpty();        
+        let session: Session = SessionEmpty();  
+
         const cookies = headers.get("cookie") ?? "";
 
         const languageHeaders = headers.get("x-language");
@@ -28,18 +29,60 @@ export class SessionServiceShared
         const page = headers.get("x-page") ?? "";
         const filename = headers.get("x-filename") ?? "";
 
-        const cityVercel = TextHelper.Decode(headers.get("v-city") ?? headers.get("x-vercel-ip-city") ?? "");
-        const countryVercel = headers.get("v-country") ?? headers.get("x-vercel-ip-country") ?? "";
-        const provinceVercel = headers.get("v-province") ?? headers.get("x-vercel-ip-country-region") ?? "";
         const latitudeVercel = LocationHelper.LatitudeNormalize(Number.parseFloat(headers.get("v-latitude") ?? headers.get("x-vercel-ip-latitude") ?? ""));
-        const longitudeVercel = LocationHelper.LongitudeNormalize(Number.parseFloat(headers.get("v-longitude") ?? headers.get("x-vercel-ip-longitude") ?? ""));        const vercelCoordsValid = latitudeVercel !== -999999 && longitudeVercel !== -999999;
-        const locationVercel = [cityVercel, provinceVercel, countryVercel].filter((part) => part !== '').join(', ');
+        const longitudeVercel = LocationHelper.LongitudeNormalize(Number.parseFloat(headers.get("v-longitude") ?? headers.get("x-vercel-ip-longitude") ?? ""));
+        const vercelCoordsValid = latitudeVercel !== -999999 && longitudeVercel !== -999999;
+
+        const locationDefault = LocationsData.DefaultCity();
+
+        let locationCurrent: LocationDefault =
+        {
+            id: locationDefault.id,
+            city: locationDefault.city,
+            province: locationDefault.province,
+            country: locationDefault.country,
+            latitude: locationDefault.latitude,
+            longitude: locationDefault.longitude,
+        };
+
+        if (vercelCoordsValid)
+        {
+            const parameters: LocationsDefaultParameters =
+            {
+                latitude: latitudeVercel,
+                longitude: longitudeVercel,
+            };
+
+            const response: LocationsDefaultResponse = await LocationsServiceServer.Default(parameters);
+
+            if (response.success)
+            {
+                const locationClosest: LocationDefault = response.data;
+
+                locationCurrent.id = locationClosest.id;
+                locationCurrent.city = locationClosest.city;
+                locationCurrent.province = locationClosest.province;
+                locationCurrent.country = locationClosest.country;
+                locationCurrent.latitude = locationClosest.latitude;
+                locationCurrent.longitude = locationClosest.longitude;
+            }
+            else
+            {
+                locationCurrent.latitude = latitudeVercel;
+                locationCurrent.longitude = longitudeVercel;
+            }
+        }
+
+        const userLocationName = LocationsData.FormatName(locationCurrent);
+        const userLocationLatitude = locationCurrent.latitude;
+        const userLocationLongitude = locationCurrent.longitude;
 
         let unit = 'metric';
-        let location = '';
-        let latitude = -999999;
-        let longitude = -999999;
         let locale = languageId === "2" ? "fr-FR" : "en-US";
+
+        let weatherLocationName = '';
+        let weatherLocationLatitude = -999999;
+        let weatherLocationLongitude = -999999;
 
         let unitCookies = CookiesHelper.Get(cookies, 'unit') ?? '';
         let locationCookies = CookiesHelper.Get(cookies, 'location') ?? '';
@@ -58,17 +101,17 @@ export class SessionServiceShared
 
         if (latitudeCookies !== '' && longitudeCookies !== '')
         {
-            latitude = LocationHelper.LatitudeNormalize(Number.parseFloat(latitudeCookies));
-            longitude = LocationHelper.LongitudeNormalize(Number.parseFloat(longitudeCookies));
+            weatherLocationLatitude = LocationHelper.LatitudeNormalize(Number.parseFloat(latitudeCookies));
+            weatherLocationLongitude = LocationHelper.LongitudeNormalize(Number.parseFloat(longitudeCookies));
         }
 
         if (locationCookies !== '')
         {
-            location = locationCookies;
+            weatherLocationName = locationCookies;
         }
 
-        const cookieCoordsValid = latitude !== -999999 && longitude !== -999999;
-        const cookieLocationComplete = location !== '' && cookieCoordsValid;
+        const cookieCoordsValid = weatherLocationLatitude !== -999999 && weatherLocationLongitude !== -999999;
+        const cookieLocationComplete = weatherLocationName !== '' && cookieCoordsValid;
 
         if (!cookieLocationComplete)
         {
@@ -79,9 +122,9 @@ export class SessionServiceShared
 
             if (sessionValidMiddleware)
             {
-                location = locationMiddleware;
-                latitude = latitudeMiddleware;
-                longitude = longitudeMiddleware;
+                weatherLocationName = locationMiddleware;
+                weatherLocationLatitude = latitudeMiddleware;
+                weatherLocationLongitude = longitudeMiddleware;
 
                 const unitMiddleware = headers.get("s-unit")?.trim().toLowerCase() ?? "";
 
@@ -92,45 +135,15 @@ export class SessionServiceShared
             }
             else
             {
-                if (!cookieCoordsValid && vercelCoordsValid)
-                {
-                    latitude = latitudeVercel;
-                    longitude = longitudeVercel;
-
-                    if (location === '')
-                    {
-                        location = locationVercel !== '' ? locationVercel : `${latitude}, ${longitude}`;
-                    }
-                }
-
-                const parameters: LocationsDefaultParameters =
-                {
-                    latitude: latitude,
-                    longitude: longitude
-                };
-
-                const response: LocationsDefaultResponse = await LocationsServiceServer.Default(parameters);
-
-                if (response.success)
-                {
-                    const locationDefault: LocationDefault = response.data;
-
-                    location = locationDefault.name;
-                    latitude = locationDefault.latitude;
-                    longitude = locationDefault.longitude;
-                }
-                else
-                {
-                    const fallback = LocationsData.DefaultCity();
-
-                    location = fallback.name;
-                    latitude = fallback.latitude;
-                    longitude = fallback.longitude;
-                }
+                weatherLocationName = userLocationName;
+                weatherLocationLatitude = userLocationLatitude;
+                weatherLocationLongitude = userLocationLongitude;
             }
-        }        
+        }  
+
         session.language.id = languageId;
         session.language.code = language;
+
         session.tracking.ip_address = ipAddress;
         session.tracking.pathname = pathname;
         session.tracking.section = section;
@@ -139,10 +152,14 @@ export class SessionServiceShared
         session.tracking.code = LanguagesHelper.PathCode(section, page);
 
         session.user.unit = unit;
-        session.user.location.name = location;
-        session.user.location.latitude = latitude;
-        session.user.location.longitude = longitude;
+        session.user.location.name = userLocationName;
+        session.user.location.latitude = userLocationLatitude;
+        session.user.location.longitude = userLocationLongitude;
         session.user.locale = locale;
+
+        session.weather.location.name = weatherLocationName;
+        session.weather.location.latitude = weatherLocationLatitude;
+        session.weather.location.longitude = weatherLocationLongitude;
 
         return session;
     }
@@ -169,15 +186,29 @@ export class SessionServiceShared
 
     public static ForwardSessionHeaders(headers: Headers, session: Session): void
     {
-        headers.set("s-location", session.user.location.name);
-        headers.set("s-latitude", String(session.user.location.latitude));
-        headers.set("s-longitude", String(session.user.location.longitude));
+        headers.set("s-location", session.weather.location.name);
+        headers.set("s-latitude", String(session.weather.location.latitude));
+        headers.set("s-longitude", String(session.weather.location.longitude));
         headers.set("s-unit", session.user.unit);
     }
 
-    public static Store(response: NextResponse, session: Session, cookieHeader: string): void
+    public static Store(
+        response: NextResponse,
+        session: Session,
+        cookieHeader: string,
+        current?: { city: string; country: string; province: string; latitude: string; longitude: string },
+    ): void
     {
         SessionServiceShared.ForwardSessionHeaders(response.headers, session);
+
+        if (current)
+        {
+            response.cookies.set("Current.City", current.city, COOKIE_DEFAULT_OPTIONS);
+            response.cookies.set("Current.Province", current.province, COOKIE_DEFAULT_OPTIONS);
+            response.cookies.set("Current.Country", current.country, COOKIE_DEFAULT_OPTIONS);
+            response.cookies.set("Current.Latitude", current.latitude, COOKIE_DEFAULT_OPTIONS);
+            response.cookies.set("Current.Longitude", current.longitude, COOKIE_DEFAULT_OPTIONS);
+        }
 
         if (LocationHelper.CookiesCompleted(cookieHeader))
         {
@@ -191,16 +222,16 @@ export class SessionServiceShared
             return;
         }
 
-        const latitude = LocationHelper.LatitudeNormalize(session.user.location.latitude);
-        const longitude = LocationHelper.LongitudeNormalize(session.user.location.longitude);
+        const latitude = LocationHelper.LatitudeNormalize(session.weather.location.latitude);
+        const longitude = LocationHelper.LongitudeNormalize(session.weather.location.longitude);
 
-        if (session.user.location.name === "" || latitude === -999999 || longitude === -999999)
+        if (session.weather.location.name === "" || latitude === -999999 || longitude === -999999)
         {
             return;
         }
 
         response.cookies.set("unit", session.user.unit, COOKIE_DEFAULT_OPTIONS);
-        response.cookies.set("location", session.user.location.name, COOKIE_DEFAULT_OPTIONS);
+        response.cookies.set("location", session.weather.location.name, COOKIE_DEFAULT_OPTIONS);
         response.cookies.set("latitude", String(latitude), COOKIE_DEFAULT_OPTIONS);
         response.cookies.set("longitude", String(longitude), COOKIE_DEFAULT_OPTIONS);
     }
@@ -216,7 +247,13 @@ export class SessionServiceShared
 
         const response = rewriteUrl ? NextResponse.rewrite(rewriteUrl, { request: { headers: forwardedHeaders } }) : NextResponse.next({ request: { headers: forwardedHeaders } });
 
-        SessionServiceShared.Store(response, session, cookieHeader);
+        SessionServiceShared.Store(response, session, cookieHeader, {
+            city: tracking.city,
+            country: tracking.country,
+            province: tracking.province,
+            latitude: tracking.latitude,
+            longitude: tracking.longitude,
+        });
 
         return response;
     }

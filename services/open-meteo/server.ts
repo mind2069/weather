@@ -8,8 +8,8 @@ export class OpenMeteoServiceServer
 
     public static async Forecast( parameters: OpenMeteoTypes.OpenMeteoForecastParameters ): Promise<OpenMeteoTypes.OpenMeteoForecastResponse>
     {
-        const latitude = parameters.session.user.location.latitude.toFixed(2);
-        const longitude = parameters.session.user.location.longitude.toFixed(2);
+        const latitude = parameters.session.weather.location.latitude.toFixed(2);
+        const longitude = parameters.session.weather.location.longitude.toFixed(2);
 
         return unstable_cache(
             async () => OpenMeteoServiceServer.ForecastUncached(parameters),
@@ -53,8 +53,8 @@ export class OpenMeteoServiceServer
             ];
 
             const url = new URL("https://api.open-meteo.com/v1/forecast");
-            const latitude = parameters.session.user.location.latitude.toFixed(2);
-            const longitude = parameters.session.user.location.longitude.toFixed(2);
+            const latitude = parameters.session.weather.location.latitude.toFixed(2);
+            const longitude = parameters.session.weather.location.longitude.toFixed(2);
 
             url.searchParams.set("latitude", latitude);
             url.searchParams.set("longitude", longitude);
@@ -106,8 +106,8 @@ export class OpenMeteoServiceServer
 
     public static async Day( parameters: OpenMeteoTypes.OpenMeteoDayParameters ): Promise<OpenMeteoTypes.OpenMeteoDayResponse>
     {
-        const latitude = parameters.session.user.location.latitude.toFixed(2);
-        const longitude = parameters.session.user.location.longitude.toFixed(2);
+        const latitude = parameters.session.weather.location.latitude.toFixed(2);
+        const longitude = parameters.session.weather.location.longitude.toFixed(2);
         
         let cached = true;
 
@@ -168,8 +168,8 @@ export class OpenMeteoServiceServer
                 ];
 
                 const url = new URL("https://api.open-meteo.com/v1/forecast");
-                const latitude = parameters.session.user.location.latitude.toFixed(2);
-                const longitude = parameters.session.user.location.longitude.toFixed(2);
+                const latitude = parameters.session.weather.location.latitude.toFixed(2);
+                const longitude = parameters.session.weather.location.longitude.toFixed(2);
 
                 url.searchParams.set("latitude", latitude);
                 url.searchParams.set("longitude", longitude);

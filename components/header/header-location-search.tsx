@@ -34,7 +34,7 @@ function SearchIcon()
 
 export default function HeaderLocationSearch({ session }: HeaderLocationSearchProperties)
 {
-    const [query, setQuery] = useState(session.user.location.name);
+    const [query, setQuery] = useState(session.weather.location.name);
     const [results, setResults] = useState<LocationResults[]>([]);
     const [searching, setSearching] = useState(false);
 
@@ -46,9 +46,9 @@ export default function HeaderLocationSearch({ session }: HeaderLocationSearchPr
 
     useEffect(() =>
     {
-        setQuery(session.user.location.name);
+        setQuery(session.weather.location.name);
 
-    }, [session.user.location.name]);
+    }, [session.weather.location.name]);
 
     useEffect(() =>
     {
@@ -125,8 +125,6 @@ export default function HeaderLocationSearch({ session }: HeaderLocationSearchPr
             
             const response = await LocationsServiceClient.Search(parameters);
 
-            console.log(response);
-
             if (currentIndex !== searchIndexRef.current)
             {
                 return;
@@ -179,9 +177,9 @@ export default function HeaderLocationSearch({ session }: HeaderLocationSearchPr
         const latitude = item.latitude;
         const longitude = item.longitude;
 
-        session.user.location.name = location;
-        session.user.location.latitude = latitude;
-        session.user.location.longitude = longitude;
+        session.weather.location.name = location;
+        session.weather.location.latitude = latitude;
+        session.weather.location.longitude = longitude;
 
         CookiesHelper.Set("location", location);
         CookiesHelper.Set("latitude", String(latitude));

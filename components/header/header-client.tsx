@@ -46,6 +46,28 @@ export default function HeaderClient({session}: ClientProperties)
         window.location.reload();
     };
 
+    const onSetCurrentLocation = () =>
+    {
+        const location = session.user.location.name;
+        const latitude = session.user.location.latitude;
+        const longitude = session.user.location.longitude;
+
+        if (!location || latitude === -999999 || longitude === -999999)
+        {
+            return;
+        }
+
+        session.weather.location.name = location;
+        session.weather.location.latitude = latitude;
+        session.weather.location.longitude = longitude;
+
+        CookiesHelper.Set("location", location);
+        CookiesHelper.Set("latitude", String(latitude));
+        CookiesHelper.Set("longitude", String(longitude));
+
+        window.location.reload();
+    };
+
     useEffect(() =>
     {
         if (!navMenuOpen && !langMenuOpen)
@@ -191,16 +213,32 @@ export default function HeaderClient({session}: ClientProperties)
                             </button>
                             {langMenuOpen ? (
                                 <div className="dropdown">
-                                    {( language !== "en-ca" && 
-                                        <a href={pathEnglish} onClick={() => setLangMenuOpen(false)}>
-                                            English
-                                        </a>
-                                    )}
-                                    {( language !== "fr-ca" && 
-                                        <a href={pathFrench} onClick={() => setLangMenuOpen(false)}>
-                                            Français
-                                        </a>
-                                    )}
+                                    <div className="links">
+                                        {( language !== "en-ca" && 
+                                            <a href={pathEnglish} onClick={() => setLangMenuOpen(false)}>
+                                                English
+                                            </a>
+                                        )}
+                                        {( language !== "fr-ca" && 
+                                            <a href={pathFrench} onClick={() => setLangMenuOpen(false)}>
+                                                Français
+                                            </a>
+                                        )}
+                                    </div>
+                                    {session.user.location.name ? (
+                                        <div className="current">
+                                            <span className="name" title={session.user.location.name}>
+                                                {session.user.location.name}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                className="btn-set"
+                                                onClick={onSetCurrentLocation}
+                                            >
+                                                {LanguagesHelper.Caption("Use")}
+                                            </button>
+                                        </div>
+                                    ) : null}
                                 </div>
                             ) : null}
                         </div>

@@ -4,6 +4,7 @@ export interface Session
     language: SessionLanguage;
     tracking: SessionTracking;
     user: SessionUser;
+    weather: SessionWeather;
     mode: string;
 }
 
@@ -27,6 +28,16 @@ export interface SessionTracking
     page: string;
     filename: string;
     code: string;
+}
+
+export interface SessionWeather
+{
+    location:
+    {
+        name: string;
+        latitude: number;
+        longitude: number;
+    };
 }
 
 export interface SessionUser
