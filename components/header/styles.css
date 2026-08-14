@@ -76,7 +76,8 @@ header .menu nav .anchor .dropdown
     top: 100%;
     z-index: 50;
     margin-top: 0.25rem;
-    min-width: 12rem;
+    width: max-content;
+    max-width: calc(100vw - 2rem);
     overflow: hidden;
     border-radius: 0.5rem;
     border: 1px solid #e2e8f0;
@@ -102,6 +103,7 @@ header .menu nav .anchor .dropdown .links a
 {
     display: block;
     padding: 0.625rem 1rem;
+    white-space: nowrap;
 }
 
 header .menu nav .anchor .dropdown .links a:hover
@@ -301,7 +303,8 @@ header .language .anchor .dropdown
     top: 100%;
     z-index: 50;
     margin-top: 0.25rem;
-    min-width: 14rem;
+    width: max-content;
+    max-width: calc(100vw - 2rem);
     overflow: hidden;
     border-radius: 0.5rem;
     border: 1px solid #e2e8f0;
@@ -320,6 +323,7 @@ header .language .anchor .dropdown .links a
 {
     display: block;
     padding: 0.625rem 1rem;
+    white-space: nowrap;
 }
 
 header .language .anchor .dropdown .links a:hover
@@ -339,6 +343,7 @@ header .language .anchor .dropdown .current
 header .language .anchor .dropdown .current .name
 {
     min-width: 0;
+    max-width: 18rem;
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;

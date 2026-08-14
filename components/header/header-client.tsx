@@ -5,6 +5,7 @@ import * as LanguagesHelper from '@/scripts/languages/languages-helper';
 import { Session } from "@/scripts/types/session";
 import { CookiesHelper } from "@/scripts/helpers/cookies";
 import HeaderLocationSearch from "@/components/header/header-location-search";
+import { FormattingHelper } from "@/scripts/helpers/formatting";
 
 interface ClientProperties
 {
@@ -31,6 +32,9 @@ export default function HeaderClient({session}: ClientProperties)
 
     const [navMenuOpen, setNavMenuOpen] = useState(false);
     const [langMenuOpen, setLangMenuOpen] = useState(false);
+    const [todayDate, setTodayDate] = useState("");
+    const [tomorrowDate, setTomorrowDate] = useState("");
+    const [afterTomorrowDate, setAfterTomorrowDate] = useState("");
     const navMenuRef = useRef<HTMLDivElement>(null);
     const langMenuRef = useRef<HTMLDivElement>(null);
 
@@ -67,6 +71,26 @@ export default function HeaderClient({session}: ClientProperties)
 
         window.location.reload();
     };
+
+    useEffect(() =>
+    {
+        const today = new Date();
+        const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+        const afterTomorrow = new Date(tomorrow.getTime() + 24 * 60 * 60 * 1000);
+
+        const isoToday = FormattingHelper.IsoDateLocal(today);
+        const isoTomorrow = FormattingHelper.IsoDateLocal(tomorrow);
+        const isoAfterTomorrow = FormattingHelper.IsoDateLocal(afterTomorrow);
+
+        const textToday = `${FormattingHelper.Weekday(isoToday, language)}, ${FormattingHelper.TextLong(isoToday, language)}`;
+        const textTomorrow = `${FormattingHelper.Weekday(isoTomorrow, language)}, ${FormattingHelper.TextLong(isoTomorrow, language)}`;
+        const textAfterTomorrow = `${FormattingHelper.Weekday(isoAfterTomorrow, language)}, ${FormattingHelper.TextLong(isoAfterTomorrow, language)}`;
+
+        setTodayDate(textToday);
+        setTomorrowDate(textTomorrow);
+        setAfterTomorrowDate(textAfterTomorrow);
+    
+    }, [language]);
 
     useEffect(() =>
     {
@@ -163,13 +187,13 @@ export default function HeaderClient({session}: ClientProperties)
                                         <div className="dropdown">
                                             <div className="links">
                                                 <a href={LanguagesHelper.Path("Public_Today")} onClick={() => setNavMenuOpen(false)}>
-                                                    {LanguagesHelper.Caption("Today")}
+                                                    {LanguagesHelper.Caption("Today")} &middot; <span className="date">{todayDate}</span>
                                                 </a>
                                                 <a href={LanguagesHelper.Path("Public_Tomorrow")} onClick={() => setNavMenuOpen(false)}>
-                                                    {LanguagesHelper.Caption("Tomorrow")}
+                                                    {LanguagesHelper.Caption("Tomorrow")} &middot; <span className="date">{tomorrowDate}</span>
                                                 </a>
                                                 <a href={LanguagesHelper.Path("Public_AfterTomorrow")} onClick={() => setNavMenuOpen(false)}>
-                                                    {LanguagesHelper.Caption("AfterTomorrow")}
+                                                    {LanguagesHelper.Caption("AfterTomorrow")} &middot; <span className="date">{afterTomorrowDate}</span>
                                                 </a>
                                                 <a href={LanguagesHelper.Path("Public_Forecast7Days")} onClick={() => setNavMenuOpen(false)}>
                                                     {LanguagesHelper.Caption("Forecast7Days")}

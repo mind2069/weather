@@ -65,7 +65,14 @@ export class FormattingHelper
 
     public static TextLong(isoDate: string, locale: string): string
     {
-        const d = new Date(`${isoDate}T12:00:00`);
+        const day = isoDate.length >= 10 ? isoDate.slice(0, 10) : isoDate;
+        const d = new Date(`${day}T12:00:00`);
+
+        if (Number.isNaN(d.getTime()))
+        {
+            return "";
+        }
+
         const formatter = new Intl.DateTimeFormat(locale, { day: "numeric", month: "long", year: "numeric" });
         const parts = formatter.formatToParts(d);
 
