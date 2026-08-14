@@ -15,6 +15,7 @@ import ModalMessage from "@/components/modal-message/modal-message";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { EffectiveDayDate, type DayRouteKind } from "./resolve-route";
 import { WindHelper } from "@/scripts/helpers/wind";
+import RadarMap from "@/components/radar-map/radar-map";
 
 interface DayHourlyChartRow
 {
@@ -1301,6 +1302,7 @@ export default function Client({ session, date, kind}: ClientProperties)
                         </div>
                     </section>
                 )}
+                {kind === "today" ? <RadarMap session={session} /> : null}
             </div>
         </>
     );
