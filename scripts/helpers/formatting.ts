@@ -89,6 +89,35 @@ export class FormattingHelper
             .join("");
     }
 
+    public static TextLongNoYear(isoDate: string, locale: string): string
+    {
+        const day = isoDate.length >= 10 ? isoDate.slice(0, 10) : isoDate;
+        const d = new Date(`${day}T12:00:00`);
+
+        if (Number.isNaN(d.getTime()))
+        {
+            return "";
+        }
+
+        const formatter = new Intl.DateTimeFormat(locale, { day: "numeric", month: "long" });
+        const parts = formatter.formatToParts(d);
+
+        return parts
+            .filter((p) => p.type !== "year" && p.type !== "era")
+            .map((p) =>
+            {
+                if (p.type === "month" && p.value.length > 0)
+                {
+                    return p.value[0].toUpperCase() + p.value.slice(1);
+                }
+
+                return p.value;
+            })
+            .join("")
+            .replace(/[,\s]+$/u, "")
+            .trim();
+    }
+
     public static DateFull(isoDate: string, locale: string): string
     {
         const d = new Date(`${isoDate}T12:00:00`);

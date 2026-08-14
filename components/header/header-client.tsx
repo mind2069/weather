@@ -82,9 +82,9 @@ export default function HeaderClient({session}: ClientProperties)
         const isoTomorrow = FormattingHelper.IsoDateLocal(tomorrow);
         const isoAfterTomorrow = FormattingHelper.IsoDateLocal(afterTomorrow);
 
-        const textToday = `${FormattingHelper.Weekday(isoToday, language)}, ${FormattingHelper.TextLong(isoToday, language)}`;
-        const textTomorrow = `${FormattingHelper.Weekday(isoTomorrow, language)}, ${FormattingHelper.TextLong(isoTomorrow, language)}`;
-        const textAfterTomorrow = `${FormattingHelper.Weekday(isoAfterTomorrow, language)}, ${FormattingHelper.TextLong(isoAfterTomorrow, language)}`;
+        const textToday = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLongNoYear(isoToday, language)}`;
+        const textTomorrow = `${FormattingHelper.Weekday(isoTomorrow, language)} ${FormattingHelper.TextLongNoYear(isoTomorrow, language)}`;
+        const textAfterTomorrow = `${FormattingHelper.Weekday(isoAfterTomorrow, language)} ${FormattingHelper.TextLongNoYear(isoAfterTomorrow, language)}`;
 
         setTodayDate(textToday);
         setTomorrowDate(textTomorrow);
