@@ -197,7 +197,7 @@
 .modal-day .summary .data
 {
     margin-top: 0.5rem;
-    display: grid;
+    display: none;
     grid-template-columns: 1fr 1fr 1fr;
     font-size: 0.75rem;
     line-height: 1rem;

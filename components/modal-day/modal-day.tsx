@@ -171,7 +171,7 @@ export default function ModalDayForecast({ session, day, dayForecast, open, load
                                             </Link>
                                             <button
                                                 type="button"
-                                                className="action"
+                                                className="action "
                                                 onClick={onClose}
                                             >
                                                 <svg
