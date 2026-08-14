@@ -182,10 +182,10 @@ export default function RadarMap({ session }: ComponentProperties)
     return (
         <section className="radar">
             <div className="container">
-                <div className="radar-head">
+                {/* <div className="radar-head">
                     <h2>{LanguagesHelper.Caption("Radar")}</h2>
                     <span className="radar-time">{frameTime}</span>
-                </div>
+                </div> */}
                 <div className="radar-map-shell">
                     <div ref={containerRef} className="radar-map" />
                     {loading ? (
