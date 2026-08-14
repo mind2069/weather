@@ -10,6 +10,31 @@ import Link from "next/link";
 import "./styles.css";
 import "./styles-responsive.css";
 
+function IsCurrentHourSlot(isoTime: string, dayIso: string): boolean
+{
+    const today = FormattingHelper.IsoDateLocal(new Date());
+
+    if (dayIso !== today)
+    {
+        return false;
+    }
+
+    const slot = new Date(isoTime);
+    const now = new Date();
+
+    if (Number.isNaN(slot.getTime()))
+    {
+        return false;
+    }
+
+    return (
+        slot.getFullYear() === now.getFullYear() &&
+        slot.getMonth() === now.getMonth() &&
+        slot.getDate() === now.getDate() &&
+        slot.getHours() === now.getHours()
+    );
+}
+
 export interface ComponentProperties
 {
     session: Session;
@@ -244,7 +269,11 @@ export default function ModalDayForecast({ session, day, dayForecast, open, load
                         {!loading && !error && dayForecast && hourly.length > 0 && (
                             <div ref={listRef}className="list scrollbar-transparent">
                                 {hourly.map((item) => (
-                                    <article className="hour" key={item.time} data-slot-time={item.time}>
+                                    <article
+                                        className={IsCurrentHourSlot(item.time, date) ? "hour current" : "hour"}
+                                        key={item.time}
+                                        data-slot-time={item.time}
+                                    >
                                         <div className="overview">
                                             <div className="grid">
                                                 <div className="time">
