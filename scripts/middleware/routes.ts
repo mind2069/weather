@@ -8,6 +8,23 @@ import { LocationsData } from "@/scripts/data/locations";
 
 const LANGUAGES = ["en-ca", "fr-ca"] as const;
 
+const PAGES_WITH_FILENAME = new Set(
+[
+    "day",
+    "journee",
+    "today",
+    "aujourdhui",
+    "tomorrow",
+    "demain",
+    "after-tomorrow",
+    "apres-demain",
+    "forecast-7-days",
+    "prevision-7-jours",
+    "forecast-14-days",
+    "prevision-14-jours",
+]);
+
+
 function IsAssetRequest(pathname: string): boolean
 {
     return (
@@ -104,20 +121,17 @@ export async function handleRoutes(request: NextRequest)
         page = segments[1] ?? "";
         filename = "";
     }
+    else if (segments.length === 3 && PAGES_WITH_FILENAME.has(segments[1] ?? ""))
+    {
+        section = language == "en-ca" ? "public" : "publique";
+        page = segments[1] ?? "";
+        filename = segments[2] ?? "";
+    }
     else if (segments.length === 3)
     {
-        if (segments[1] == "day" || segments[1] == "journee")
-        {
-            section = language == "en-ca" ? "public" : "publique";
-            page = segments[1] ?? "";
-            filename = segments[2] ?? "";
-        }
-        else
-        {
-            section = segments[1] ?? "";
-            page = segments[1] ?? "";
-            filename = "";
-        }
+        section = segments[1] ?? "";
+        page = segments[1] ?? "";
+        filename = "";
     }
 
     if (section === page)

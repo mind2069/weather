@@ -12,14 +12,13 @@ import { ConfigurationsShared } from "@/scripts/configurations/configurations-sh
 export async function generateMetadata(): Promise<Metadata>
 {
     const headersList = await headers();
-    const pathname = headersList.get("x-pathname") ?? "";
-    const languageCode = headersList.get("x-language") ?? "en-ca";
+    const session = await Cache.Session();
+    const languageCode = session.language.code;
     const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
-    const route = ResolveForecastRoute(pathname);
+    const route = ResolveForecastRoute(session.tracking.page);
     const baseUrl = ConfigurationsShared.Website.Base;
     const context = ForecastMetaContextFromRoute(route, baseUrl);
     const cookies = headersList.get("cookie") ?? "";
-    const session = await Cache.Session();
     const location = MetaLocation(cookies, session, headersList.get("s-location"));
 
     return ToNextMetadata(languageId, context, location);
@@ -28,10 +27,10 @@ export async function generateMetadata(): Promise<Metadata>
 export default async function LayoutBase({ children }: { children: React.ReactNode })
 {
     const headersList = await headers();
-    const pathname = headersList.get("x-pathname") ?? "";
-    const languageCode = headersList.get("x-language") ?? "en-ca";
+    const session = await Cache.Session();
+    const languageCode = headersList.get("x-language") ?? session.language.code;
     const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
-    const route = ResolveForecastRoute(pathname);
+    const route = ResolveForecastRoute(session.tracking.page);
     const baseUrl = ConfigurationsShared.Website.Base;
     const context = ForecastMetaContextFromRoute(route, baseUrl);
     const jsonLd = JSON.stringify(Meta.JsonLd(languageId, context));

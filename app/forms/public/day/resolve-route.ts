@@ -40,6 +40,8 @@ export function ResolveDayRoute(page: string, date: string): DayRoute
         case "day":
         case "journee":
         {
+            // Only /day/{YYYY-MM-DD} uses filename as a real date.
+            // SEO slugs on today/tomorrow/etc. are ignored here.
             const trimmed = date?.trim() ?? "";
 
             if (FormattingHelper.IsValidIsoDate(trimmed))
