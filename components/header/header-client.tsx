@@ -88,11 +88,11 @@ export default function HeaderClient({session}: ClientProperties)
         const isoDaysSeven = FormattingHelper.IsoDateLocal(daysSeven);
         const isoDaysFourteen = FormattingHelper.IsoDateLocal(daysFourteen);
 
-        const textToday = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLongNoYear(isoToday, language)}`;
-        const textTomorrow = `${FormattingHelper.Weekday(isoTomorrow, language)} ${FormattingHelper.TextLongNoYear(isoTomorrow, language)}`;
-        const textAfterTomorrow = `${FormattingHelper.Weekday(isoAfterTomorrow, language)} ${FormattingHelper.TextLongNoYear(isoAfterTomorrow, language)}`;
-        const textDaysSeven = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLongNoYear(isoToday, language)} ${LanguagesHelper.Caption("To").toLowerCase()} ${FormattingHelper.Weekday(isoDaysSeven, language)} ${FormattingHelper.TextLongNoYear(isoDaysSeven, language)}`;
-        const textDaysFourteen = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLongNoYear(isoToday, language)} ${LanguagesHelper.Caption("To").toLowerCase()} ${FormattingHelper.Weekday(isoDaysFourteen, language)} ${FormattingHelper.TextLongNoYear(isoDaysFourteen, language)}`;
+        const textToday = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLong(isoToday, language)}`;
+        const textTomorrow = `${FormattingHelper.Weekday(isoTomorrow, language)} ${FormattingHelper.TextLong(isoTomorrow, language)}`;
+        const textAfterTomorrow = `${FormattingHelper.Weekday(isoAfterTomorrow, language)} ${FormattingHelper.TextLong(isoAfterTomorrow, language)}`;
+        const textDaysSeven = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLong(isoToday, language)} ${LanguagesHelper.Caption("To").toLowerCase()} ${FormattingHelper.Weekday(isoDaysSeven, language)} ${FormattingHelper.TextLongNoYear(isoDaysSeven, language)}`;
+        const textDaysFourteen = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLong(isoToday, language)} ${LanguagesHelper.Caption("To").toLowerCase()} ${FormattingHelper.Weekday(isoDaysFourteen, language)} ${FormattingHelper.TextLongNoYear(isoDaysFourteen, language)}`;
 
         setTodayDate(textToday.replace(",", "").replace(",", "").trim());
         setTomorrowDate(textTomorrow.replace(",", "").replace(",", "").trim());
