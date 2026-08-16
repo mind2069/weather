@@ -1,0 +1,18 @@
+@media (max-width: 599px)
+{
+    .not-found .details .code
+    {
+        font-size: 5rem;
+    }
+
+    .not-found .details .title
+    {
+        font-size: 1.5rem;
+        line-height: 2rem;
+    }
+
+    .not-found .details .actions .btn
+    {
+        max-width: 100%;
+    }
+}

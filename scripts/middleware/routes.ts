@@ -73,7 +73,7 @@ function TrackingFromRequest(request: NextRequest, language: string, ipAddress: 
     return data;
 }
 
-async function CreateSessionResponse(request: NextRequest, rewriteUrl: URL | null, language: string, ipAddress: string, hostname: string, pathname: string, section: string, page: string, filename: string): Promise<NextResponse>
+async function CreateSessionResponse(request: NextRequest, rewriteUrl: URL | null, language: string, ipAddress: string, hostname: string, pathname: string, section: string, page: string, filename: string, status?: number): Promise<NextResponse>
 {
     const tracking = TrackingFromRequest(request, language, ipAddress, hostname, pathname, section, page, filename);
 
@@ -82,6 +82,7 @@ async function CreateSessionResponse(request: NextRequest, rewriteUrl: URL | nul
         rewriteUrl,
         request.headers.get("cookie") ?? "",
         tracking,
+        status,
     );
 }
 
@@ -200,7 +201,9 @@ export async function handleRoutes(request: NextRequest)
         return NextResponse.redirect(new URL(`/en-ca${pathname}`, request.url));
     }
 
-    const response = await CreateSessionResponse(request, null, language, ipAddress, hostname, pathname, section, page, filename);
+    const rewriteUrlNotFound = new URL("/forms/public/not-found", request.url);
+
+    const response = await CreateSessionResponse(request, rewriteUrlNotFound, language, ipAddress, hostname, pathname, section, page, filename, 404);
 
     return SetRefererCookie(response, referer, language);
 }

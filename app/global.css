@@ -1,9 +1,18 @@
+html
+{
+    min-height: 100%;
+}
+
 body
 {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     padding: 0;
     margin: 0;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
     font-family:
         ui-sans-serif,
         system-ui,
@@ -31,6 +40,11 @@ body
 *::after
 {
     box-sizing: border-box;
+}
+
+body > footer
+{
+    margin-top: auto;
 }
 
 a

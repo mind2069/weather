@@ -204,4 +204,10 @@ export const LANGUAGES_CAPTION: Record<string, string> =
     "2_Unknown": "Inconnu",
     "1_CacheMissing": "Cache missing",
     "2_CacheMissing": "Cache manquant",
+    "1_PageNotFound": "Page not found",
+    "2_PageNotFound": "Page introuvable",
+    "1_PageNotFoundMessage": "The page you are looking for does not exist or may have moved.",
+    "2_PageNotFoundMessage": "La page que vous recherchez n’existe pas ou a peut-être été déplacée.",
+    "1_BackToWeather": "Back to today’s weather",
+    "2_BackToWeather": "Retour à la météo d’aujourd’hui",
 };

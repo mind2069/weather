@@ -236,7 +236,7 @@ export class SessionServiceShared
         response.cookies.set("longitude", String(longitude), COOKIE_DEFAULT_OPTIONS);
     }
 
-    public static async CreateResponse(requestHeaders: Headers, rewriteUrl: URL | null, cookieHeader: string, tracking: { language: string; ipAddress: string; hostname: string; pathname: string; section: string; page: string; filename: string; city: string; country: string; province: string; latitude: string; longitude: string }): Promise<NextResponse>
+    public static async CreateResponse(requestHeaders: Headers, rewriteUrl: URL | null, cookieHeader: string, tracking: { language: string; ipAddress: string; hostname: string; pathname: string; section: string; page: string; filename: string; city: string; country: string; province: string; latitude: string; longitude: string }, status?: number): Promise<NextResponse>
     {
         const sessionHeaders = SessionServiceShared.HeadersForBuild(requestHeaders, tracking);
         const session = await SessionServiceShared.Build(sessionHeaders);
@@ -245,7 +245,7 @@ export class SessionServiceShared
 
         SessionServiceShared.ForwardSessionHeaders(forwardedHeaders, session);
 
-        const response = rewriteUrl ? NextResponse.rewrite(rewriteUrl, { request: { headers: forwardedHeaders } }) : NextResponse.next({ request: { headers: forwardedHeaders } });
+        const response = rewriteUrl ? NextResponse.rewrite(rewriteUrl, { request: { headers: forwardedHeaders }, status: status }) : NextResponse.next({ request: { headers: forwardedHeaders } });
 
         SessionServiceShared.Store(response, session, cookieHeader, {
             city: tracking.city,
