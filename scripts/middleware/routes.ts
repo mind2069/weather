@@ -5,6 +5,8 @@ import { RouteAuthorized, RouteProtected } from "./authentification";
 import * as LanguagesHelper from "@/scripts/languages/languages-helper";
 import { SessionServiceShared } from "@/services/session/shared";
 import { LocationsData } from "@/scripts/data/locations";
+import { FormattingHelper } from "@/scripts/helpers/formatting";
+import { DateHelper } from "@/scripts/helpers/date";
 
 const LANGUAGES = ["en-ca", "fr-ca"] as const;
 
@@ -103,7 +105,9 @@ export async function handleRoutes(request: NextRequest)
         LanguagesHelper.Initialize("en-ca");
 
         const languageId = LanguagesHelper.LanguageId();
-        const path = LanguagesHelper.PathLanguage("Public_Today", languageId);
+        const isoToday = FormattingHelper.IsoDateLocal(new Date());
+        const slug = DateHelper.DateToFileName(isoToday, "en-ca");
+        const path = LanguagesHelper.PathLanguage("Public_Day", languageId) + "/" + slug;
 
         return NextResponse.redirect(new URL(path, request.url));
     }
