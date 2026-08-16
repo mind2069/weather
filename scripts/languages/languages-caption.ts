@@ -10,8 +10,6 @@ export const LANGUAGES_CAPTION: Record<string, string> =
     "2_Loading": "Chargement…",
     "1_Radar": "Radar",
     "2_Radar": "Radar",
-    "1_To": "To",
-    "2_To": "Au",
     "1_CouldNotLoadRadar": "Could not load weather radar.",
     "2_CouldNotLoadRadar": "Impossible de charger le radar météo.",
     "1_Play": "Play radar animation",
