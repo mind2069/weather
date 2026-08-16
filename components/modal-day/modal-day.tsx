@@ -5,6 +5,7 @@ import * as LanguagesHelper from "@/scripts/languages/languages-helper";
 import type { ForecastNormalized, DayNormalized } from "@/scripts/types/open-meteo";
 import type { Session } from "@/scripts/types/session";
 import { FormattingHelper } from "@/scripts/helpers/formatting";
+import { DateHelper } from "@/scripts/helpers/date";
 import Link from "next/link";
 
 import "./styles.css";
@@ -176,7 +177,7 @@ export default function ModalDayForecast({ session, day, dayForecast, open, load
                                         </h2>
                                         <div className="actions">
                                             <Link
-                                                href={LanguagesHelper.Path("Public_Day") + "/" + date}
+                                                href={LanguagesHelper.Path("Public_Day") + "/" + DateHelper.DateToFileName(date, locale)}
                                                 className="action"
                                             >
                                                 <svg

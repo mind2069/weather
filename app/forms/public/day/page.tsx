@@ -6,6 +6,7 @@ import "./styles-responsive.css";
 import { Session } from "@/scripts/types/session";
 import { Cache } from "@/scripts/cache/cache";
 import { ResolveDayRoute } from "./resolve-route";
+import { DateHelper } from "@/scripts/helpers/date";
 
 export default async function Page()
 {
@@ -20,7 +21,9 @@ export default async function Page()
 
     if (!route.valid)
     {
-        redirect(LanguagesHelper.Path("Public_Day"));
+        const slug = DateHelper.DateToFileName(route.date, session.user.locale);
+
+        redirect(LanguagesHelper.Path("Public_Day") + "/" + slug);
     }
 
     return <Client session={session} date={route.date} kind={route.kind} />;

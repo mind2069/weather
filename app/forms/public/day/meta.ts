@@ -4,6 +4,7 @@ import { FormattingHelper } from "@/scripts/helpers/formatting";
 import { MetaOpenGraph, MetaTwitter, MetaLanguageAlternates, MetaGeoTags, MetaJsonLdWebPage, type MetaLocationInput, IsEnglish } from "@/scripts/helpers/meta-helpers";
 import type { DayRoute, DayRouteKind } from "./resolve-route";
 import { ConfigurationsShared } from "@/scripts/configurations/configurations-shared";
+import { DateHelper } from "@/scripts/helpers/date";
 
 export interface DayMetaContext
 {
@@ -17,28 +18,17 @@ function localeCode(languageId: LanguageId): string
     return IsEnglish(languageId) ? "en-ca" : "fr-ca";
 }
 
-function dayPath(languageId: LanguageId, kind: DayRouteKind, date: string): string
+function dayPath(languageId: LanguageId, _kind: DayRouteKind, date: string): string
 {
+    const locale = localeCode(languageId);
+    const slug = DateHelper.DateToFileName(date, locale);
+
     if (IsEnglish(languageId))
     {
-        switch (kind)
-        {
-            case "today": return "/en-ca/today";
-            case "tomorrow": return "/en-ca/tomorrow";
-            case "after-tomorrow": return "/en-ca/after-tomorrow";
-            case "date": return `/en-ca/day/${date}`;
-        }
+        return `/en-ca/day/${slug}`;
     }
 
-    switch (kind)
-    {
-        case "today": return "/fr-ca/aujourdhui";
-        case "tomorrow": return "/fr-ca/demain";
-        case "after-tomorrow": return "/fr-ca/apres-demain";
-        case "date": return `/fr-ca/journee/${date}`;
-    }
-
-    return "";
+    return `/fr-ca/journee/${slug}`;
 }
 
 function titleFor(context: DayMetaContext, languageId: LanguageId): string

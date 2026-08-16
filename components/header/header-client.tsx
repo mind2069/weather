@@ -7,6 +7,7 @@ import { CookiesHelper } from "@/scripts/helpers/cookies";
 import HeaderLocationSearch from "@/components/header/header-location-search";
 import { FormattingHelper } from "@/scripts/helpers/formatting";
 import { TextHelper } from "@/scripts/helpers/text";
+import { DateHelper } from "@/scripts/helpers/date";
 
 interface ClientProperties
 {
@@ -25,10 +26,31 @@ export default function HeaderClient({session}: ClientProperties)
     let pathEnglish = LanguagesHelper.PathLanguage(pathCode, "1");
     let pathFrench = LanguagesHelper.PathLanguage(pathCode, "2");
 
-    if(session.tracking.filename !== "")    
+    if (session.tracking.filename !== "")
     {
-        pathEnglish += "/" + session.tracking.filename;
-        pathFrench += "/" + session.tracking.filename;
+        if (pathCode === "Public_Day")
+        {
+            const iso = DateHelper.FileNameToDate(session.tracking.filename)
+                || (FormattingHelper.IsValidIsoDate(session.tracking.filename)
+                    ? session.tracking.filename
+                    : "");
+
+            if (iso)
+            {
+                pathEnglish += "/" + DateHelper.DateToFileName(iso, "en-ca");
+                pathFrench += "/" + DateHelper.DateToFileName(iso, "fr-ca");
+            }
+            else
+            {
+                pathEnglish += "/" + session.tracking.filename;
+                pathFrench += "/" + session.tracking.filename;
+            }
+        }
+        else
+        {
+            pathEnglish += "/" + session.tracking.filename;
+            pathFrench += "/" + session.tracking.filename;
+        }
     }
 
     const [navMenuOpen, setNavMenuOpen] = useState(false);
@@ -118,8 +140,6 @@ export default function HeaderClient({session}: ClientProperties)
         setUrlDaysSeven(urlDaysSeven);
         setUrlDaysFourteen(urlDaysFourteen);
 
-
-    
     }, [language]);
 
     useEffect(() =>
@@ -216,24 +236,24 @@ export default function HeaderClient({session}: ClientProperties)
                                     <>
                                         <div className="dropdown">
                                             <div className="links">
-                                                <a href={LanguagesHelper.Path("Public_Today") + (urlToday ? "/" + urlToday : "")} onClick={() => setNavMenuOpen(false)}>
+                                                <a href={LanguagesHelper.Path("Public_Day") + (urlToday ? "/" + urlToday : "")} onClick={() => setNavMenuOpen(false)}>
                                                     <span className="caption">{LanguagesHelper.Caption("Today")}</span>
                                                     <span className="date">{todayDate}</span>
                                                 </a>
-                                                <a href={LanguagesHelper.Path("Public_Tomorrow") + (urlTomorrow ? "/" + urlTomorrow : "")} onClick={() => setNavMenuOpen(false)}>
+                                                <a href={LanguagesHelper.Path("Public_Day") + (urlTomorrow ? "/" + urlTomorrow : "")} onClick={() => setNavMenuOpen(false)}>
                                                     <span className="caption">{LanguagesHelper.Caption("Tomorrow")}</span>
                                                     <span className="date">{tomorrowDate}</span>
                                                 </a>
-                                                <a href={LanguagesHelper.Path("Public_AfterTomorrow") + (urlAfterTomorrow ? "/" + urlAfterTomorrow : "")} onClick={() => setNavMenuOpen(false)}>
+                                                <a href={LanguagesHelper.Path("Public_Day") + (urlAfterTomorrow ? "/" + urlAfterTomorrow : "")} onClick={() => setNavMenuOpen(false)}>
                                                     <span className="caption">{LanguagesHelper.Caption("AfterTomorrow")}</span>
                                                     <span className="date">{afterTomorrowDate}</span>
                                                 </a>
                                                 <a href={LanguagesHelper.Path("Public_Forecast7Days") + (urlDaysSeven ? "/" + urlDaysSeven : "")} onClick={() => setNavMenuOpen(false)}>
-                                                    <span className="caption">{LanguagesHelper.Caption("Forecast7Days")}</span>
+                                                    <span className="caption">{LanguagesHelper.Caption("7Days")}</span>
                                                     <span className="date">{daysSevenDate}</span>
                                                 </a>
                                                 <a href={LanguagesHelper.Path("Public_Forecast14Days") + (urlDaysFourteen ? "/" + urlDaysFourteen : "")} onClick={() => setNavMenuOpen(false)}>
-                                                    <span className="caption">{LanguagesHelper.Caption("Forecast14Days")}</span>
+                                                    <span className="caption">{LanguagesHelper.Caption("14Days")}</span>
                                                     <span className="date">{daysFourteenDate}</span>
                                                 </a>
                                             </div>

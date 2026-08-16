@@ -1,4 +1,5 @@
 import { FormattingHelper } from "@/scripts/helpers/formatting";
+import { DateHelper } from "@/scripts/helpers/date";
 
 export type DayRouteKind = "today" | "tomorrow" | "after-tomorrow" | "date";
 
@@ -7,6 +8,30 @@ export interface DayRoute
     valid: boolean;
     date: string;
     kind: DayRouteKind;
+}
+
+function KindFromIsoDate(isoDate: string): DayRouteKind
+{
+    const today = FormattingHelper.IsoDateLocal(new Date());
+    const tomorrow = FormattingHelper.IsoDateLocal(new Date(Date.now() + 24 * 60 * 60 * 1000));
+    const afterTomorrow = FormattingHelper.IsoDateLocal(new Date(Date.now() + 48 * 60 * 60 * 1000));
+
+    if (isoDate === today)
+    {
+        return "today";
+    }
+
+    if (isoDate === tomorrow)
+    {
+        return "tomorrow";
+    }
+
+    if (isoDate === afterTomorrow)
+    {
+        return "after-tomorrow";
+    }
+
+    return "date";
 }
 
 export function EffectiveDayDate(kind: DayRouteKind, fixedDate: string): string
@@ -29,24 +54,36 @@ export function EffectiveDayDate(kind: DayRouteKind, fixedDate: string): string
     return fixedDate;
 }
 
-export function ResolveDayRoute(page: string, date: string): DayRoute
+export function ResolveDayRoute(page: string, filename: string): DayRoute
 {
     const today = FormattingHelper.IsoDateLocal(new Date());
     const tomorrow = FormattingHelper.IsoDateLocal(new Date(Date.now() + 24 * 60 * 60 * 1000));
     const afterTomorrow = FormattingHelper.IsoDateLocal(new Date(Date.now() + 48 * 60 * 60 * 1000));
+    const filenameTrimmed = filename?.trim() ?? "";
 
     switch (page)
     {
         case "day":
         case "journee":
         {
-            // Only /day/{YYYY-MM-DD} uses filename as a real date.
-            // SEO slugs on today/tomorrow/etc. are ignored here.
-            const trimmed = date?.trim() ?? "";
-
-            if (FormattingHelper.IsValidIsoDate(trimmed))
+            if (FormattingHelper.IsValidIsoDate(filenameTrimmed))
             {
-                return { valid: true, date: trimmed, kind: "date" };
+                return {
+                    valid: true,
+                    date: filenameTrimmed,
+                    kind: KindFromIsoDate(filenameTrimmed),
+                };
+            }
+
+            const dateFromSlug = DateHelper.FileNameToDate(filenameTrimmed);
+
+            if (dateFromSlug)
+            {
+                return {
+                    valid: true,
+                    date: dateFromSlug,
+                    kind: KindFromIsoDate(dateFromSlug),
+                };
             }
 
             return { valid: false, date: today, kind: "today" };
@@ -54,18 +91,15 @@ export function ResolveDayRoute(page: string, date: string): DayRoute
 
         case "today":
         case "aujourdhui":
-
             return { valid: true, date: today, kind: "today" };
 
         case "tomorrow":
         case "demain":
-
             return { valid: true, date: tomorrow, kind: "tomorrow" };
 
         case "after-tomorrow":
         case "apres-demain":
-
-             return { valid: true, date: afterTomorrow, kind: "after-tomorrow" };
+            return { valid: true, date: afterTomorrow, kind: "after-tomorrow" };
     }
 
     return { valid: false, date: today, kind: "today" };
