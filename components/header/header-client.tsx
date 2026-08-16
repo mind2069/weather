@@ -35,6 +35,8 @@ export default function HeaderClient({session}: ClientProperties)
     const [todayDate, setTodayDate] = useState("");
     const [tomorrowDate, setTomorrowDate] = useState("");
     const [afterTomorrowDate, setAfterTomorrowDate] = useState("");
+    const [daysSevenDate, setDaysSevenDate] = useState("");
+    const [daysFourteenDate, setDaysFourteenDate] = useState("");
     const navMenuRef = useRef<HTMLDivElement>(null);
     const langMenuRef = useRef<HTMLDivElement>(null);
 
@@ -77,18 +79,26 @@ export default function HeaderClient({session}: ClientProperties)
         const today = new Date();
         const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
         const afterTomorrow = new Date(tomorrow.getTime() + 24 * 60 * 60 * 1000);
+        const daysSeven = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+        const daysFourteen = new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000);
 
         const isoToday = FormattingHelper.IsoDateLocal(today);
         const isoTomorrow = FormattingHelper.IsoDateLocal(tomorrow);
         const isoAfterTomorrow = FormattingHelper.IsoDateLocal(afterTomorrow);
+        const isoDaysSeven = FormattingHelper.IsoDateLocal(daysSeven);
+        const isoDaysFourteen = FormattingHelper.IsoDateLocal(daysFourteen);
 
         const textToday = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLongNoYear(isoToday, language)}`;
         const textTomorrow = `${FormattingHelper.Weekday(isoTomorrow, language)} ${FormattingHelper.TextLongNoYear(isoTomorrow, language)}`;
         const textAfterTomorrow = `${FormattingHelper.Weekday(isoAfterTomorrow, language)} ${FormattingHelper.TextLongNoYear(isoAfterTomorrow, language)}`;
+        const textDaysSeven = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLongNoYear(isoToday, language)} ${LanguagesHelper.Caption("To").toLowerCase()} ${FormattingHelper.Weekday(isoDaysSeven, language)} ${FormattingHelper.TextLongNoYear(isoDaysSeven, language)}`;
+        const textDaysFourteen = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLongNoYear(isoToday, language)} ${LanguagesHelper.Caption("To").toLowerCase()} ${FormattingHelper.Weekday(isoDaysFourteen, language)} ${FormattingHelper.TextLongNoYear(isoDaysFourteen, language)}`;
 
-        setTodayDate(textToday);
-        setTomorrowDate(textTomorrow);
-        setAfterTomorrowDate(textAfterTomorrow);
+        setTodayDate(textToday.replace(",", "").replace(",", "").trim());
+        setTomorrowDate(textTomorrow.replace(",", "").replace(",", "").trim());
+        setAfterTomorrowDate(textAfterTomorrow.replace(",", "").replace(",", "").trim());
+        setDaysSevenDate(textDaysSeven.replace(",", "").replace(",", "").trim());
+        setDaysFourteenDate(textDaysFourteen.replace(",", "").replace(",", "").trim());
     
     }, [language]);
 
@@ -187,19 +197,24 @@ export default function HeaderClient({session}: ClientProperties)
                                         <div className="dropdown">
                                             <div className="links">
                                                 <a href={LanguagesHelper.Path("Public_Today")} onClick={() => setNavMenuOpen(false)}>
-                                                    {LanguagesHelper.Caption("Today")} &middot; <span className="date">{todayDate}</span>
+                                                    <span className="caption">{LanguagesHelper.Caption("Today")}</span>
+                                                    <span className="date">{todayDate}</span>
                                                 </a>
                                                 <a href={LanguagesHelper.Path("Public_Tomorrow")} onClick={() => setNavMenuOpen(false)}>
-                                                    {LanguagesHelper.Caption("Tomorrow")} &middot; <span className="date">{tomorrowDate}</span>
+                                                    <span className="caption">{LanguagesHelper.Caption("Tomorrow")}</span>
+                                                    <span className="date">{tomorrowDate}</span>
                                                 </a>
                                                 <a href={LanguagesHelper.Path("Public_AfterTomorrow")} onClick={() => setNavMenuOpen(false)}>
-                                                    {LanguagesHelper.Caption("AfterTomorrow")} &middot; <span className="date">{afterTomorrowDate}</span>
+                                                    <span className="caption">{LanguagesHelper.Caption("AfterTomorrow")}</span>
+                                                    <span className="date">{afterTomorrowDate}</span>
                                                 </a>
                                                 <a href={LanguagesHelper.Path("Public_Forecast7Days")} onClick={() => setNavMenuOpen(false)}>
-                                                    {LanguagesHelper.Caption("Forecast7Days")}
+                                                    <span className="caption">{LanguagesHelper.Caption("Forecast7Days")}</span>
+                                                    <span className="date">{daysSevenDate}</span>
                                                 </a>
                                                 <a href={LanguagesHelper.Path("Public_Forecast14Days")} onClick={() => setNavMenuOpen(false)}>
-                                                    {LanguagesHelper.Caption("Forecast14Days")}
+                                                    <span className="caption">{LanguagesHelper.Caption("Forecast14Days")}</span>
+                                                    <span className="date">{daysFourteenDate}</span>
                                                 </a>
                                             </div>
                                             <div className="units">

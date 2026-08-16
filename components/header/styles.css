@@ -101,9 +101,25 @@ header .menu nav .anchor .dropdown .links
 
 header .menu nav .anchor .dropdown .links a
 {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
     padding: 0.625rem 1rem;
     white-space: nowrap;
+}
+
+header .menu nav .anchor .dropdown .links a .caption
+{
+    color: #1e293b;
+    font-weight: 500;
+}
+
+header .menu nav .anchor .dropdown .links a .date
+{
+    color: #94a3b8;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 400;
 }
 
 header .menu nav .anchor .dropdown .links a:hover
