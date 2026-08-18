@@ -46,7 +46,7 @@ export default function HeaderClient({session}: ClientProperties)
                 pathFrench += "/" + session.tracking.filename;
             }
         }
-        else if (pathCode === "Public_Forecast" || pathCode === "Public_7Days" || pathCode === "Public_14Days")
+        else if (pathCode === "Public_Forecast" || pathCode === "Public_7DayForecast" || pathCode === "Public_14DayForecast")
         {
             const { dateStart, dateEnd } = DateHelper.FileNameToDates(session.tracking.filename);
 
@@ -268,11 +268,11 @@ export default function HeaderClient({session}: ClientProperties)
                                                     <span className="caption">{LanguagesHelper.Caption("AfterTomorrow")}</span>
                                                     <span className="date">{afterTomorrowDate}</span>
                                                 </a>
-                                                <a href={LanguagesHelper.Path("Public_7Days") + (urlDaysSeven ? "/" + urlDaysSeven : "")} onClick={() => setNavMenuOpen(false)}>
+                                                <a href={LanguagesHelper.Path("Public_7DayForecast") + (urlDaysSeven ? "/" + urlDaysSeven : "")} onClick={() => setNavMenuOpen(false)}>
                                                     <span className="caption">{LanguagesHelper.Caption("7Days")}</span>
                                                     <span className="date">{daysSevenDate}</span>
                                                 </a>
-                                                <a href={LanguagesHelper.Path("Public_14Days") + (urlDaysFourteen ? "/" + urlDaysFourteen : "")} onClick={() => setNavMenuOpen(false)}>
+                                                <a href={LanguagesHelper.Path("Public_14DayForecast") + (urlDaysFourteen ? "/" + urlDaysFourteen : "")} onClick={() => setNavMenuOpen(false)}>
                                                     <span className="caption">{LanguagesHelper.Caption("14Days")}</span>
                                                     <span className="date">{daysFourteenDate}</span>
                                                 </a>

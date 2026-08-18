@@ -20,7 +20,7 @@ export default async function Page()
 
     if (!route.valid)
     {
-        redirect(LanguagesHelper.Path("Public_14Days"));
+        redirect(LanguagesHelper.Path("Public_14DayForecast"));
     }
 
     return <Client session={session} dateStart={route.dateStart} dateEnd={route.dateEnd} page={route.page} />;

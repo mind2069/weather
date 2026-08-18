@@ -33,13 +33,13 @@ function DayCountForPage(page: string): number
 {
     switch (page)
     {
-        case "7-days":
-        case "7-jours":
+        case "7-day-forecast":
+        case "previsions-7-jours":
 
             return FORECAST_7_DAYS;
 
-        case "14-days":
-        case "14-jours":
+        case "14-day-forecast":
+        case "previsions-14-jours":
 
             return FORECAST_DEFAULT_DAYS;
 

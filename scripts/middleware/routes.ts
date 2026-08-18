@@ -22,10 +22,10 @@ const PAGES_WITH_FILENAME = new Set(
     "apres-demain",
     "forecast",
     "prevision",
-    "7-days",
-    "7-jours",
-    "14-days",
-    "14-jours",
+    "7-day-forecast",
+    "previsions-7-jours",
+    "14-day-forecast",
+    "previsions-14-jours",
 ]);
 
 

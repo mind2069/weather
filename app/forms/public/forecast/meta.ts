@@ -15,14 +15,14 @@ export interface ForecastMetaContext
 
 function forecastPathBase(languageId: LanguageId, page: string): string
 {
-    if (page === "7-days" || page === "7-jours")
+    if (page === "7-day-forecast" || page === "previsions-7-jours")
     {
-        return IsEnglish(languageId) ? "/en-ca/7-days" : "/fr-ca/7-jours";
+        return IsEnglish(languageId) ? "/en-ca/7-day-forecast" : "/fr-ca/previsions-7-jours";
     }
 
-    if (page === "14-days" || page === "14-jours")
+    if (page === "14-day-forecast" || page === "previsions-14-jours")
     {
-        return IsEnglish(languageId) ? "/en-ca/14-days" : "/fr-ca/14-jours";
+        return IsEnglish(languageId) ? "/en-ca/14-day-forecast" : "/fr-ca/previsions-14-jours";
     }
 
     return IsEnglish(languageId) ? "/en-ca/forecast" : "/fr-ca/prevision";

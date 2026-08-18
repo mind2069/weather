@@ -10,8 +10,8 @@ export const LANGUAGES_CODE: Record<string, string> =
     "publique_apres-demain": "Public_AfterTomorrow",
     "public_forecast": "Public_Forecast",
     "publique_prevision": "Public_Forecast",
-    "public_14-days": "Public_14Days",
-    "publique_14-jours": "Public_14Days",
-    "public_7-days": "Public_7Days",
-    "publique_7-jours": "Public_7Days"
+    "public_14-day-forecast": "Public_14DayForecast",
+    "publique_previsions-14-jours": "Public_14DayForecast",
+    "public_7-day-forecast": "Public_7DayForecast",
+    "publique_previsions-7-jours": "Public_7DayForecast"
 };

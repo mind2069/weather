@@ -20,8 +20,8 @@ export default function FooterClient({ session }: ClientProperties)
     const [todayHref, setTodayHref] = useState(LanguagesHelper.Path("Public_Day"));
     const [tomorrowHref, setTomorrowHref] = useState(LanguagesHelper.Path("Public_Day"));
     const [afterTomorrowHref, setAfterTomorrowHref] = useState(LanguagesHelper.Path("Public_Day"));
-    const [daysSevenHref, setDaysSevenHref] = useState(LanguagesHelper.Path("Public_7Days"));
-    const [daysFourteenHref, setDaysFourteenHref] = useState(LanguagesHelper.Path("Public_14Days"));
+    const [daysSevenHref, setDaysSevenHref] = useState(LanguagesHelper.Path("Public_7DayForecast"));
+    const [daysFourteenHref, setDaysFourteenHref] = useState(LanguagesHelper.Path("Public_14DayForecast"));
     const [todayDate, setTodayDate] = useState("");
     const [tomorrowDate, setTomorrowDate] = useState("");
     const [afterTomorrowDate, setAfterTomorrowDate] = useState("");
@@ -57,8 +57,8 @@ export default function FooterClient({ session }: ClientProperties)
         setTodayHref(LanguagesHelper.Path("Public_Day") + "/" + urlToday);
         setTomorrowHref(LanguagesHelper.Path("Public_Day") + "/" + urlTomorrow);
         setAfterTomorrowHref(LanguagesHelper.Path("Public_Day") + "/" + urlAfterTomorrow);
-        setDaysSevenHref(LanguagesHelper.Path("Public_7Days") + "/" + urlDaysSeven);
-        setDaysFourteenHref(LanguagesHelper.Path("Public_14Days") + "/" + urlDaysFourteen);
+        setDaysSevenHref(LanguagesHelper.Path("Public_7DayForecast") + "/" + urlDaysSeven);
+        setDaysFourteenHref(LanguagesHelper.Path("Public_14DayForecast") + "/" + urlDaysFourteen);
 
         setTodayDate(textToday.replace(",", "").replace(",", "").trim());
         setTomorrowDate(textTomorrow.replace(",", "").replace(",", "").trim());

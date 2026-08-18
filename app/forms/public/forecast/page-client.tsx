@@ -237,7 +237,7 @@ export default function Client({ session, dateStart, dateEnd, page }: ClientProp
     const tempUnitSuffix = session.user.unit === "imperial" ? "F" : "C";
     const forecastDays = ForecastDaysFromRange(dateStart, dateEnd);
     const forecastTitleCaption =
-        page === "7-days" || page === "7-jours" || forecastDays <= 7
+        page === "7-day-forecast" || page === "previsions-7-jours" || forecastDays <= 7
             ? "Forecast7Days"
             : "Forecast14Days";
     const [forecast, setForecast] = useState<ForecastNormalized[] | null>(null);
