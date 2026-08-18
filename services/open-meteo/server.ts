@@ -17,7 +17,8 @@ export class OpenMeteoServiceServer
                 `open-meteo-forecast-${OpenMeteoServiceServer.CACHE_KEY_VERSION}`,
                 latitude,
                 longitude,
-                String(parameters.days),
+                parameters.dateStart,
+                parameters.dateEnd,
                 parameters.session.user.unit,
             ],
             { revalidate: 1800 }
@@ -58,7 +59,8 @@ export class OpenMeteoServiceServer
 
             url.searchParams.set("latitude", latitude);
             url.searchParams.set("longitude", longitude);
-            url.searchParams.set("forecast_days", String(parameters.days));
+            url.searchParams.set("start_date", parameters.dateStart);
+            url.searchParams.set("end_date", parameters.dateEnd);
             url.searchParams.set("timezone", "auto");
             url.searchParams.set("daily", daily.join(","));
             url.searchParams.set("hourly", "weather_code");

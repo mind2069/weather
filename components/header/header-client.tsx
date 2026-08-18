@@ -46,6 +46,26 @@ export default function HeaderClient({session}: ClientProperties)
                 pathFrench += "/" + session.tracking.filename;
             }
         }
+        else if (pathCode === "Public_Forecast" || pathCode === "Public_7Days" || pathCode === "Public_14Days")
+        {
+            const { dateStart, dateEnd } = DateHelper.FileNameToDates(session.tracking.filename);
+
+            if (
+                dateStart &&
+                dateEnd &&
+                FormattingHelper.IsValidIsoDate(dateStart) &&
+                FormattingHelper.IsValidIsoDate(dateEnd)
+            )
+            {
+                pathEnglish += "/" + DateHelper.DatesToFileName(dateStart, dateEnd, "en-ca");
+                pathFrench += "/" + DateHelper.DatesToFileName(dateStart, dateEnd, "fr-ca");
+            }
+            else
+            {
+                pathEnglish += "/" + session.tracking.filename;
+                pathFrench += "/" + session.tracking.filename;
+            }
+        }
         else
         {
             pathEnglish += "/" + session.tracking.filename;
@@ -107,8 +127,8 @@ export default function HeaderClient({session}: ClientProperties)
         const today = new Date();
         const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
         const afterTomorrow = new Date(tomorrow.getTime() + 24 * 60 * 60 * 1000);
-        const daysSeven = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-        const daysFourteen = new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000);
+        const daysSeven = new Date(today.getTime() + 6 * 24 * 60 * 60 * 1000);
+        const daysFourteen = new Date(today.getTime() + 13 * 24 * 60 * 60 * 1000);
 
         const isoToday = FormattingHelper.IsoDateLocal(today);
         const isoTomorrow = FormattingHelper.IsoDateLocal(tomorrow);
@@ -125,8 +145,8 @@ export default function HeaderClient({session}: ClientProperties)
         const urlToday = TextHelper.FileName(textToday);
         const urlTomorrow = TextHelper.FileName(textTomorrow);
         const urlAfterTomorrow = TextHelper.FileName(textAfterTomorrow);
-        const urlDaysSeven = TextHelper.FileName(textDaysSeven);
-        const urlDaysFourteen = TextHelper.FileName(textDaysFourteen);
+        const urlDaysSeven = DateHelper.DatesToFileName(isoToday, isoDaysSeven, language);
+        const urlDaysFourteen = DateHelper.DatesToFileName(isoToday, isoDaysFourteen, language);
 
         setTodayDate(textToday.replace(",", "").replace(",", "").trim());
         setTomorrowDate(textTomorrow.replace(",", "").replace(",", "").trim());
@@ -248,11 +268,11 @@ export default function HeaderClient({session}: ClientProperties)
                                                     <span className="caption">{LanguagesHelper.Caption("AfterTomorrow")}</span>
                                                     <span className="date">{afterTomorrowDate}</span>
                                                 </a>
-                                                <a href={LanguagesHelper.Path("Public_Forecast7Days") + (urlDaysSeven ? "/" + urlDaysSeven : "")} onClick={() => setNavMenuOpen(false)}>
+                                                <a href={LanguagesHelper.Path("Public_7Days") + (urlDaysSeven ? "/" + urlDaysSeven : "")} onClick={() => setNavMenuOpen(false)}>
                                                     <span className="caption">{LanguagesHelper.Caption("7Days")}</span>
                                                     <span className="date">{daysSevenDate}</span>
                                                 </a>
-                                                <a href={LanguagesHelper.Path("Public_Forecast14Days") + (urlDaysFourteen ? "/" + urlDaysFourteen : "")} onClick={() => setNavMenuOpen(false)}>
+                                                <a href={LanguagesHelper.Path("Public_14Days") + (urlDaysFourteen ? "/" + urlDaysFourteen : "")} onClick={() => setNavMenuOpen(false)}>
                                                     <span className="caption">{LanguagesHelper.Caption("14Days")}</span>
                                                     <span className="date">{daysFourteenDate}</span>
                                                 </a>

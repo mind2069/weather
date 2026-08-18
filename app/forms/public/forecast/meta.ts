@@ -1,31 +1,44 @@
 import type { Metadata } from "next";
 import { MetaData, LanguageId, META_CONSTANTS, JsonLdData } from "@/scripts/types/meta";
 import { MetaOpenGraph, MetaTwitter, MetaLanguageAlternates, MetaGeoTags, MetaJsonLdWebPage, type MetaLocationInput, IsEnglish } from "@/scripts/helpers/meta-helpers";
-import { FORECAST_DEFAULT_DAYS, type ForecastRoute } from "./resolve-route";
+import { ForecastDaysFromRange, type ForecastRoute } from "./resolve-route";
 import { ConfigurationsShared } from "@/scripts/configurations/configurations-shared";
 
 export interface ForecastMetaContext
 {
-    days: number;
+    dateStart: string;
+    dateEnd: string;
+    page: string;
+    slug: string;
     baseUrl: string;
 }
 
-function forecastPath(languageId: LanguageId, days: number): string
+function forecastPathBase(languageId: LanguageId, page: string): string
 {
-    const base = IsEnglish(languageId) ? "/en-ca/forecast" : "/fr-ca/prevision";
-
-    if (days === FORECAST_DEFAULT_DAYS)
+    if (page === "7-days" || page === "7-jours")
     {
-        return base;
+        return IsEnglish(languageId) ? "/en-ca/7-days" : "/fr-ca/7-jours";
     }
 
-    return `${base}/${days}`;
+    if (page === "14-days" || page === "14-jours")
+    {
+        return IsEnglish(languageId) ? "/en-ca/14-days" : "/fr-ca/14-jours";
+    }
+
+    return IsEnglish(languageId) ? "/en-ca/forecast" : "/fr-ca/prevision";
+}
+
+function forecastPath(languageId: LanguageId, page: string, slug: string): string
+{
+    const base = forecastPathBase(languageId, page);
+
+    return slug ? `${base}/${slug}` : base;
 }
 
 function titleFor(context: ForecastMetaContext, languageId: LanguageId): string
 {
     const site = ConfigurationsShared.Name;
-    const days = context.days;
+    const days = ForecastDaysFromRange(context.dateStart, context.dateEnd);
 
     if (IsEnglish(languageId))
     {
@@ -37,7 +50,7 @@ function titleFor(context: ForecastMetaContext, languageId: LanguageId): string
 
 function descriptionFor(context: ForecastMetaContext, languageId: LanguageId): string
 {
-    const days = context.days;
+    const days = ForecastDaysFromRange(context.dateStart, context.dateEnd);
 
     if (IsEnglish(languageId))
     {
@@ -99,7 +112,7 @@ export const Meta: MetaData =
     {
         const ctx = context as ForecastMetaContext;
 
-        return `${ctx.baseUrl}${forecastPath(languageId, ctx.days)}`;
+        return `${ctx.baseUrl}${forecastPath(languageId, ctx.page, ctx.slug)}`;
     },
 
     LanguageAlternates(context?: unknown)
@@ -107,8 +120,8 @@ export const Meta: MetaData =
         const ctx = context as ForecastMetaContext;
 
         return MetaLanguageAlternates(
-            `${ctx.baseUrl}${forecastPath(META_CONSTANTS.LANGUAGES.EN, ctx.days)}`,
-            `${ctx.baseUrl}${forecastPath(META_CONSTANTS.LANGUAGES.FR, ctx.days)}`,
+            `${ctx.baseUrl}${forecastPath(META_CONSTANTS.LANGUAGES.EN, ctx.page, ctx.slug)}`,
+            `${ctx.baseUrl}${forecastPath(META_CONSTANTS.LANGUAGES.FR, ctx.page, ctx.slug)}`,
         );
     },
 
@@ -126,7 +139,13 @@ export const Meta: MetaData =
 
 export function ForecastMetaContextFromRoute(route: ForecastRoute, baseUrl: string): ForecastMetaContext
 {
-    return { days: route.days, baseUrl };
+    return {
+        dateStart: route.dateStart,
+        dateEnd: route.dateEnd,
+        page: route.page,
+        slug: route.slug,
+        baseUrl,
+    };
 }
 
 export function ToNextMetadata(

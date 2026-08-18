@@ -1,11 +1,19 @@
+@media (min-width: 600px)
+{
+    footer nav a.link span.date
+    {
+        display: none;
+    }
+}
+
 @media (max-width: 599px)
 {
     footer nav
     {
         flex-direction: column;
-        align-items: stretch;
+        align-items: flex-start;
         column-gap: 0;
-        row-gap: 0.25rem;
+        row-gap: 0;
     }
 
     footer .separator
@@ -13,10 +21,30 @@
         display: none;
     }
 
-    footer .link
+    footer nav a.link
+    {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.125rem;
+        width: 100%;
+        padding: 0.625rem 0;
+        text-align: left;
+        font-weight: 500;
+    }
+
+    footer nav a.link .caption
+    {
+        color: #1e293b;
+        font-weight: 500;
+    }
+
+    footer nav a.link span.date
     {
         display: block;
-        width: 100%;
-        text-align: center;
+        color: #94a3b8;
+        font-size: 0.75rem;
+        line-height: 1rem;
+        font-weight: 400;
     }
 }

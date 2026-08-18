@@ -38,6 +38,26 @@ export class DateHelper
         return TextHelper.FileName(text);
     }
 
+    public static DatesToFileName(dateStart: string, dateEnd: string, locale: string): string
+    {
+        const startSlug = DateHelper.DateToFileName(dateStart, locale);
+        const endSlug = DateHelper.DateToFileName(dateEnd, locale);
+
+        if (!startSlug || !endSlug)
+        {
+            return "";
+        }
+
+        if (dateStart === dateEnd)
+        {
+            return startSlug;
+        }
+
+        const separator = locale.startsWith("fr") ? "-au-" : "-to-";
+
+        return `${startSlug}${separator}${endSlug}`;
+    }
+
     public static FileNameToDate(filename: string): string
     {
         const parts = filename

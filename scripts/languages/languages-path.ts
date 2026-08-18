@@ -10,8 +10,8 @@ export const LANGUAGES_PATH: Record<string, string> =
   "2_Public_AfterTomorrow": "/fr-ca/apres-demain",
   "1_Public_Forecast": "/en-ca/forecast",
   "2_Public_Forecast": "/fr-ca/prevision",
-  "1_Public_Forecast7Days": "/en-ca/forecast-7-days",
-  "2_Public_Forecast7Days": "/fr-ca/prevision-7-jours",
-  "1_Public_Forecast14Days": "/en-ca/forecast-14-days",
-  "2_Public_Forecast14Days": "/fr-ca/prevision-14-jours"
+  "1_Public_7Days": "/en-ca/7-days",
+  "2_Public_7Days": "/fr-ca/7-jours",
+  "1_Public_14Days": "/en-ca/14-days",
+  "2_Public_14Days": "/fr-ca/14-jours"
 };

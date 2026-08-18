@@ -15,11 +15,14 @@ import ModalLoading from "@/components/modal-loading/modal-loading";
 import ModalMessage from "@/components/modal-message/modal-message";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { WindHelper } from "@/scripts/helpers/wind";
+import { ForecastDaysFromRange } from "./resolve-route";
 
 interface ClientProperties
 {
     session: Session;
-    days: number;
+    dateStart: string;
+    dateEnd: string;
+    page: string;
 }
 
 interface ForecastChartRow
@@ -225,25 +228,21 @@ function FormatForecastRangeLabel(metric: ForecastRangeMetric, value: number, te
     }
 }
 
-export default function Client({ session, days }: ClientProperties)
+export default function Client({ session, dateStart, dateEnd, page }: ClientProperties)
 {
     LanguagesHelper.Initialize(session.language.code);
 
     const locale = session.user.locale;
     const windSpeedUnit = session.user.unit === "imperial" ? "MPH" : "KM/H";
     const tempUnitSuffix = session.user.unit === "imperial" ? "F" : "C";
+    const forecastDays = ForecastDaysFromRange(dateStart, dateEnd);
+    const forecastTitleCaption =
+        page === "7-days" || page === "7-jours" || forecastDays <= 7
+            ? "Forecast7Days"
+            : "Forecast14Days";
     const [forecast, setForecast] = useState<ForecastNormalized[] | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [dateStart, setDateStart] = useState<Date>(() => new Date());
-    const [dateEnd, setDateEnd] = useState<Date>(() =>
-    {
-        const d = new Date();
-
-        d.setDate(d.getDate() + days);
-
-        return d;
-    });
     const [dayModalOpen, setDayModalOpen] = useState(false);
     const [dayModalLoading, setDayModalLoading] = useState(false);
     const [dayModalError, setDayModalError] = useState<string | null>(null);
@@ -353,7 +352,8 @@ export default function Client({ session, days }: ClientProperties)
         const parametersForecast: OpenMeteoForecastParameters =
         {
             session: session,
-            days: days,
+            dateStart: dateStart,
+            dateEnd: dateEnd,
         };
 
         const responseForecast: OpenMeteoForecastResponse = await WeatherServiceClient.Forecast(parametersForecast);
@@ -446,7 +446,12 @@ export default function Client({ session, days }: ClientProperties)
         );
     }
 
-    const forecastNormalized: ForecastNormalized[] = forecast ?? [];
+    const forecastNormalized: ForecastNormalized[] = useMemo(() =>
+    {
+        const items = forecast ?? [];
+
+        return items.filter((item) => item.date >= dateStart && item.date <= dateEnd);
+    }, [forecast, dateStart, dateEnd]);
 
     const chartData: ForecastChartRow[] = useMemo(
         () =>
@@ -714,17 +719,17 @@ export default function Client({ session, days }: ClientProperties)
                     <div className="container">
                         <h1 className="head">
                             <span className="label">
-                                {LanguagesHelper.Caption("Forecast14Days")}
+                                {LanguagesHelper.Caption(forecastTitleCaption)}
                             </span>
                             <span className="dates">
                                 <span>
-                                    {FormattingHelper.TextLong(FormattingHelper.IsoDateLocal(dateStart), locale)}
+                                    {FormattingHelper.TextLong(dateStart, locale)}
                                 </span>
                                 <span>
                                     {LanguagesHelper.Caption("To").toLocaleLowerCase()}{" "}
                                 </span>
                                 <span>
-                                    {FormattingHelper.TextLong(FormattingHelper.IsoDateLocal(dateEnd), locale)}
+                                    {FormattingHelper.TextLong(dateEnd, locale)}
                                 </span>
                             </span>
                         </h1>

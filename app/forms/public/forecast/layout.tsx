@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata>
     const session = await Cache.Session();
     const languageCode = session.language.code;
     const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
-    const route = ResolveForecastRoute(session.tracking.page);
+    const route = ResolveForecastRoute(session.tracking.page, session.tracking.filename);
     const baseUrl = ConfigurationsShared.Website.Base;
     const context = ForecastMetaContextFromRoute(route, baseUrl);
     const cookies = headersList.get("cookie") ?? "";
@@ -30,7 +30,7 @@ export default async function LayoutBase({ children }: { children: React.ReactNo
     const session = await Cache.Session();
     const languageCode = headersList.get("x-language") ?? session.language.code;
     const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
-    const route = ResolveForecastRoute(session.tracking.page);
+    const route = ResolveForecastRoute(session.tracking.page, session.tracking.filename);
     const baseUrl = ConfigurationsShared.Website.Base;
     const context = ForecastMetaContextFromRoute(route, baseUrl);
     const jsonLd = JSON.stringify(Meta.JsonLd(languageId, context));

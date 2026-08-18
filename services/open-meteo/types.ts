@@ -4,7 +4,8 @@ import { Session } from "@/scripts/types/session";
 export interface OpenMeteoForecastParameters
 {
     session: Session;
-    days: number;
+    dateStart: string;
+    dateEnd: string;
 }
 
 export interface OpenMeteoForecastResponse

@@ -12,15 +12,16 @@ export default async function Page()
     const session: Session = await Cache.Session();
     const language = session.language.code;
     const page = session.tracking.page;
+    const filename = session.tracking.filename;
 
     LanguagesHelper.Initialize(language);
 
-    const route = ResolveForecastRoute(page);
+    const route = ResolveForecastRoute(page, filename);
 
     if (!route.valid)
     {
-        redirect(LanguagesHelper.Path("Public_Forecast14Days"));
+        redirect(LanguagesHelper.Path("Public_14Days"));
     }
 
-    return <Client session={session} days={route.days} />;
+    return <Client session={session} dateStart={route.dateStart} dateEnd={route.dateEnd} page={route.page} />;
 }
