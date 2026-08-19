@@ -202,6 +202,24 @@ export default function HeaderClient({session}: ClientProperties)
 
     }, [navMenuOpen, langMenuOpen]);
 
+    const MenuToggle = () =>
+    {
+        setNavMenuOpen((open) => !open);
+        setLangMenuOpen(false);
+    }
+
+    const LanguageToggle = () =>
+    {
+        setLangMenuOpen((open) => !open);
+        setNavMenuOpen(false);
+    }
+
+    const MenuCloseAll = () =>
+    {
+        setNavMenuOpen(false);
+        setLangMenuOpen(false);
+    }
+
     const HamburgerIcon = () =>
     {
         return (
@@ -248,7 +266,7 @@ export default function HeaderClient({session}: ClientProperties)
                                     type="button"
                                     className="icon"
                                     aria-expanded={navMenuOpen}
-                                    onClick={() => setNavMenuOpen((open) => !open)}
+                                    onClick={MenuToggle}
                                 >
                                     <HamburgerIcon />
                                 </button>
@@ -256,23 +274,23 @@ export default function HeaderClient({session}: ClientProperties)
                                     <>
                                         <div className="dropdown">
                                             <div className="links">
-                                                <a href={LanguagesHelper.Path("Public_Day") + (urlToday ? "/" + urlToday : "")} onClick={() => setNavMenuOpen(false)}>
+                                                <a href={LanguagesHelper.Path("Public_Day") + (urlToday ? "/" + urlToday : "")} onClick={() => MenuCloseAll()}>
                                                     <span className="caption">{LanguagesHelper.Caption("Today")}</span>
                                                     <span className="date">{todayDate}</span>
                                                 </a>
-                                                <a href={LanguagesHelper.Path("Public_Day") + (urlTomorrow ? "/" + urlTomorrow : "")} onClick={() => setNavMenuOpen(false)}>
+                                                <a href={LanguagesHelper.Path("Public_Day") + (urlTomorrow ? "/" + urlTomorrow : "")} onClick={() => MenuCloseAll()}>
                                                     <span className="caption">{LanguagesHelper.Caption("Tomorrow")}</span>
                                                     <span className="date">{tomorrowDate}</span>
                                                 </a>
-                                                <a href={LanguagesHelper.Path("Public_Day") + (urlAfterTomorrow ? "/" + urlAfterTomorrow : "")} onClick={() => setNavMenuOpen(false)}>
+                                                <a href={LanguagesHelper.Path("Public_Day") + (urlAfterTomorrow ? "/" + urlAfterTomorrow : "")} onClick={() => MenuCloseAll()}>
                                                     <span className="caption">{LanguagesHelper.Caption("AfterTomorrow")}</span>
                                                     <span className="date">{afterTomorrowDate}</span>
                                                 </a>
-                                                <a href={LanguagesHelper.Path("Public_7DayForecast") + (urlDaysSeven ? "/" + urlDaysSeven : "")} onClick={() => setNavMenuOpen(false)}>
+                                                <a href={LanguagesHelper.Path("Public_7DayForecast") + (urlDaysSeven ? "/" + urlDaysSeven : "")} onClick={() => MenuCloseAll()}>
                                                     <span className="caption">{LanguagesHelper.Caption("7Days")}</span>
                                                     <span className="date">{daysSevenDate}</span>
                                                 </a>
-                                                <a href={LanguagesHelper.Path("Public_14DayForecast") + (urlDaysFourteen ? "/" + urlDaysFourteen : "")} onClick={() => setNavMenuOpen(false)}>
+                                                <a href={LanguagesHelper.Path("Public_14DayForecast") + (urlDaysFourteen ? "/" + urlDaysFourteen : "")} onClick={() => MenuCloseAll()}>
                                                     <span className="caption">{LanguagesHelper.Caption("14Days")}</span>
                                                     <span className="date">{daysFourteenDate}</span>
                                                 </a>
@@ -306,7 +324,7 @@ export default function HeaderClient({session}: ClientProperties)
                                 type="button"
                                 className="icon"
                                 aria-expanded={langMenuOpen}
-                                onClick={() => setLangMenuOpen((open) => !open)}
+                                onClick={LanguageToggle}
                             >
                                 <LanguageIcon />
                             </button>
@@ -314,12 +332,12 @@ export default function HeaderClient({session}: ClientProperties)
                                 <div className="dropdown">
                                     <div className="links">
                                         {( language !== "en-ca" && 
-                                            <a href={pathEnglish} onClick={() => setLangMenuOpen(false)}>
+                                            <a href={pathEnglish} onClick={() => MenuCloseAll()}>
                                                 English
                                             </a>
                                         )}
                                         {( language !== "fr-ca" && 
-                                            <a href={pathFrench} onClick={() => setLangMenuOpen(false)}>
+                                            <a href={pathFrench} onClick={() => MenuCloseAll()}>
                                                 Français
                                             </a>
                                         )}
