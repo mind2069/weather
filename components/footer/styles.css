@@ -42,3 +42,13 @@ footer .separator
 {
     color: #e2e8f0;
 }
+
+footer .credit
+{
+    margin: 1rem 0 0;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 400;
+    text-align: center;
+}

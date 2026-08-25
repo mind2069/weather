@@ -146,7 +146,7 @@ export default function RadarMap({ session }: ComponentProperties)
 
         const tileUrl = `${radar.host}${frame.path}/256/{z}/{x}/{y}/2/1_1.png`;
         const layer = L.tileLayer(tileUrl, {
-            attribution: "Radar &copy; RainViewer",
+            attribution: "",
             opacity: 0.72,
             maxZoom: 7,
             tileSize: 256,
@@ -222,12 +222,6 @@ export default function RadarMap({ session }: ComponentProperties)
                         />
                     </div>
                 ) : null}
-                <p className="radar-credit">
-                    {LanguagesHelper.Caption("RadarData")}{" "}
-                    <a href="https://www.rainviewer.com/" target="_blank" rel="noreferrer">
-                        RainViewer
-                    </a>
-                </p>
             </div>
         </section>
     );

@@ -89,17 +89,3 @@
     width: 100%;
     accent-color: #1180b2;
 }
-
-.radar .radar-credit
-{
-    margin: 0.5rem 0 0;
-    color: #64748b;
-    font-size: 0.75rem;
-    line-height: 1rem;
-    text-align: right;
-}
-
-.radar .radar-credit a
-{
-    color: #0369a1;
-}

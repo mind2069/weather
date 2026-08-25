@@ -47,4 +47,10 @@
         line-height: 1rem;
         font-weight: 400;
     }
+
+    footer .credit
+    {
+        width: 100%;
+        text-align: center;
+    }
 }

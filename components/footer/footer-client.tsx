@@ -105,6 +105,9 @@ export default function FooterClient({ session }: ClientProperties)
                         <span className="date">{daysFourteenDate}</span>
                     </a>
                 </nav>
+                <p className="credit">
+                    WeatherSimple, built with RainViewer, Geonames, and OpenMeteo
+                </p>
             </div>
         </footer>
     );
