@@ -14,18 +14,8 @@ const PAGES_WITH_FILENAME = new Set(
 [
     "day",
     "journee",
-    "today",
-    "aujourdhui",
-    "tomorrow",
-    "demain",
-    "after-tomorrow",
-    "apres-demain",
     "forecast",
     "prevision",
-    "7-day-forecast",
-    "previsions-7-jours",
-    "14-day-forecast",
-    "previsions-14-jours",
 ]);
 
 
@@ -155,7 +145,9 @@ export async function handleRoutes(request: NextRequest)
             LanguagesHelper.Initialize(language);
 
             const languageId = LanguagesHelper.LanguageId();
-            const path = LanguagesHelper.PathLanguage("Public_Today", languageId);
+            const isoToday = FormattingHelper.IsoDateLocal(new Date());
+            const slug = DateHelper.DateToFileName(isoToday, "en-ca");
+            const path = LanguagesHelper.PathLanguage("Public_Day", languageId) + "/" + slug;
 
             return NextResponse.redirect(new URL(path, request.url));
         }

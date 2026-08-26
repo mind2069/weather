@@ -20,11 +20,13 @@ export default function FooterClient({ session }: ClientProperties)
     const [todayHref, setTodayHref] = useState(LanguagesHelper.Path("Public_Day"));
     const [tomorrowHref, setTomorrowHref] = useState(LanguagesHelper.Path("Public_Day"));
     const [afterTomorrowHref, setAfterTomorrowHref] = useState(LanguagesHelper.Path("Public_Day"));
-    const [daysSevenHref, setDaysSevenHref] = useState(LanguagesHelper.Path("Public_7DayForecast"));
-    const [daysFourteenHref, setDaysFourteenHref] = useState(LanguagesHelper.Path("Public_14DayForecast"));
+    const [daysThreeHref, setDaysThreeHref] = useState(LanguagesHelper.Path("Public_Forecast_3Days"));
+    const [daysSevenHref, setDaysSevenHref] = useState(LanguagesHelper.Path("Public_Forecast_7Days"));
+    const [daysFourteenHref, setDaysFourteenHref] = useState(LanguagesHelper.Path("Public_Forecast_14Days"));
     const [todayDate, setTodayDate] = useState("");
     const [tomorrowDate, setTomorrowDate] = useState("");
     const [afterTomorrowDate, setAfterTomorrowDate] = useState("");
+    const [daysThreeDate, setDaysThreeDate] = useState("");
     const [daysSevenDate, setDaysSevenDate] = useState("");
     const [daysFourteenDate, setDaysFourteenDate] = useState("");
 
@@ -33,36 +35,39 @@ export default function FooterClient({ session }: ClientProperties)
         const today = new Date();
         const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
         const afterTomorrow = new Date(tomorrow.getTime() + 24 * 60 * 60 * 1000);
+        const daysThree = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000);
         const daysSeven = new Date(today.getTime() + 6 * 24 * 60 * 60 * 1000);
         const daysFourteen = new Date(today.getTime() + 13 * 24 * 60 * 60 * 1000);
 
         const isoToday = FormattingHelper.IsoDateLocal(today);
         const isoTomorrow = FormattingHelper.IsoDateLocal(tomorrow);
         const isoAfterTomorrow = FormattingHelper.IsoDateLocal(afterTomorrow);
+        const isoDaysThree = FormattingHelper.IsoDateLocal(daysThree);
         const isoDaysSeven = FormattingHelper.IsoDateLocal(daysSeven);
         const isoDaysFourteen = FormattingHelper.IsoDateLocal(daysFourteen);
 
         const textToday = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLong(isoToday, language)}`;
         const textTomorrow = `${FormattingHelper.Weekday(isoTomorrow, language)} ${FormattingHelper.TextLong(isoTomorrow, language)}`;
         const textAfterTomorrow = `${FormattingHelper.Weekday(isoAfterTomorrow, language)} ${FormattingHelper.TextLong(isoAfterTomorrow, language)}`;
+        const textDaysThree = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLong(isoToday, language)} ${LanguagesHelper.Caption("To").toLowerCase()} ${FormattingHelper.Weekday(isoDaysThree, language)} ${FormattingHelper.TextLong(isoDaysThree, language)}`;
         const textDaysSeven = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLong(isoToday, language)} ${LanguagesHelper.Caption("To").toLowerCase()} ${FormattingHelper.Weekday(isoDaysSeven, language)} ${FormattingHelper.TextLong(isoDaysSeven, language)}`;
         const textDaysFourteen = `${FormattingHelper.Weekday(isoToday, language)} ${FormattingHelper.TextLong(isoToday, language)} ${LanguagesHelper.Caption("To").toLowerCase()} ${FormattingHelper.Weekday(isoDaysFourteen, language)} ${FormattingHelper.TextLong(isoDaysFourteen, language)}`;
 
         const urlToday = TextHelper.FileName(textToday);
         const urlTomorrow = TextHelper.FileName(textTomorrow);
         const urlAfterTomorrow = TextHelper.FileName(textAfterTomorrow);
-        const urlDaysSeven = DateHelper.DatesToFileName(isoToday, isoDaysSeven, language);
-        const urlDaysFourteen = DateHelper.DatesToFileName(isoToday, isoDaysFourteen, language);
 
         setTodayHref(LanguagesHelper.Path("Public_Day") + "/" + urlToday);
         setTomorrowHref(LanguagesHelper.Path("Public_Day") + "/" + urlTomorrow);
         setAfterTomorrowHref(LanguagesHelper.Path("Public_Day") + "/" + urlAfterTomorrow);
-        setDaysSevenHref(LanguagesHelper.Path("Public_7DayForecast") + "/" + urlDaysSeven);
-        setDaysFourteenHref(LanguagesHelper.Path("Public_14DayForecast") + "/" + urlDaysFourteen);
+        setDaysThreeHref(LanguagesHelper.Path("Public_Forecast_3Days"));
+        setDaysSevenHref(LanguagesHelper.Path("Public_Forecast_7Days"));
+        setDaysFourteenHref(LanguagesHelper.Path("Public_Forecast_14Days"));
 
         setTodayDate(textToday.replace(",", "").replace(",", "").trim());
         setTomorrowDate(textTomorrow.replace(",", "").replace(",", "").trim());
         setAfterTomorrowDate(textAfterTomorrow.replace(",", "").replace(",", "").trim());
+        setDaysThreeDate(textDaysThree.replace(",", "").replace(",", "").trim());
         setDaysSevenDate(textDaysSeven.replace(",", "").replace(",", "").trim());
         setDaysFourteenDate(textDaysFourteen.replace(",", "").replace(",", "").trim());
 
@@ -89,6 +94,13 @@ export default function FooterClient({ session }: ClientProperties)
                     <a className="link" href={afterTomorrowHref}>
                         <span className="caption">{LanguagesHelper.Caption("AfterTomorrow")}</span>
                         <span className="date">{afterTomorrowDate}</span>
+                    </a>
+                    <span className="separator" aria-hidden>
+                        |
+                    </span>
+                    <a className="link" href={daysThreeHref}>
+                        <span className="caption">{LanguagesHelper.Caption("3Days")}</span>
+                        <span className="date">{daysThreeDate}</span>
                     </a>
                     <span className="separator" aria-hidden>
                         |

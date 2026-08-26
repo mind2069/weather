@@ -13,26 +13,31 @@ export interface ForecastMetaContext
     baseUrl: string;
 }
 
-function forecastPathBase(languageId: LanguageId, page: string): string
+function forecastPathBase(languageId: LanguageId, page: string, slug: string): string
 {
-    if (page === "7-day-forecast" || page === "previsions-7-jours")
+    if (slug === "3-days" || slug === "3-jours")
     {
-        return IsEnglish(languageId) ? "/en-ca/7-day-forecast" : "/fr-ca/previsions-7-jours";
+        return IsEnglish(languageId) ? "/en-ca/forecast/3-days" : "/fr-ca/prevision/3-jours";
     }
 
-    if (page === "14-day-forecast" || page === "previsions-14-jours")
+    if (slug === "7-days" || slug === "7-jours")
     {
-        return IsEnglish(languageId) ? "/en-ca/14-day-forecast" : "/fr-ca/previsions-14-jours";
+        return IsEnglish(languageId) ? "/en-ca/forecast/7-days" : "/fr-ca/prevision/7-jours";
     }
 
-    return IsEnglish(languageId) ? "/en-ca/forecast" : "/fr-ca/prevision";
+    if (slug === "14-days" || slug === "14-jours")
+    {
+        return IsEnglish(languageId) ? "/en-ca/forecast/14-days" : "/fr-ca/prevision/14-jours";
+    }
+
+    const base = IsEnglish(languageId) ? "/en-ca/forecast" : "/fr-ca/prevision";
+
+    return slug ? `${base}/${slug}` : base;
 }
 
 function forecastPath(languageId: LanguageId, page: string, slug: string): string
 {
-    const base = forecastPathBase(languageId, page);
-
-    return slug ? `${base}/${slug}` : base;
+    return forecastPathBase(languageId, page, slug);
 }
 
 function titleFor(context: ForecastMetaContext, languageId: LanguageId): string

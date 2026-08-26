@@ -57,49 +57,31 @@ export function EffectiveDayDate(kind: DayRouteKind, fixedDate: string): string
 export function ResolveDayRoute(page: string, filename: string): DayRoute
 {
     const today = FormattingHelper.IsoDateLocal(new Date());
-    const tomorrow = FormattingHelper.IsoDateLocal(new Date(Date.now() + 24 * 60 * 60 * 1000));
-    const afterTomorrow = FormattingHelper.IsoDateLocal(new Date(Date.now() + 48 * 60 * 60 * 1000));
     const filenameTrimmed = filename?.trim() ?? "";
 
-    switch (page)
+    if (page === "day" || page === "journee")
     {
-        case "day":
-        case "journee":
+        if (FormattingHelper.IsValidIsoDate(filenameTrimmed))
         {
-            if (FormattingHelper.IsValidIsoDate(filenameTrimmed))
-            {
-                return {
-                    valid: true,
-                    date: filenameTrimmed,
-                    kind: KindFromIsoDate(filenameTrimmed),
-                };
-            }
-
-            const dateFromSlug = DateHelper.FileNameToDate(filenameTrimmed);
-
-            if (dateFromSlug)
-            {
-                return {
-                    valid: true,
-                    date: dateFromSlug,
-                    kind: KindFromIsoDate(dateFromSlug),
-                };
-            }
-
-            return { valid: false, date: today, kind: "today" };
+            return {
+                valid: true,
+                date: filenameTrimmed,
+                kind: KindFromIsoDate(filenameTrimmed),
+            };
         }
 
-        case "today":
-        case "aujourdhui":
-            return { valid: true, date: today, kind: "today" };
+        const dateFromSlug = DateHelper.FileNameToDate(filenameTrimmed);
 
-        case "tomorrow":
-        case "demain":
-            return { valid: true, date: tomorrow, kind: "tomorrow" };
+        if (dateFromSlug)
+        {
+            return {
+                valid: true,
+                date: dateFromSlug,
+                kind: KindFromIsoDate(dateFromSlug),
+            };
+        }
 
-        case "after-tomorrow":
-        case "apres-demain":
-            return { valid: true, date: afterTomorrow, kind: "after-tomorrow" };
+        return { valid: false, date: today, kind: "today" };
     }
 
     return { valid: false, date: today, kind: "today" };

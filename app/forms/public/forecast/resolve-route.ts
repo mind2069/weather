@@ -3,6 +3,7 @@ import { DateHelper } from "@/scripts/helpers/date";
 
 export const FORECAST_DEFAULT_DAYS = 14;
 export const FORECAST_7_DAYS = 7;
+export const FORECAST_3_DAYS = 3;
 
 export interface ForecastRoute
 {
@@ -29,26 +30,24 @@ function DefaultRange(dayCount: number): { dateStart: string; dateEnd: string }
     return { dateStart: today, dateEnd: RangeEndDate(today, dayCount) };
 }
 
-function DayCountForPage(page: string): number
+function RangeDayCount(token: string): number | null
 {
-    switch (page)
+    if (token === "3-days" || token === "3-jours")
     {
-        case "7-day-forecast":
-        case "previsions-7-jours":
-
-            return FORECAST_7_DAYS;
-
-        case "14-day-forecast":
-        case "previsions-14-jours":
-
-            return FORECAST_DEFAULT_DAYS;
-
-        case "forecast":
-        case "prevision":  
-        default:
-
-            return FORECAST_DEFAULT_DAYS;
+        return FORECAST_3_DAYS;
     }
+
+    if (token === "7-days" || token === "7-jours")
+    {
+        return FORECAST_7_DAYS;
+    }
+
+    if (token === "14-days" || token === "14-jours")
+    {
+        return FORECAST_DEFAULT_DAYS;
+    }
+
+    return null;
 }
 
 export function ForecastDaysFromRange(dateStart: string, dateEnd: string): number
@@ -63,8 +62,12 @@ export function ForecastDaysFromRange(dateStart: string, dateEnd: string): numbe
 export function ResolveForecastRoute(page: string, filename: string): ForecastRoute
 {
     const filenameTrimmed = filename?.trim() ?? "";
-    const dayCount = DayCountForPage(page);
-    const fallback = DefaultRange(dayCount);
+    const rangeDays = RangeDayCount(filenameTrimmed);
+
+    if (rangeDays != null)
+    {
+        return { valid: true, ...DefaultRange(rangeDays), page, slug: filenameTrimmed };
+    }
 
     if (filenameTrimmed)
     {
@@ -77,19 +80,17 @@ export function ResolveForecastRoute(page: string, filename: string): ForecastRo
             FormattingHelper.IsValidIsoDate(dateEnd)
         )
         {
-            const normalizedEnd = RangeEndDate(dateStart, dayCount);
-
             return {
                 valid: true,
                 dateStart,
-                dateEnd: normalizedEnd,
+                dateEnd,
                 page,
                 slug: filenameTrimmed,
             };
         }
 
-        return { valid: false, ...fallback, page, slug: "" };
+        return { valid: false, ...DefaultRange(FORECAST_DEFAULT_DAYS), page, slug: "" };
     }
 
-    return { valid: true, ...fallback, page, slug: "" };
+    return { valid: true, ...DefaultRange(FORECAST_DEFAULT_DAYS), page, slug: "" };
 }

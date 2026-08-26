@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Area, Bar, ComposedChart, LabelList, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { BarShapeProps } from "recharts";
 import * as LanguagesHelper from "@/scripts/languages/languages-helper";
@@ -15,7 +15,6 @@ import ModalLoading from "@/components/modal-loading/modal-loading";
 import ModalMessage from "@/components/modal-message/modal-message";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { WindHelper } from "@/scripts/helpers/wind";
-import { ForecastDaysFromRange } from "./resolve-route";
 
 interface ClientProperties
 {
@@ -235,11 +234,6 @@ export default function Client({ session, dateStart, dateEnd, page }: ClientProp
     const locale = session.user.locale;
     const windSpeedUnit = session.user.unit === "imperial" ? "MPH" : "KM/H";
     const tempUnitSuffix = session.user.unit === "imperial" ? "F" : "C";
-    const forecastDays = ForecastDaysFromRange(dateStart, dateEnd);
-    const forecastTitleCaption =
-        page === "7-day-forecast" || page === "previsions-7-jours" || forecastDays <= 7
-            ? "Forecast7Days"
-            : "Forecast14Days";
     const [forecast, setForecast] = useState<ForecastNormalized[] | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -719,7 +713,7 @@ export default function Client({ session, dateStart, dateEnd, page }: ClientProp
                     <div className="container">
                         <h1 className="head">
                             <span className="label">
-                                {LanguagesHelper.Caption(forecastTitleCaption)}
+                                {LanguagesHelper.Caption("ForecastDays").replace("{0}", String(forecastNormalized.length))}
                             </span>
                             <span className="dates">
                                 <span>
@@ -733,7 +727,10 @@ export default function Client({ session, dateStart, dateEnd, page }: ClientProp
                                 </span>
                             </span>
                         </h1>
-                        <div className="items">
+                        <div
+                            className="items"
+                            style={{ "--columns": Math.min(forecastNormalized.length, 7) } as CSSProperties}
+                        >
                             {forecastNormalized.map((item) => (
                                 <div key={item.date}>
                                     <button className="item" type="button" onClick={() => void OpenDayModal(item)}>
