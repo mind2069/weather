@@ -1,0 +1,198 @@
+.calendar
+{
+}
+
+.calendar .details
+{
+    padding: 2.5rem 0 4rem 0;
+    background: linear-gradient(to bottom, #079fe1, #30b0e6);
+    color: #ffffff;
+}
+
+.calendar .details.details-unloaded
+{
+    min-height: 18rem;
+}
+
+.calendar .details .head
+{
+    padding: 0 0 1rem 0;
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+}
+
+.calendar .board
+{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.calendar .weekdays
+{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendar .weekdays .weekday
+{
+    text-align: center;
+    font-size: 0.8125rem;
+    line-height: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    opacity: 0.9;
+    padding: 0.25rem 0;
+    overflow-wrap: anywhere;
+}
+
+.calendar .days
+{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendar .days .day
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.375rem;
+    min-height: 7.5rem;
+    padding: 0.5rem 0.75rem 0.75rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 0.0625rem solid rgba(255, 255, 255, 0.55);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: inherit;
+    text-decoration: none;
+    font: inherit;
+    text-align: inherit;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.calendar .days .day:hover
+{
+    background-color: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.75);
+}
+
+.calendar .days .day:focus-visible
+{
+    outline: 0.125rem solid rgba(255, 255, 255, 0.9);
+    outline-offset: 0.125rem;
+}
+
+.calendar .days .day.empty
+{
+    background: transparent;
+    border-color: transparent;
+    min-height: 7.5rem;
+    pointer-events: none;
+}
+
+.calendar .days .day.bare
+{
+    pointer-events: none;
+}
+
+.calendar .days .day.past
+{
+    opacity: 0.55;
+}
+
+.calendar .days .day.today
+{
+    background-color: #138fc8;
+    border-color: #138fc8;
+}
+
+.calendar .days .day.today:hover
+{
+    background-color: #138fc8;
+    border-color: rgba(255, 255, 255, 0.55);
+}
+
+.calendar .days .day .number
+{
+    align-self: stretch;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 0.35rem;
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
+    font-weight:400;
+}
+
+.calendar .days .day .number .month
+{
+    font-size: 0.875rem;
+    font-weight: 500;
+    opacity: 0.9;
+    white-space: normal;
+}
+
+.calendar .days .day .icon
+{
+    padding-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
+.calendar .days .day .icon img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.calendar .days .day .temperature
+{
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.calendar .days .day .temperature .value
+{
+    font-size: 1.25rem;
+}
+
+.calendar .days .day .temperature .symbol
+{
+    font-size: 0.875rem;
+}
+
+.calendar .days .day .temperature .unit
+{
+    margin-left: 0.125rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.85;
+}
+
+.calendar .days .day .blurb
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 1.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.15;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.75);
+    white-space: normal;
+}

@@ -55,6 +55,28 @@ export class FormattingHelper
 
         return weekday[0].toUpperCase() + weekday.slice(1);
     }
+
+    public static Month(isoDate: string, locale: string): string
+    {
+        const day = isoDate.length >= 10 ? isoDate.slice(0, 10) : isoDate;
+        const d = new Date(`${day}T12:00:00`);
+
+        if (Number.isNaN(d.getTime()))
+        {
+            return "";
+        }
+
+        const formatter = new Intl.DateTimeFormat(locale, { month: "long" });
+        const parts = formatter.formatToParts(d);
+        const month = parts.find((p) => p.type === "month")?.value ?? "";
+
+        if (month.length === 0)
+        {
+            return month;
+        }
+
+        return month[0]!.toUpperCase() + month.slice(1);
+    }
     
     public static CalendarDate(isoDate: string, locale: string): string
     {

@@ -116,6 +116,12 @@ export default function FooterClient({ session }: ClientProperties)
                         <span className="caption">{LanguagesHelper.Caption("14Days")}</span>
                         <span className="date">{daysFourteenDate}</span>
                     </a>
+                    <span className="separator" aria-hidden>
+                        |
+                    </span>
+                    <a className="link" href={LanguagesHelper.Path("Public_Calendar")}>
+                        <span className="caption">{LanguagesHelper.Caption("Calendar")}</span>
+                    </a>
                 </nav>
                 <p className="credit">
                     WeatherSimple, built with RainViewer, Geonames, and OpenMeteo

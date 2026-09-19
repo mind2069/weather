@@ -4,7 +4,9 @@ import { OpenMeteoForecast, OpenMeteoDay } from "@/scripts/types/open-meteo";
 
 export class OpenMeteoServiceServer
 {
-    private static readonly CACHE_KEY_VERSION = "1.7";
+    private static readonly CACHE_KEY_VERSION = "1.8";
+    private static readonly FORECAST_API_MAX_DAYS = 16;
+    private static readonly ENSEMBLE_MEAN_MODEL = "ncep_gefs_ensemble_mean_seamless";
 
     public static async Forecast( parameters: OpenMeteoTypes.OpenMeteoForecastParameters ): Promise<OpenMeteoTypes.OpenMeteoForecastResponse>
     {
@@ -23,6 +25,14 @@ export class OpenMeteoServiceServer
             ],
             { revalidate: 1800 }
         )();
+    }
+
+    private static ForecastDayCount(dateStart: string, dateEnd: string): number
+    {
+        const start = new Date(`${dateStart}T12:00:00`);
+        const end = new Date(`${dateEnd}T12:00:00`);
+
+        return Math.round((end.getTime() - start.getTime()) / 86_400_000) + 1;
     }
 
     private static async ForecastUncached( parameters: OpenMeteoTypes.OpenMeteoForecastParameters ): Promise<OpenMeteoTypes.OpenMeteoForecastResponse>
@@ -53,7 +63,13 @@ export class OpenMeteoServiceServer
                 "relative_humidity_2m_max",
             ];
 
-            const url = new URL("https://api.open-meteo.com/v1/forecast");
+            const dayCount = OpenMeteoServiceServer.ForecastDayCount(parameters.dateStart, parameters.dateEnd);
+            const useEnsemble = dayCount > OpenMeteoServiceServer.FORECAST_API_MAX_DAYS;
+            const url = new URL(
+                useEnsemble
+                    ? "https://ensemble-api.open-meteo.com/v1/ensemble"
+                    : "https://api.open-meteo.com/v1/forecast",
+            );
             const latitude = parameters.session.weather.location.latitude.toFixed(2);
             const longitude = parameters.session.weather.location.longitude.toFixed(2);
 
@@ -64,6 +80,11 @@ export class OpenMeteoServiceServer
             url.searchParams.set("timezone", "auto");
             url.searchParams.set("daily", daily.join(","));
             url.searchParams.set("hourly", "weather_code");
+
+            if (useEnsemble)
+            {
+                url.searchParams.set("models", OpenMeteoServiceServer.ENSEMBLE_MEAN_MODEL);
+            }
 
             if (parameters.session.user.unit == "imperial")
             {

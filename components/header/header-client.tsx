@@ -317,6 +317,9 @@ export default function HeaderClient({session}: ClientProperties)
                                                     <span className="caption">{LanguagesHelper.Caption("14Days")}</span>
                                                     <span className="date">{daysFourteenDate}</span>
                                                 </a>
+                                                <a href={LanguagesHelper.Path("Public_Calendar")} onClick={() => MenuCloseAll()}>
+                                                    <span className="caption">{LanguagesHelper.Caption("Calendar")}</span>
+                                                </a>
                                             </div>
                                             <div className="units">
                                                 <select className="select" value={unitValue} onChange={(e) => onUnitChange(e.target.value)}>

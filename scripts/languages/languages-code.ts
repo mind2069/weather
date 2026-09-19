@@ -10,4 +10,6 @@ export const LANGUAGES_CODE: Record<string, string> =
     "publique_prevision_7-jours": "Public_Forecast_7Days",
     "public_forecast_14-days": "Public_Forecast_14Days",
     "publique_prevision_14-jours": "Public_Forecast_14Days",
+    "public_calendar": "Public_Calendar",
+    "publique_calendrier": "Public_Calendar"
 };

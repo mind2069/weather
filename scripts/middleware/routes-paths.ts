@@ -16,4 +16,6 @@ export const ROUTES_PATHS: RouteConfiguration[] =
     { pattern: "/fr-ca/prevision/14-jours", rewrite: "/forms/public/forecast" },
     { pattern: /^\/en-ca\/forecast\/([^/]+)$/, rewrite: "/forms/public/forecast" },
     { pattern: /^\/fr-ca\/prevision\/([^/]+)$/, rewrite: "/forms/public/forecast" },
+    { pattern: "/en-ca/calendar", rewrite: "/forms/public/calendar" },
+    { pattern: "/fr-ca/calendrier", rewrite: "/forms/public/calendar" },
 ];

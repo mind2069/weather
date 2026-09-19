@@ -207,7 +207,9 @@ export const LANGUAGES_CAPTION: Record<string, string> =
     "1_PageNotFound": "Page not found",
     "2_PageNotFound": "Page introuvable",
     "1_PageNotFoundMessage": "The page you are looking for does not exist or may have moved.",
-    "2_PageNotFoundMessage": "La page que vous recherchez n’existe pas ou a peut-être été déplacée.",
-    "1_BackToWeather": "Back to today’s weather",
-    "2_BackToWeather": "Retour à la météo d’aujourd’hui",
+    "2_PageNotFoundMessage": "La page que vous recherchez n'existe pas ou a peut-être été déplacée.",
+    "1_BackToWeather": "Back to today's weather",
+    "2_BackToWeather": "Retour à la météo d'aujourd'hui",
+    "1_Calendar": "Calendar",
+    "2_Calendar": "Calendrier",
 };

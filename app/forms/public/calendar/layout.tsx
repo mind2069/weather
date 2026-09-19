@@ -1,0 +1,44 @@
+import { headers } from "next/headers";
+import type { Metadata } from "next";
+import LayoutPublic from "@/layouts/public/public";
+import { LANGUAGES_ID } from "@/scripts/languages/languages-id";
+import { type LanguageId } from "@/scripts/types/meta";
+import { MetaLocation } from "@/scripts/helpers/meta-helpers";
+import { Cache } from "@/scripts/cache/cache";
+import { CalendarMetaContextFromSession, Meta, ToNextMetadata } from "./meta";
+import { ConfigurationsShared } from "@/scripts/configurations/configurations-shared";
+
+export async function generateMetadata(): Promise<Metadata>
+{
+    const headersList = await headers();
+    const session = await Cache.Session();
+    const languageCode = session.language.code;
+    const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
+    const baseUrl = ConfigurationsShared.Website.Base;
+    const context = CalendarMetaContextFromSession(baseUrl);
+    const cookies = headersList.get("cookie") ?? "";
+    const location = MetaLocation(cookies, session, headersList.get("s-location"));
+
+    return ToNextMetadata(languageId, context, location);
+}
+
+export default async function LayoutBase({ children }: { children: React.ReactNode })
+{
+    const headersList = await headers();
+    const session = await Cache.Session();
+    const languageCode = headersList.get("x-language") ?? session.language.code;
+    const languageId = (LANGUAGES_ID[languageCode] ?? "1") as LanguageId;
+    const baseUrl = ConfigurationsShared.Website.Base;
+    const context = CalendarMetaContextFromSession(baseUrl);
+    const jsonLd = JSON.stringify(Meta.JsonLd(languageId, context));
+
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: jsonLd }}
+            />
+            <LayoutPublic>{children}</LayoutPublic>
+        </>
+    );
+}
