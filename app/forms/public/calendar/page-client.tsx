@@ -250,7 +250,8 @@ export default function Client({ session, forecastStart, forecastEnd }: ClientPr
                             <div className="weekdays">
                                 {weekdayLabels.map((label) => (
                                     <div key={label} className="weekday">
-                                        {label}
+                                        <span className="long">{label}</span>
+                                        <span className="short">{label.slice(0, 3)}</span>
                                     </div>
                                 ))}
                             </div>
@@ -275,7 +276,8 @@ export default function Client({ session, forecastStart, forecastEnd }: ClientPr
                                             >
                                                 <span className="number">
                                                     <span className="day-number">{cell.dayNumber}</span>
-                                                    <span className="month">{FormattingHelper.Month(cell.date, locale)}</span>
+                                                    <span className="month long">{FormattingHelper.Month(cell.date, locale)}</span>
+                                                    <span className="month short">{FormattingHelper.Month(cell.date, locale).slice(0, 3)}</span>
                                                 </span>
                                             </div>
                                         );
@@ -290,7 +292,8 @@ export default function Client({ session, forecastStart, forecastEnd }: ClientPr
                                         >
                                             <span className="number">
                                                 <span className="day-number">{cell.dayNumber}</span>
-                                                <span className="month">{FormattingHelper.Month(cell.date, locale)}</span>
+                                                <span className="month long">{FormattingHelper.Month(cell.date, locale)}</span>
+                                                <span className="month short">{FormattingHelper.Month(cell.date, locale).slice(0, 3)}</span>
                                             </span>
                                             <span className="icon">
                                                 <img src={item.icon} alt={item.forecast} draggable={false} />

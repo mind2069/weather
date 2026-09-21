@@ -4,7 +4,7 @@ import { OpenMeteoForecast, OpenMeteoDay } from "@/scripts/types/open-meteo";
 
 export class OpenMeteoServiceServer
 {
-    private static readonly CACHE_KEY_VERSION = "1.8";
+    private static readonly CACHE_KEY_VERSION = "1.9";
     private static readonly FORECAST_API_MAX_DAYS = 16;
     private static readonly ENSEMBLE_MEAN_MODEL = "ncep_gefs_ensemble_mean_seamless";
 
@@ -33,6 +33,123 @@ export class OpenMeteoServiceServer
         const end = new Date(`${dateEnd}T12:00:00`);
 
         return Math.round((end.getTime() - start.getTime()) / 86_400_000) + 1;
+    }
+
+    private static AddDaysIso(isoDate: string, days: number): string
+    {
+        const d = new Date(`${isoDate}T12:00:00`);
+
+        d.setDate(d.getDate() + days);
+
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    }
+
+    private static MergeForecast(primary: OpenMeteoForecast, extension: OpenMeteoForecast): OpenMeteoForecast
+    {
+        const mergeDaily = <T,>(a: T[] | undefined, b: T[] | undefined): T[] | undefined =>
+        {
+            if (!a && !b)
+            {
+                return undefined;
+            }
+
+            return [...(a ?? []), ...(b ?? [])];
+        };
+
+        return {
+            ...primary,
+            daily_units: primary.daily_units,
+            daily:
+            {
+                time: [...primary.daily.time, ...extension.daily.time],
+                temperature_2m_max: [...primary.daily.temperature_2m_max, ...extension.daily.temperature_2m_max],
+                temperature_2m_min: [...primary.daily.temperature_2m_min, ...extension.daily.temperature_2m_min],
+                uv_index_max: [...primary.daily.uv_index_max, ...extension.daily.uv_index_max],
+                uv_index_clear_sky_max: [...primary.daily.uv_index_clear_sky_max, ...extension.daily.uv_index_clear_sky_max],
+                wind_speed_10m_max: [...primary.daily.wind_speed_10m_max, ...extension.daily.wind_speed_10m_max],
+                wind_speed_10m_min: [...primary.daily.wind_speed_10m_min, ...extension.daily.wind_speed_10m_min],
+                wind_direction_10m_dominant: mergeDaily(
+                    primary.daily.wind_direction_10m_dominant,
+                    extension.daily.wind_direction_10m_dominant,
+                ),
+                weather_code: [...primary.daily.weather_code, ...extension.daily.weather_code],
+                sunrise: [...primary.daily.sunrise, ...extension.daily.sunrise],
+                sunset: [...primary.daily.sunset, ...extension.daily.sunset],
+                precipitation_probability_max: mergeDaily(
+                    primary.daily.precipitation_probability_max,
+                    extension.daily.precipitation_probability_max,
+                ),
+                precipitation_sum: mergeDaily(primary.daily.precipitation_sum, extension.daily.precipitation_sum),
+                relative_humidity_2m_mean: mergeDaily(
+                    primary.daily.relative_humidity_2m_mean,
+                    extension.daily.relative_humidity_2m_mean,
+                ),
+                relative_humidity_2m_min: mergeDaily(
+                    primary.daily.relative_humidity_2m_min,
+                    extension.daily.relative_humidity_2m_min,
+                ),
+                relative_humidity_2m_max: mergeDaily(
+                    primary.daily.relative_humidity_2m_max,
+                    extension.daily.relative_humidity_2m_max,
+                ),
+            },
+            hourly_units: primary.hourly_units ?? extension.hourly_units,
+            hourly:
+            {
+                time: [...(primary.hourly?.time ?? []), ...(extension.hourly?.time ?? [])],
+                weather_code: [...(primary.hourly?.weather_code ?? []), ...(extension.hourly?.weather_code ?? [])],
+            },
+        };
+    }
+
+    private static async ForecastFetch(
+        parameters: OpenMeteoTypes.OpenMeteoForecastParameters,
+        dateStart: string,
+        dateEnd: string,
+        ensemble: boolean,
+        daily: string[],
+    ): Promise<OpenMeteoForecast>
+    {
+        const url = new URL(
+            ensemble
+                ? "https://ensemble-api.open-meteo.com/v1/ensemble"
+                : "https://api.open-meteo.com/v1/forecast",
+        );
+        const latitude = parameters.session.weather.location.latitude.toFixed(2);
+        const longitude = parameters.session.weather.location.longitude.toFixed(2);
+
+        url.searchParams.set("latitude", latitude);
+        url.searchParams.set("longitude", longitude);
+        url.searchParams.set("start_date", dateStart);
+        url.searchParams.set("end_date", dateEnd);
+        url.searchParams.set("timezone", "auto");
+        url.searchParams.set("daily", daily.join(","));
+        url.searchParams.set("hourly", "weather_code");
+
+        if (ensemble)
+        {
+            url.searchParams.set("models", OpenMeteoServiceServer.ENSEMBLE_MEAN_MODEL);
+        }
+
+        if (parameters.session.user.unit == "imperial")
+        {
+            url.searchParams.set("temperature_unit", "fahrenheit");
+            url.searchParams.set("wind_speed_unit", "mph");
+        }
+        else
+        {
+            url.searchParams.set("temperature_unit", "celsius");
+            url.searchParams.set("wind_speed_unit", "kmh");
+        }
+
+        const response = await fetch(url.toString());
+
+        if (!response.ok)
+        {
+            throw new Error(response.statusText || "Open meteo request failed");
+        }
+
+        return await response.json() as OpenMeteoForecast;
     }
 
     private static async ForecastUncached( parameters: OpenMeteoTypes.OpenMeteoForecastParameters ): Promise<OpenMeteoTypes.OpenMeteoForecastResponse>
@@ -64,52 +181,38 @@ export class OpenMeteoServiceServer
             ];
 
             const dayCount = OpenMeteoServiceServer.ForecastDayCount(parameters.dateStart, parameters.dateEnd);
-            const useEnsemble = dayCount > OpenMeteoServiceServer.FORECAST_API_MAX_DAYS;
-            const url = new URL(
-                useEnsemble
-                    ? "https://ensemble-api.open-meteo.com/v1/ensemble"
-                    : "https://api.open-meteo.com/v1/forecast",
+            const standardDays = Math.min(dayCount, OpenMeteoServiceServer.FORECAST_API_MAX_DAYS);
+            const standardEnd = OpenMeteoServiceServer.AddDaysIso(parameters.dateStart, standardDays - 1);
+
+            const primary = await OpenMeteoServiceServer.ForecastFetch(
+                parameters,
+                parameters.dateStart,
+                standardEnd,
+                false,
+                daily,
             );
-            const latitude = parameters.session.weather.location.latitude.toFixed(2);
-            const longitude = parameters.session.weather.location.longitude.toFixed(2);
 
-            url.searchParams.set("latitude", latitude);
-            url.searchParams.set("longitude", longitude);
-            url.searchParams.set("start_date", parameters.dateStart);
-            url.searchParams.set("end_date", parameters.dateEnd);
-            url.searchParams.set("timezone", "auto");
-            url.searchParams.set("daily", daily.join(","));
-            url.searchParams.set("hourly", "weather_code");
-
-            if (useEnsemble)
+            if (dayCount > OpenMeteoServiceServer.FORECAST_API_MAX_DAYS)
             {
-                url.searchParams.set("models", OpenMeteoServiceServer.ENSEMBLE_MEAN_MODEL);
-            }
+                const extensionStart = OpenMeteoServiceServer.AddDaysIso(standardEnd, 1);
+                const extension = await OpenMeteoServiceServer.ForecastFetch(
+                    parameters,
+                    extensionStart,
+                    parameters.dateEnd,
+                    true,
+                    daily,
+                );
 
-            if (parameters.session.user.unit == "imperial")
-            {
-                url.searchParams.set("temperature_unit", "fahrenheit");
-                url.searchParams.set("wind_speed_unit", "mph");
+                data = OpenMeteoServiceServer.MergeForecast(primary, extension);
             }
             else
             {
-                url.searchParams.set("temperature_unit", "celsius");
-                url.searchParams.set("wind_speed_unit", "kmh");
+                data = primary;
             }
 
-            const response = await fetch(url.toString());
-
-            if (response.ok)
-            {
-                success = true;
-                data = await response.json() as OpenMeteoForecast;
-                codes = ["Success"];
-                message = "Open meteo get successful";
-            }
-            else
-            {
-                message = response.statusText;
-            }
+            success = true;
+            codes = ["Success"];
+            message = "Open meteo get successful";
         }
         catch (error)
         {
