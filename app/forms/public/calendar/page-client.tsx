@@ -13,12 +13,14 @@ import { OpenMeteoHelper } from "@/scripts/helpers/open-meteo";
 import { DayNormalized, ForecastNormalized, OpenMeteoDay, OpenMeteoForecast } from "@/scripts/types/open-meteo";
 import { FormattingHelper } from "@/scripts/helpers/formatting";
 import { Session } from "@/scripts/types/session";
+import { WEATHER_ICONS_UNKNOWN } from "@/scripts/constants/open-meteo";
 import ModalLoading from "@/components/modal-loading/modal-loading";
 import ModalMessage from "@/components/modal-message/modal-message";
 import ModalDay from "@/components/modal-day/modal-day";
 
-const CALENDAR_ROWS = 4;
+const CALENDAR_ROWS = 6;
 const CALENDAR_CELLS = CALENDAR_ROWS * 7;
+const CLICKABLE_FORECAST_DAYS = 16;
 
 interface ClientProperties
 {
@@ -60,6 +62,35 @@ function WeekdayLabels(locale: string, weekStartsOn: number): string[]
     return labels;
 }
 
+function HasUsableForecast(item: ForecastNormalized): boolean
+{
+    return (
+        item.icon !== WEATHER_ICONS_UNKNOWN &&
+        Number.isFinite(item.tempMax) &&
+        Number.isFinite(item.tempMin)
+    );
+}
+
+function TrimTrailingEmptyRows(cells: CalendarCell[]): CalendarCell[]
+{
+    let end = cells.length;
+
+    while (end >= 7)
+    {
+        const row = cells.slice(end - 7, end);
+        const hasForecast = row.some((cell) => !!cell.forecast);
+
+        if (hasForecast)
+        {
+            break;
+        }
+
+        end -= 7;
+    }
+
+    return cells.slice(0, end);
+}
+
 function BuildCells(
     todayIso: string,
     forecastByDate: Map<string, ForecastNormalized>,
@@ -82,17 +113,18 @@ function BuildCells(
 
         const date = FormattingHelper.IsoDateLocal(cursor);
         const past = date < todayIso;
+        const forecast = past ? undefined : forecastByDate.get(date);
 
         cells.push({
             key: date,
             empty: false,
             date,
             dayNumber: cursor.getDate(),
-            forecast: past ? undefined : forecastByDate.get(date),
+            forecast: forecast && HasUsableForecast(forecast) ? forecast : undefined,
         });
     }
 
-    return cells;
+    return TrimTrailingEmptyRows(cells);
 }
 
 export default function Client({ session, forecastStart, forecastEnd }: ClientProperties)
@@ -113,6 +145,14 @@ export default function Client({ session, forecastStart, forecastEnd }: ClientPr
     const [dayModalForecast, setDayModalForecast] = useState<DayNormalized | null>(null);
     const pageLoadedRef = useRef(false);
     const todayIso = FormattingHelper.IsoDateLocal(new Date());
+    const clickableEndIso = useMemo(() =>
+    {
+        const end = new Date(`${todayIso}T12:00:00`);
+
+        end.setDate(end.getDate() + (CLICKABLE_FORECAST_DAYS - 1));
+
+        return FormattingHelper.IsoDateLocal(end);
+    }, [todayIso]);
 
     useEffect(() =>
     {
@@ -283,13 +323,8 @@ export default function Client({ session, forecastStart, forecastEnd }: ClientPr
                                         );
                                     }
 
-                                    return (
-                                        <button
-                                            key={cell.key}
-                                            type="button"
-                                            className={`day${isToday ? " today" : ""}`}
-                                            onClick={() => void OpenDayModal(item)}
-                                        >
+                                    const dayContent = (
+                                        <>
                                             <span className="number">
                                                 <span className="day-number">{cell.dayNumber}</span>
                                                 <span className="month long">{FormattingHelper.Month(cell.date, locale)}</span>
@@ -306,6 +341,31 @@ export default function Client({ session, forecastStart, forecastEnd }: ClientPr
                                             <span className="blurb" title={item.forecast}>
                                                 {item.forecast}
                                             </span>
+                                        </>
+                                    );
+
+                                    const canOpenDay = cell.date <= clickableEndIso;
+
+                                    if (!canOpenDay)
+                                    {
+                                        return (
+                                            <div
+                                                key={cell.key}
+                                                className={`day locked${isToday ? " today" : ""}`}
+                                            >
+                                                {dayContent}
+                                            </div>
+                                        );
+                                    }
+
+                                    return (
+                                        <button
+                                            key={cell.key}
+                                            type="button"
+                                            className={`day${isToday ? " today" : ""}`}
+                                            onClick={() => void OpenDayModal(item)}
+                                        >
+                                            {dayContent}
                                         </button>
                                     );
                                 })}

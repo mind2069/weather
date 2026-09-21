@@ -126,16 +126,28 @@ export class OpenMeteoHelper
 
         const hourly = data.hourly;
 
-        return data.daily.time.map((date, i) =>
+        return data.daily.time.flatMap((date, i) =>
         {
+            const tempMax = data.daily.temperature_2m_max[i];
+            const tempMin = data.daily.temperature_2m_min[i];
+            const displayCodeFallback = data.daily.weather_code[i];
+
+            if (
+                tempMax == null || Number.isNaN(tempMax) ||
+                tempMin == null || Number.isNaN(tempMin) ||
+                displayCodeFallback == null || Number.isNaN(displayCodeFallback)
+            )
+            {
+                return [];
+            }
+
             const p = data.daily.precipitation_probability_max?.[i];
             const precip = data.daily.precipitation_sum?.[i];
             const rh = data.daily.relative_humidity_2m_mean?.[i];
             const rhMin = data.daily.relative_humidity_2m_min?.[i];
             const rhMax = data.daily.relative_humidity_2m_max?.[i];
             const sunrise = data.daily.sunrise[i];
-            const sunset = data.daily.sunset[i]; 
-            const displayCodeFallback = data.daily.weather_code[i];
+            const sunset = data.daily.sunset[i];
             const windDirRaw = data.daily.wind_direction_10m_dominant?.[i];
             const windDirection = windDirRaw == null || Number.isNaN(windDirRaw) ? 0 : Math.round(((windDirRaw % 360) + 360) % 360);
 
@@ -148,10 +160,15 @@ export class OpenMeteoHelper
                 hourly?.weather_code ?? [],
             ) ?? displayCodeFallback;
 
-            return {
+            if (displayCode == null || Number.isNaN(displayCode) || !(displayCode in WEATHER_ICONS))
+            {
+                return [];
+            }
+
+            return [{
                 date: date,
-                tempMin: data.daily.temperature_2m_min[i],
-                tempMax: data.daily.temperature_2m_max[i],
+                tempMin: tempMin,
+                tempMax: tempMax,
                 humidity: ClampHumidityPercent(rh),
                 humidityMin: ClampHumidityPercent(rhMin ?? rh),
                 humidityMax: ClampHumidityPercent(rhMax ?? rh),
@@ -169,7 +186,7 @@ export class OpenMeteoHelper
                 severityIcon: WEATHER_ICONS[displayCodeFallback] ?? WEATHER_ICONS_UNKNOWN,
                 sunrise: sunrise,
                 sunset: sunset,
-            };
+            }];
         });
     }
 

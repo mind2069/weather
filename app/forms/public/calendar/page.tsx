@@ -6,8 +6,8 @@ import { Session } from "@/scripts/types/session";
 import { Cache } from "@/scripts/cache/cache";
 import { FormattingHelper } from "@/scripts/helpers/formatting";
 
-/** Open-Meteo ensemble mean supports up to 35 days; standard forecast max is 16. */
-const FORECAST_MAX_DAYS = 35;
+/** Calendar forecast window (standard API + ensemble). */
+const FORECAST_MAX_DAYS = 31;
 
 export default async function Page()
 {

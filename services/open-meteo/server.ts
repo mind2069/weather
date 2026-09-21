@@ -4,7 +4,7 @@ import { OpenMeteoForecast, OpenMeteoDay } from "@/scripts/types/open-meteo";
 
 export class OpenMeteoServiceServer
 {
-    private static readonly CACHE_KEY_VERSION = "1.9";
+    private static readonly CACHE_KEY_VERSION = "1.10";
     private static readonly FORECAST_API_MAX_DAYS = 16;
     private static readonly ENSEMBLE_MEAN_MODEL = "ncep_gefs_ensemble_mean_seamless";
 
