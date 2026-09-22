@@ -4,8 +4,9 @@ import { OpenMeteoForecast, OpenMeteoDay } from "@/scripts/types/open-meteo";
 
 export class OpenMeteoServiceServer
 {
-    private static readonly CACHE_KEY_VERSION = "1.10";
-    private static readonly FORECAST_API_MAX_DAYS = 16;
+    private static readonly CACHE_KEY_VERSION = "1.11";
+    /** Standard forecast often returns an empty last day at 16; use 15 then ensemble. */
+    private static readonly FORECAST_API_MAX_DAYS = 15;
     private static readonly ENSEMBLE_MEAN_MODEL = "ncep_gefs_ensemble_mean_seamless";
 
     public static async Forecast( parameters: OpenMeteoTypes.OpenMeteoForecastParameters ): Promise<OpenMeteoTypes.OpenMeteoForecastResponse>
