@@ -319,6 +319,7 @@ export default function HeaderClient({session}: ClientProperties)
                                                 </a>
                                                 <a href={LanguagesHelper.Path("Public_Calendar")} onClick={() => MenuCloseAll()}>
                                                     <span className="caption">{LanguagesHelper.Caption("Calendar")}</span>
+                                                    <span className="date">{LanguagesHelper.Caption("31DaysForecast")}</span>
                                                 </a>
                                             </div>
                                             <div className="units">

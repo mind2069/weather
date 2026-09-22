@@ -212,4 +212,6 @@ export const LANGUAGES_CAPTION: Record<string, string> =
     "2_BackToWeather": "Retour à la météo d'aujourd'hui",
     "1_Calendar": "Calendar",
     "2_Calendar": "Calendrier",
+    "1_31DaysForecast": "31 Days Forecast",
+    "2_31DaysForecast": "Prévisions sur 31 Jours",
 };
